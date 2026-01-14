@@ -1,15 +1,15 @@
-# Roadmapa
+# Roadmap
 
-## Moduł 00: Setup + Tooling
+## Module 00: Setup + Tooling
 
-**Cel:** Działające środowisko, rozumiesz co jest co.
+**Goal:** Working environment, you understand what is what.
 
-### Instalacja
+### Installation
 
-- JDK 21 (SDKMAN lub manual)
+- JDK 21 (SDKMAN or manual)
 - Maven
 - Docker Desktop
-- VS Code + rozszerzenia
+- VS Code + extensions
 - Claude Code CLI
 
 ### VS Code Extensions
@@ -18,17 +18,16 @@
 - Spring Boot Extension Pack
 - Lombok Annotations Support
 
-### Narzędzia - co jest co
+### Tools - What Is What
 
-| Narzędzie   | Rola                 | Analog z frontend |
-| ----------- | -------------------- | ----------------- |
-| JDK         | Runtime + kompilator | Node.js           |
-| Maven       | Build + zależności   | npm/yarn          |
-| Spring Boot | Framework webowy     | NestJS/Express    |
-| Docker      | Konteneryzacja       | Docker            |
+| Tool        | Role                   | Frontend Analog |
+| ----------- | ---------------------- | --------------- |
+| JDK         | Runtime + compiler     | Node.js         |
+| Maven       | Build + dependencies   | npm/yarn        |
+| Spring Boot | Web framework          | NestJS/Express  |
+| Docker      | Containerization       | Docker          |
 
-### Weryfikacja
-
+### Verification
 ```bash
 java --version      # 21+
 mvn --version       # 3.9+
@@ -36,54 +35,54 @@ docker --version    # 24+
 claude --version    # Claude Code CLI
 ```
 
-## Moduł 01: REST + Java 21
+## Module 01: REST + Java 21
 
-**Cel:** Wystawić pierwsze API, poznać Records i Streams.
+**Goal:** Expose your first API, learn Records and Streams.
 
 - Controller, GET/POST
-- Java Records jako DTO
-- Stream API (funkcyjny styl)
+- Java Records as DTO
+- Stream API (functional style)
 - In-memory storage
 
-## Moduł 02: DI + Warstwy
+## Module 02: DI + Layers
 
-**Cel:** Oddzielić logikę od HTTP, zrozumieć Spring DI.
+**Goal:** Separate logic from HTTP, understand Spring DI.
 
-- Warstwa Service
+- Service Layer
 - Constructor Injection
 - Lombok
 - CRUD in-memory
 
-## Moduł 03: JPA + PostgreSQL
+## Module 03: JPA + PostgreSQL
 
-**Cel:** Trwałość danych w prawdziwej bazie.
+**Goal:** Data persistence in a real database.
 
 - Docker Compose + PostgreSQL
 - Entity, Repository
 - Spring Data JPA
 - @Transactional
 
-## Moduł 04: Walidacja + Błędy
+## Module 04: Validation + Error Handling
 
-**Cel:** API nie "wybucha", zwraca czytelne błędy.
+**Goal:** API doesn't "crash", returns readable errors.
 
 - @Valid, @NotNull, @Size
 - @ControllerAdvice
-- Spójny ErrorDto
-- Kody HTTP (400, 404, 500)
+- Consistent ErrorDto
+- HTTP codes (400, 404, 500)
 
-## Moduł 05: Testy
+## Module 05: Tests
 
-**Cel:** Pewność że kod działa.
+**Goal:** Confidence that code works.
 
 - JUnit 5 + AssertJ
-- Unit testy (Mockito)
-- Integration testy
+- Unit tests (Mockito)
+- Integration tests
 - Test containers
 
-## Moduł 06: Docker + Deploy
+## Module 06: Docker + Deploy
 
-**Cel:** Aplikacja działa wszędzie.
+**Goal:** Application works everywhere.
 
 - Maven build (JAR)
 - Dockerfile
