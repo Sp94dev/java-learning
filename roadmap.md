@@ -6,7 +6,7 @@
 
 ### Installation
 
-- JDK 21 (SDKMAN or manual)
+- JDK 25 (SDKMAN or manual)
 - Maven
 - Docker Desktop
 - VS Code + extensions
@@ -29,13 +29,13 @@
 
 ### Verification
 ```bash
-java --version      # 21+
+java --version      # 25+
 mvn --version       # 3.9+
 docker --version    # 24+
 claude --version    # Claude Code CLI
 ```
 
-## Module 01: REST + Java 21
+## Module 01: REST + Java 25
 
 **Goal:** Expose your first API, learn Records and Streams.
 

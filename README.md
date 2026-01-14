@@ -1,13 +1,13 @@
 # Java Backend Learning
 
-> Angular Senior → Full-Stack (Java 21 + Spring Boot 3)
+> Angular Senior → Full-Stack (Java 25 + Spring Boot 4)
 
 ## Progress
 
 | # | Moduł | Status | Branch |
 |---|-------|--------|--------|
-| 00 | Setup + Tooling | ⚪ | - |
-| 01 | REST + Java 21 | ⚪ | - |
+| 00 | Setup + Tooling | 🟢 | - |
+| 01 | REST + Java 25 | ⚪ | - |
 | 02 | DI + Warstwy | ⚪ | - |
 | 03 | JPA + PostgreSQL | ⚪ | - |
 | 04 | Walidacja + Błędy | ⚪ | - |
@@ -26,12 +26,11 @@ claude "commit with description: feat(module-01): add first endpoint"
 
 ## Projekt
 
-**WalletManager API** - Developed throuth all modules.
+**WalletManager API** - Developed through all modules.
 
 ## Structure
-
 ```
 exercises/    # Exercises per module
 projects/     # Wallet manager
-docs/notes/   # NOtes
+docs/notes/   # Notes
 ```
