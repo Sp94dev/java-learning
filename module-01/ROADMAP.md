@@ -1,12 +1,12 @@
 # Module 01: REST Architecture & Spring MVC
 
-> Cel: Zbudować kompletne REST API z CRUD, poznać Records i Stream API.
+> Goal: Build complete REST API with CRUD, get familar witg Records and Stream API.
 
-## Lekcje
+## Lessons
 
-| # | Temat | Opis | Status |
+| # | Topic | Desc | Status |
 |---|-------|------|--------|
-| 01 | Controller Basics | `@RestController`, routing, pierwszy endpoint | ⚪ |
+| 01 | Controller Basics | `@RestController`, routing, first endpoint | 🟡 |
 | 02 | HTTP Methods | GET, POST, PUT, DELETE - pełne CRUD | ⚪ |
 | 03 | Input Handling | `@PathVariable`, `@RequestParam`, `@RequestBody` | ⚪ |
 | 04 | Java Records | Niemutowalne DTO zamiast POJO | ⚪ |
