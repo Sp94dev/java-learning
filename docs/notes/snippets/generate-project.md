@@ -13,3 +13,6 @@ spring init \
   --name=Ex01 \
   --package-name=com.example.ex01 \
 ex01
+
+#Odpalenie projektu
+./mvnw spring-boot:run
