@@ -6,7 +6,7 @@
 
 | # | Moduł | Status | Branch |
 |---|-------|--------|--------|
-| 00 | Setup + Tooling | 🟢 | - |
+| 00 | Setup + Tooling | ⚪ | - |
 | 01 | REST + Java 25 | ⚪ | - |
 | 02 | DI + Warstwy | ⚪ | - |
 | 03 | JPA + PostgreSQL | ⚪ | - |
@@ -18,19 +18,20 @@
 
 ## Workflow
 
-Use **Claude Code** locally - full access to Git:
+Używaj **Claude Code** lokalnie - ma pełny dostęp do Git:
 ```bash
-claude "create branch module-01/learning"
-claude "commit with description: feat(module-01): add first endpoint"
+claude "utwórz branch module-01/learning"
+claude "commituj z opisem: feat(module-01): add first endpoint"
 ```
 
 ## Projekt
 
-**WalletManager API** - Developed through all modules.
+**Wallet Manager API** - uproszczony tracker portfela inwestycyjnego (inspiracja: myFund.pl).
 
-## Structure
+## Struktura
+
 ```
-exercises/    # Exercises per module
-projects/     # Wallet manager
-docs/notes/   # Notes
+exercises/                # Ćwiczenia per moduł
+projects/wallet-manager/  # Główny projekt
+docs/notes/               # Notatki
 ```
