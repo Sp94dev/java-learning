@@ -1,0 +1,31 @@
+### Get all instruments
+http://localhost:8080/api/instruments
+
+
+### Create instrument
+POST http://localhost:8080/api/instruments
+Content-Type: application/json
+
+{
+  "ticker": "WIG20ETR",
+  "currency": "EUR",
+  "market": "WSE",
+  "type": "ETF"
+}
+
+
+### Update instrument
+PUT http://localhost:8080/api/instruments/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "ticker": "WIG20ETR",
+  "currency": "TEST",
+  "market": "WSE",
+  "type": "ETF"
+}
+
+
+### Delete instrument
+DELETE  http://localhost:8080/api/instruments/1
