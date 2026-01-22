@@ -24,29 +24,28 @@ public class NoteController {
     private final AtomicLong idCounter = new AtomicLong(1);
 
     public NoteController() {
-        // Dodajemy pierwszą notatkę
+        // Add first note
         notes.add(new Note(
                 idCounter.getAndIncrement(),
-                "Lista zakupów",
-                "Mleko, chleb, jajka, masło",
+                "Shopping list",
+                "Milk, bread, eggs, butter",
                 "Jan",
-                new ArrayList<>(List.of(new Comment(1L, "Comment 1"), new Comment(2L, "Comment 2"))) // Pusta lista
-                                                                                                     // komentarzy
+                new ArrayList<>(List.of(new Comment(1L, "Comment 1"), new Comment(2L, "Comment 2"))) // Empty comment list
         ));
 
-        // Dodajemy drugą notatkę
+        // Add second note
         notes.add(new Note(
                 idCounter.getAndIncrement(),
-                "Nauka Springa",
-                "Opanować @RestController i @RequestParam",
+                "Learning Spring",
+                "Master @RestController and @RequestParam",
                 "Anna",
                 new ArrayList<>()));
 
-        // Dodajemy trzecią notatkę
+        // Add third note
         notes.add(new Note(
                 idCounter.getAndIncrement(),
-                "Plan treningowy",
-                "Poniedziałek: klatka, Środa: plecy, Piątek: nogi",
+                "Workout plan",
+                "Monday: chest, Wednesday: back, Friday: legs",
                 "Piotr",
                 new ArrayList<>()));
     }

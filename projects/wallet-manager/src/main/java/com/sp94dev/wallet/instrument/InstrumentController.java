@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,17 +15,31 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.sp94dev.wallet.instrument.Instrument;
-
 @RestController
 @RequestMapping("/api/instruments")
 public class InstrumentController {
-    private List<Instrument> instruments = new ArrayList<>();
+    private List<Instrument> instruments = new ArrayList<>(List.of(
+            new Instrument(1L, "AAPL", "USD", "NASDAQ", "STOCK"),
+            new Instrument(2L, "GOOGL", "USD", "NASDAQ", "ETF"),
+            new Instrument(3L, "TSLA", "USD", "NASDAQ", "STOCK"),
+            new Instrument(4L, "AMZN", "USD", "NASDAQ", "STOCK"),
+            new Instrument(5L, "MSFT", "USD", "NASDAQ", "STOCK")
+    ));
     private final AtomicLong idCounter = new AtomicLong(1);
 
     @GetMapping()
-    List<Instrument> getAll() {
-        return this.instruments;
+    List<Instrument> getAll(
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) String currency,
+        @RequestParam(required = false) String ticker,
+        @RequestParam(required = false) String market
+        ) {
+        return this.instruments.stream()
+            .filter(instrument -> type == null || instrument.type.equals(type))
+            .filter(instrument -> currency == null || instrument.currency.equals(currency))
+            .filter(instrument -> ticker == null || instrument.ticker.toLowerCase().contains(ticker.toLowerCase()))
+            .filter(instrument -> market == null || instrument.market.equals(market))
+            .toList();
     }
 
     @GetMapping("/{id}")

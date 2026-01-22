@@ -4,72 +4,117 @@
 
 ## Progress
 
-### Faza 1: Fundamenty
+### Phase 1: Fundamentals
 
-| #   | Moduł                            | Status |
+| #   | Module                           | Status |
 | --- | -------------------------------- | ------ |
 | 00  | Setup + Tooling                  | 🟢     |
-| 01  | REST + Java Basics               | 🟡     |
+| 01  | REST + Java Basics               | 🟢     |
 | 02  | Java Internals (JVM, Memory, GC) | ⚪     |
 
-### Faza 2: Architektura
+### Phase 2: Architecture
 
-| #   | Moduł                           | Status |
+| #   | Module                          | Status |
 | --- | ------------------------------- | ------ |
-| 03  | DI + Warstwy                    | ⚪     |
-| 04  | Architektura (Clean, Hexagonal) | ⚪     |
+| 03  | DI + Layers                     | ⚪     |
+| 04  | Architecture (Clean, Hexagonal) | ⚪     |
 
-### Faza 3: Dane
+### Phase 3: Data
 
-| #   | Moduł                      | Status |
+| #   | Module                     | Status |
 | --- | -------------------------- | ------ |
 | 05  | JPA + PostgreSQL           | ⚪     |
-| 06  | Bazy Danych Deep Dive      | ⚪     |
+| 06  | Databases Deep Dive        | ⚪     |
 | 07  | Caching (Redis, In-Memory) | ⚪     |
 
-### Faza 4: Security
+### Phase 4: Security
 
-| #   | Moduł                       | Status |
+| #   | Module                      | Status |
 | --- | --------------------------- | ------ |
 | 08  | Auth (JWT, Spring Security) | ⚪     |
 
-### Faza 5: Quality
+### Phase 5: Quality
 
-| #   | Moduł                      | Status |
+| #   | Module                     | Status |
 | --- | -------------------------- | ------ |
-| 09  | Walidacja + Error Handling | ⚪     |
-| 10  | Testy                      | ⚪     |
-| 11  | Debugowanie & Profiling    | ⚪     |
+| 09  | Validation + Error Handling| ⚪     |
+| 10  | Tests                      | ⚪     |
+| 11  | Debugging & Profiling      | ⚪     |
 
-### Faza 6: DevOps
+### Phase 6: DevOps
 
-| #   | Moduł                   | Status |
+| #   | Module                  | Status |
 | --- | ----------------------- | ------ |
-| 12  | Konteneryzacja (Docker) | ⚪     |
+| 12  | Containerization (Docker)| ⚪     |
 | 13  | CI/CD (GitHub Actions)  | ⚪     |
 | 14  | Cloud Deployment        | ⚪     |
 
-### Faza 7: Praktyka
+### Phase 7: Practice
 
-| #   | Moduł                | Status |
+| #   | Module               | Status |
 | --- | -------------------- | ------ |
-| 15  | Dobre i Złe Praktyki | ⚪     |
+| 15  | Good and Bad Practices| ⚪     |
 | 16  | Interview Prep       | ⚪     |
 
 `⚪ Not Started` · `🟡 In Progress` · `🟢 Done`
 
-## Projekt
+## Project
 
-**Wallet Manager API** - tracker portfela inwestycyjnego.
+**Wallet Manager API** - investment portfolio tracker.
 
-## Struktura
+## Structure
 
 ```
-module-XX/           # Lekcje i ćwiczenia
-projects/wallet-manager/  # Główny projekt
-docs/                # Dokumentacja
+module-XX/           # Lessons and exercises
+projects/wallet-manager/  # Main project
+docs/                # Documentation
 ```
 
-## Czas
+## Timeline
 
-~12 miesięcy (38 tygodni + buffer)
+~12 months (38 weeks + buffer)
+
+<!-- AI:START -->
+
+## Technical Details
+
+### Project Overview
+
+This repository contains the source code for the "Java Backend Learning" curriculum, including the "Wallet Manager" capstone project and various learning modules.
+
+### Tech Stack
+
+- **Language**: Java 25
+- **Framework**: Spring Boot 4.0.1
+- **Build Tool**: Maven (mvnw)
+- **Database**: PostgreSQL (planned), Redis (planned)
+
+### Build & Run
+
+**Wallet Manager:**
+
+```bash
+cd projects/wallet-manager
+./mvnw clean install
+./mvnw spring-boot:run
+```
+
+**Module Exercises (e.g., Module 00):**
+
+```bash
+cd modules/module-00/hello-spring
+./mvnw spring-boot:run
+```
+
+### Project Structure
+
+- `modules/`: Learning modules containing isolated exercises.
+- `projects/`: Capstone projects (Wallet Manager).
+- `docs/`: Theory, roadmaps, and documentation.
+
+### Configuration
+
+- **Application Name**: Wallet
+- **Port**: 8080 (Default)
+- **Properties**: `projects/wallet-manager/src/main/resources/application.properties`
+<!-- AI:END -->
