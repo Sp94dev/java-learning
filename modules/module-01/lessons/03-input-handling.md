@@ -1,10 +1,10 @@
-# Lesson 03: Input Handling
+# Lekcja 03: Obsługa Danych Wejściowych
 
 > `@PathVariable`, `@RequestParam`, `@RequestBody`
 
-## Three ways to pass data
+## Trzy sposoby przekazywania danych
 
-### 1. Path Variable - part of URL
+### 1. Path Variable - część adresu URL
 
 ```java
 // GET /api/users/42
@@ -19,7 +19,7 @@ public Order getOrder(
 ) { }
 ```
 
-### 2. Query Params - after `?` sign
+### 2. Query Params - po znaku `?`
 
 ```java
 // GET /api/users?page=1&size=10&sort=name
@@ -35,7 +35,7 @@ public List<User> getUsers(
 public List<Result> search(@RequestParam String q) { }
 ```
 
-### 3. Request Body - JSON in body
+### 3. Request Body - JSON w ciele żądania
 
 ```java
 // POST /api/users
@@ -44,25 +44,25 @@ public List<Result> search(@RequestParam String q) { }
 public User createUser(@RequestBody CreateUserRequest request) { }
 ```
 
-## When to use what?
+## Kiedy używać czego?
 
-| Type | When | Example |
+| Typ | Kiedy | Przykład |
 |-----|-------|----------|
-| PathVariable | Resource Identifier | `/users/42` |
-| RequestParam | Filtering, pagination, options | `?status=active&page=2` |
-| RequestBody | Creating/updating complex objects | JSON payload |
+| PathVariable | Identyfikator zasobu | `/users/42` |
+| RequestParam | Filtrowanie, stronicowanie, opcje | `?status=active&page=2` |
+| RequestBody | Tworzenie/aktualizacja złożonych obiektów | JSON payload |
 
-## Exercise
+## Ćwiczenie
 
-**Task:** Extend `NoteController`:
-- `GET /notes?author=John` - filtering by author
-- `GET /notes?search=keyword` - searching in title
-- `GET /notes/{id}/comments/{commentId}` - nested resources
+**Zadanie:** Rozszerz `NoteController`:
+- `GET /notes?author=John` - filtrowanie po autorze
+- `GET /notes?search=keyword` - szukanie w tytule
+- `GET /notes/{id}/comments/{commentId}` - zagnieżdżone zasoby
 
-**Files:** `exercises/ex03-input-handling/`
+**Pliki:** `exercises/ex03-input-handling/`
 
 ## Checklist
 
-- [ ] I know when to use PathVariable vs RequestParam
-- [ ] I can handle optional parameters
-- [ ] I understand how Spring deserializes JSON to object
+- [ ] Wiem kiedy użyć PathVariable vs RequestParam
+- [ ] Potrafię obsługiwać parametry opcjonalne
+- [ ] Rozumiem jak Spring deserializuje JSON do obiektu

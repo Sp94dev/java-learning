@@ -9,44 +9,62 @@
 - JDK 25, Maven, Docker, VS Code
 - Spring Boot 4.0.1 project
 
-### Moduł 01: REST + Java Basics ✅
+### Moduł 01: REST + Java Basics 🟡
 
 **Cel:** Pierwsze API, Records, Streams.
 
-- Controller, HTTP methods
-- Java Records jako DTO
-- Stream API
-- In-memory storage
+- [x] Controller, HTTP methods
+- [ ] Java Records jako DTO
+- [x] Stream API (Basic usage)
+- [x] In-memory storage
 
 ### Moduł 02: Java Internals 🆕
 
 **Cel:** Zrozumieć jak Java działa pod spodem.
 
-#### JVM & Execution
+#### 1. JVM Architecture
+- [ ] Class Loader subsystem
+- [ ] Runtime Data Areas (Stack, Heap, Method Area)
+- [ ] Execution Engine
 
-- JVM architecture (Class Loader, Runtime Data Areas, Execution Engine)
-- Bytecode basics - co się dzieje po `javac`
-- JIT compilation - dlaczego Java przyspiesza w runtime
+#### 2. JIT Compilation
+- [ ] Interpreter vs JIT
+- [ ] Hot spots & Warm-up
+- [ ] Native code generation
 
-#### Memory Model
+#### 3. Memory Model
+- [ ] Stack vs Heap details
+- [ ] Primitives vs Objects storage
+- [ ] Stack frames
 
-- Stack vs Heap
-- Primitive vs Reference types
-- String pool
-- Pass by value (always!) - częsty błąd
+#### 4. Pass by Value
+- [ ] Zrozumienie mechanizmu przekazywania
+- [ ] Reference copying
 
-#### Garbage Collection
+#### 5. String Pool
+- [ ] Interning stringów
+- [ ] Immutability & Security
+- [ ] StringBuilder
 
-- Generacje (Young, Old, Metaspace)
-- GC algorithms (G1, ZGC)
-- Memory leaks w Javie - jak to możliwe?
+#### 6. Garbage Collection
+- [ ] Reachability analysis
+- [ ] Generational Hypothesis (Eden, Survivor, Old)
+- [ ] GC Algorithms types
 
-#### Concurrency Basics
+#### 7. Memory Leaks
+- [ ] Static references
+- [ ] Unclosed resources
+- [ ] Listener leaks
 
-- Threads vs Virtual Threads (Java 21+)
-- synchronized, volatile
-- CompletableFuture
-- Kiedy używać (i kiedy NIE)
+#### 8. Primitives vs Wrappers
+- [ ] Autoboxing/Unboxing cost
+- [ ] Integer Cache
+- [ ] Identity vs Equality
+
+#### 9. Exceptions
+- [ ] Hierarchy (Error vs Exception)
+- [ ] Checked vs Unchecked philosophy
+- [ ] Try-with-resources
 
 ---
 

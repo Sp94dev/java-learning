@@ -1,27 +1,27 @@
-# Exercise 03: Input Handling
+# Ćwiczenie 03: Obsługa Danych Wejściowych
 
-## Task
+## Zadanie
 
-Extend `NoteController` to handle different types of input.
+Rozszerz `NoteController` o obsługę różnych typów danych wejściowych.
 
-### New endpoints
+### Nowe endpointy
 
 ```
-GET /api/notes?author=John         → filter by author
-GET /api/notes?search=keyword      → search in title
-GET /api/notes?page=0&size=10      → pagination
-GET /api/notes/{id}/comments/{cid} → nested resources
+GET /api/notes?author=John         → filtrowanie po autorze
+GET /api/notes?search=keyword      → szukanie w tytule
+GET /api/notes?page=0&size=10      → stronicowanie
+GET /api/notes/{id}/comments/{cid} → zagnieżdżone zasoby
 ```
 
-### Updated model
+### Zaktualizowany model
 
 ```java
 class Note {
     Long id;
     String title;
     String content;
-    String author;        // new
-    List<Comment> comments; // new
+    String author;        // nowe pole
+    List<Comment> comments; // nowe pole
 }
 
 class Comment {
@@ -30,24 +30,24 @@ class Comment {
 }
 ```
 
-## Hints
+## Wskazówki
 
-- `@RequestParam(required = false)` for optional
-- `@RequestParam(defaultValue = "0")` for default values
-- You can use multiple `@PathVariable` in one method
+- `@RequestParam(required = false)` dla opcjonalnych
+- `@RequestParam(defaultValue = "0")` dla wartości domyślnych
+- Możesz użyć wielu `@PathVariable` w jednej metodzie
 
-## Test
+## Testowanie
 
 ```bash
-# Filtering
+# Filtrowanie
 curl "http://localhost:8080/api/notes?author=John"
 
-# Searching
+# Wyszukiwanie
 curl "http://localhost:8080/api/notes?search=java"
 
-# Pagination
+# Stronicowanie
 curl "http://localhost:8080/api/notes?page=0&size=5"
 
-# Nested
+# Zagnieżdżone
 curl http://localhost:8080/api/notes/1/comments/2
 ```

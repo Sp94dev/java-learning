@@ -5,12 +5,14 @@
 ## 1. Po co architektura?
 
 ### Problemy bez architektury
+
 - **Spaghetti code** - wszystko połączone ze wszystkim
 - **Niemożliwe testowanie** - tight coupling
 - **Trudna zmiana** - dotknięcie jednego miejsca psuje inne
 - **Brak skalowalności** - nie można wydzielić modułów
 
 ### Cel architektury
+
 1. **Separation of Concerns** - każdy moduł ma jedną odpowiedzialność
 2. **Low Coupling** - minimalne zależności między modułami
 3. **High Cohesion** - powiązane rzeczy razem
@@ -48,16 +50,19 @@
 ```
 
 ### Zasady
+
 1. **Zależności tylko w dół** - Controller może używać Service, nie odwrotnie
 2. **Każda warstwa ma własną odpowiedzialność**
 3. **Komunikacja przez interfejsy** - ułatwia testowanie
 
 ### Zalety
+
 - Prosta do zrozumienia
 - Jasna separacja
 - Łatwy start
 
 ### Wady
+
 - **Tight coupling z DB** - cała aplikacja zależy od modelu danych
 - **Anemic Domain Model** - logika w serwisach, entity to tylko dane
 - **Monolith tendency** - trudno wydzielić moduły
@@ -67,9 +72,11 @@
 ## 3. Package by Feature
 
 ### Idea
+
 Organizuj kod wokół **funkcjonalności biznesowych**, nie warstw technicznych.
 
 ### Package by Layer (tradycyjne)
+
 ```
 com.example/
 ├── controller/
@@ -87,6 +94,7 @@ com.example/
 ```
 
 ### Package by Feature
+
 ```
 com.example/
 ├── user/
@@ -104,6 +112,7 @@ com.example/
 ```
 
 ### Zalety Package by Feature
+
 1. **Wysoka kohezja** - wszystko związane z feature razem
 2. **Łatwa nawigacja** - szukasz order? → pakiet `order/`
 3. **Modularity** - każdy feature to potencjalny microservice
@@ -115,10 +124,12 @@ com.example/
 ## 4. Hexagonal Architecture (Ports & Adapters)
 
 ### Problem z Layered
+
 W layered architecture domena **zależy od infrastruktury** (DB, HTTP).
 Zmiana bazy = zmiana w całej aplikacji.
 
 ### Idea Hexagonal
+
 **Domena w centrum**, niezależna od wszystkiego.
 Infrastruktura "podłącza się" przez **porty**.
 
@@ -164,16 +175,21 @@ Infrastruktura "podłącza się" przez **porty**.
 ```
 
 ### Port
+
 **Interfejs** definiowany przez domenę.
+
 - **Driving Port (IN)** - co domena oferuje światu (Use Cases)
 - **Driven Port (OUT)** - czego domena potrzebuje (Repository, External Services)
 
 ### Adapter
+
 **Implementacja** portu dla konkretnej technologii.
+
 - **Driving Adapter (IN)** - REST Controller, CLI, Message Consumer
 - **Driven Adapter (OUT)** - JPA Repository, HTTP Client, Kafka Producer
 
 ### Dependency Rule
+
 **Zależności wskazują do środka** - domena nie wie o infrastrukturze.
 
 ```
@@ -182,6 +198,7 @@ Controller → UseCase Interface ← Domain Service → Repository Interface ←
 ```
 
 ### Package Structure
+
 ```
 com.example/
 ├── domain/
@@ -206,17 +223,20 @@ com.example/
 ```
 
 ### Zalety
+
 1. **Domain isolation** - czysta Java, bez frameworków
 2. **Testability** - testujesz domenę bez DB, HTTP
 3. **Flexibility** - łatwa podmiana adaptera (MySQL → Postgres)
 4. **Postponed decisions** - możesz zacząć bez wyboru DB
 
 ### Wady
+
 1. **Complexity** - więcej interfejsów, mapowanie
 2. **Over-engineering** - dla CRUD to overkill
 3. **Learning curve** - zespół musi rozumieć
 
 ### Kiedy używać
+
 ✅ Złożona logika biznesowa
 ✅ Długoterminowy projekt
 ✅ Wiele źródeł danych / interfejsów
@@ -251,6 +271,7 @@ com.example/
 **Dependency Rule:** Zależności tylko do środka (inner circles).
 
 ### Różnice od Hexagonal
+
 - Hexagonal: focus na **ports & adapters**
 - Clean: focus na **warstwy** i ich odpowiedzialności
 - W praktyce: bardzo podobne, różne słownictwo
@@ -284,30 +305,36 @@ Kod używa tych samych terminów co biznes.
 ### Tactical DDD
 
 **Entity**
+
 - Ma tożsamość (ID)
 - Mutowalny stan
 - Równość przez ID
 
 **Value Object**
+
 - Brak tożsamości
 - Immutable
 - Równość przez wartość
 - Przykłady: Money, Address, DateRange
 
 **Aggregate**
+
 - Klaster encji z jednym "root"
 - Invarianty chronione przez root
 - Transakcje na poziomie aggregate
 
 **Repository**
+
 - Abstrakcja kolekcji aggregates
 - Zwykle jeden per aggregate root
 
 **Domain Service**
+
 - Logika która nie należy do żadnej encji
 - Stateless
 
 **Domain Event**
+
 - Coś co się wydarzyło w domenie
 - "OrderPlaced", "PaymentReceived"
 
@@ -331,6 +358,7 @@ Kod używa tych samych terminów co biznes.
 ```
 
 **Zalety:**
+
 - Prostsze na start
 - Łatwiejszy deployment (jeden artefakt)
 - Brak network latency między modułami
@@ -338,6 +366,7 @@ Kod używa tych samych terminów co biznes.
 - Prostsze debugging
 
 **Wady:**
+
 - Skalowanie całości, nie części
 - Deployment = całość (ryzyko)
 - Tight coupling między modułami
@@ -355,6 +384,7 @@ Kod używa tych samych terminów co biznes.
 ```
 
 **Zalety:**
+
 - Niezależne skalowanie
 - Niezależne deployment
 - Różne technologie per serwis
@@ -362,6 +392,7 @@ Kod używa tych samych terminów co biznes.
 - Małe zespoły (ownership)
 
 **Wady:**
+
 - **Złożoność operacyjna** - wiele serwisów do monitorowania
 - **Network latency** - komunikacja przez sieć
 - **Distributed transactions** - saga pattern, eventual consistency
@@ -374,11 +405,13 @@ Kod używa tych samych terminów co biznes.
 
 "Monolith first" - zacznij od dobrze zmodularyzowanego monolitu.
 Wydzielaj serwisy gdy:
+
 1. Masz konkretny powód (skalowanie, niezależny deploy)
 2. Granice modułów są jasne
 3. Zespół ma doświadczenie z distributed systems
 
 ### Modular Monolith
+
 Kompromis: monolith z jasną modularyzacją.
 
 ```
@@ -407,7 +440,7 @@ Jak złożona jest logika biznesowa?
 │
 ├─► Prosta (CRUD) → Layered Architecture, Package by Feature
 │
-└─► Złożona → 
+└─► Złożona →
     │
     ├─► Czy potrzebujesz izolacji domeny?
     │   │
@@ -426,12 +459,12 @@ Jak złożona jest logika biznesowa?
 
 ## Podsumowanie
 
-| Architektura | Kiedy |
-|--------------|-------|
-| **Layered** | Proste projekty, szybki start |
-| **Package by Feature** | Średnie projekty, modularity |
-| **Hexagonal** | Złożona domena, izolacja, testowalność |
-| **Modular Monolith** | Przygotowanie do microservices |
-| **Microservices** | Skalowanie, niezależne zespoły |
+| Architektura           | Kiedy                                  |
+| ---------------------- | -------------------------------------- |
+| **Layered**            | Proste projekty, szybki start          |
+| **Package by Feature** | Średnie projekty, modularity           |
+| **Hexagonal**          | Złożona domena, izolacja, testowalność |
+| **Modular Monolith**   | Przygotowanie do microservices         |
+| **Microservices**      | Skalowanie, niezależne zespoły         |
 
 **Zasada:** Start simple, evolve as needed. Nie over-engineer.

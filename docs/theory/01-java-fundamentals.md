@@ -5,15 +5,17 @@
 ## 1. Czym jest Java?
 
 ### Język + Platforma
+
 Java to nie tylko język programowania, ale cały ekosystem:
 
-**Język** - składnia, którą piszesz (.java)
-**Kompilator** (javac) - tłumaczy kod na bytecode (.class)
-**JVM** (Java Virtual Machine) - wykonuje bytecode
-**JRE** (Java Runtime Environment) - JVM + biblioteki standardowe
-**JDK** (Java Development Kit) - JRE + narzędzia deweloperskie
+- **Język** - składnia, którą piszesz (.java)
+- **Kompilator** (javac) - tłumaczy kod na bytecode (.class)
+- **JVM** (Java Virtual Machine) - wykonuje bytecode
+- **JRE** (Java Runtime Environment) - JVM + biblioteki standardowe
+- **JDK** (Java Development Kit) - JRE + narzędzia deweloperskie
 
 ### "Write Once, Run Anywhere"
+
 Kluczowa idea Javy: kod kompiluje się do **bytecode** - uniwersalnego formatu zrozumiałego przez JVM. JVM istnieje dla każdej platformy (Windows, Mac, Linux), więc ten sam .class działa wszędzie.
 
 ```
@@ -58,9 +60,10 @@ Bytecode (.class) ← uniwersalny
 ```
 
 ### Class Loader - hierarchia
+
 Klasy ładowane są przez trzy loadery w hierarchii:
 
-1. **Bootstrap ClassLoader** - ładuje core Java (java.lang.*, java.util.*)
+1. **Bootstrap ClassLoader** - ładuje core Java (java.lang._, java.util._)
 2. **Extension ClassLoader** - ładuje rozszerzenia (jre/lib/ext)
 3. **Application ClassLoader** - ładuje Twój kod i biblioteki
 
@@ -90,22 +93,24 @@ Następne wywołania → native speed
 
 ### Stack vs Heap
 
-| Stack | Heap |
-|-------|------|
-| Per wątek (izolowany) | Współdzielony między wątkami |
-| Szybki (LIFO) | Wolniejszy |
-| Automatyczne czyszczenie | Garbage Collector |
-| Zmienne lokalne, referencje | Obiekty |
-| Mały rozmiar (~1MB per wątek) | Duży (GB) |
+| Stack                         | Heap                         |
+| ----------------------------- | ---------------------------- |
+| Per wątek (izolowany)         | Współdzielony między wątkami |
+| Szybki (LIFO)                 | Wolniejszy                   |
+| Automatyczne czyszczenie      | Garbage Collector            |
+| Zmienne lokalne, referencje   | Obiekty                      |
+| Mały rozmiar (~1MB per wątek) | Duży (GB)                    |
 
 ### Co gdzie trafia?
 
 **Stack:**
+
 - Primitive values (int, boolean, double...)
 - Referencje (adresy do obiektów na Heap)
 - Stack frames (kontekst wywołania metody)
 
 **Heap:**
+
 - Wszystkie obiekty (new Object())
 - Tablice (to też obiekty)
 - Stringi
@@ -138,6 +143,7 @@ STACK (Thread-1)              HEAP
 Java **zawsze** przekazuje przez wartość. Ale wartość referencji to adres!
 
 **Dla primitives:**
+
 ```java
 void modify(int x) {
     x = 100;  // Modyfikujesz KOPIĘ wartości
@@ -149,6 +155,7 @@ modify(a);
 ```
 
 **Dla obiektów:**
+
 ```java
 void modify(User user) {
     user.setName("New");  // Modyfikujesz obiekt przez KOPIĘ referencji
@@ -168,7 +175,9 @@ modify(u);
 ## 4. Garbage Collection
 
 ### Po co GC?
+
 W C/C++ programista musi ręcznie zwalniać pamięć (`free`, `delete`). To prowadzi do:
+
 - Memory leaks (zapomniano zwolnić)
 - Dangling pointers (zwolniono za wcześnie)
 - Double free (zwolniono dwa razy)
@@ -180,6 +189,7 @@ Java rozwiązuje to automatycznie - GC usuwa obiekty bez referencji.
 **Reachability Analysis:** GC startuje od "root" referencji i traversuje graf obiektów. Wszystko nieosiągalne = garbage.
 
 **Root references:**
+
 - Zmienne lokalne na stosie
 - Static pola klas
 - JNI references
@@ -245,19 +255,20 @@ Liczba obiektów
 
 ### GC Algorithms
 
-| Algorithm | Charakterystyka | Use case |
-|-----------|-----------------|----------|
-| **Serial** | Single-threaded, stop-the-world | Małe aplikacje |
-| **Parallel** | Multi-threaded, max throughput | Batch processing |
-| **G1** | Balans latency/throughput, default | Większość aplikacji |
-| **ZGC** | Ultra-low latency (<1ms pause) | Real-time systems |
-| **Shenandoah** | Low latency, concurrent | Similar to ZGC |
+| Algorithm      | Charakterystyka                    | Use case            |
+| -------------- | ---------------------------------- | ------------------- |
+| **Serial**     | Single-threaded, stop-the-world    | Małe aplikacje      |
+| **Parallel**   | Multi-threaded, max throughput     | Batch processing    |
+| **G1**         | Balans latency/throughput, default | Większość aplikacji |
+| **ZGC**        | Ultra-low latency (<1ms pause)     | Real-time systems   |
+| **Shenandoah** | Low latency, concurrent            | Similar to ZGC      |
 
 ### Memory Leaks w Javie - tak, są możliwe!
 
 GC usuwa tylko obiekty BEZ referencji. Jeśli trzymasz referencję - obiekt żyje.
 
 **Typowe przyczyny:**
+
 1. Static collections rosnące w nieskończoność
 2. Listeners/callbacks niezarejestrowane
 3. Cache bez limitu/TTL
@@ -269,6 +280,7 @@ GC usuwa tylko obiekty BEZ referencji. Jeśli trzymasz referencję - obiekt żyj
 ## 5. String Pool
 
 ### Problem
+
 Stringi są najczęściej używanym typem. Tworzenie nowego obiektu dla każdego "hello" = waste pamięci.
 
 ### Rozwiązanie: String Pool (Interning)
@@ -315,16 +327,16 @@ String result = sb.toString();
 
 ### Primitives vs Objects
 
-| Primitive | Wrapper | Rozmiar | Default |
-|-----------|---------|---------|---------|
-| byte | Byte | 8 bit | 0 |
-| short | Short | 16 bit | 0 |
-| int | Integer | 32 bit | 0 |
-| long | Long | 64 bit | 0L |
-| float | Float | 32 bit | 0.0f |
-| double | Double | 64 bit | 0.0d |
-| boolean | Boolean | ~1 bit | false |
-| char | Character | 16 bit | '\u0000' |
+| Primitive | Wrapper   | Rozmiar | Default  |
+| --------- | --------- | ------- | -------- |
+| byte      | Byte      | 8 bit   | 0        |
+| short     | Short     | 16 bit  | 0        |
+| int       | Integer   | 32 bit  | 0        |
+| long      | Long      | 64 bit  | 0L       |
+| float     | Float     | 32 bit  | 0.0f     |
+| double    | Double    | 64 bit  | 0.0d     |
+| boolean   | Boolean   | ~1 bit  | false    |
+| char      | Character | 16 bit  | '\u0000' |
 
 ### Autoboxing / Unboxing
 
@@ -339,6 +351,7 @@ int z = list.get(0);   // Unboxing
 ```
 
 **Uwaga na null:**
+
 ```java
 Integer x = null;
 int y = x;  // NullPointerException! Unboxing null
@@ -388,12 +401,14 @@ Throwable
 ### Checked vs Unchecked
 
 **Checked (kompilator wymusza obsługę):**
+
 - Dziedziczą z Exception (ale nie RuntimeException)
 - Musisz `try-catch` lub `throws`
 - Reprezentują recoverable errors
 - Przykłady: IOException, SQLException
 
 **Unchecked (kompilator nie wymusza):**
+
 - Dziedziczą z RuntimeException
 - Reprezentują programming errors
 - Przykłady: NullPointerException, IllegalArgumentException
