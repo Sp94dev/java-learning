@@ -2,129 +2,77 @@
 
 ## Zadanie
 
-Dodaj do `NoteService` metody wykorzystujące Stream API.
+Rozbuduj warstwę serwisową w `wallet-manager` o bardziej zaawansowane operacje na danych z użyciem Java Stream API.
 
-### Nowe endpointy
+### 1. Rozbudowa `InstrumentService`
 
-```
-GET /api/notes?author=John          → filtruj po autorze
-GET /api/notes?search=java          → szukaj w tytule/content
-GET /api/notes/recent?limit=5       → ostatnie N notatek
-GET /api/notes/stats                → statystyki
-```
+Dodaj metody pozwalające na sortowanie i limitowanie wyników.
 
-### NoteService - nowe metody
+**Nowe parametry w kontrolerze:**
+`GET /api/instruments?sort=ticker&limit=5`
 
+**Implementacja w serwisie:**
+Wykorzystaj `sorted(Comparator...)` i `limit(long)`.
+
+### 2. Statystyki Transakcji (`TransactionService`)
+
+Stwórz nowy endpoint `GET /api/transactions/stats`, który zwróci podsumowanie portfela.
+
+**Stwórz rekord DTO `TransactionStats`:**
 ```java
-public List<NoteResponse> findByAuthor(String author) {
-    return repository.findAll().stream()
-        .filter(note -> note.author().equalsIgnoreCase(author))
-        .map(this::toResponse)
-        .toList();
-}
-
-public List<NoteResponse> search(String keyword) {
-    String lowerKeyword = keyword.toLowerCase();
-    return repository.findAll().stream()
-        .filter(note -> 
-            note.title().toLowerCase().contains(lowerKeyword) ||
-            note.content().toLowerCase().contains(lowerKeyword))
-        .map(this::toResponse)
-        .toList();
-}
-
-public List<NoteResponse> findRecent(int limit) {
-    return repository.findAll().stream()
-        .sorted(Comparator.comparing(Note::createdAt).reversed())
-        .limit(limit)
-        .map(this::toResponse)
-        .toList();
-}
-
-public NoteStatsResponse getStats() {
-    List<Note> all = repository.findAll();
-    
-    Map<String, Long> countByAuthor = all.stream()
-        .collect(Collectors.groupingBy(Note::author, Collectors.counting()));
-    
-    return new NoteStatsResponse(
-        all.size(),
-        countByAuthor
-    );
-}
-```
-
-### Nowe DTO
-
-```java
-public record NoteStatsResponse(
-    int totalNotes,
-    Map<String, Long> notesByAuthor
+public record TransactionStats(
+    int totalTransactions,
+    Map<String, Long> countByType, // BUY: 5, SELL: 2
+    Map<Long, Double> totalValueByInstrument // InstrumentID: Suma (price * quantity)
 ) {}
 ```
 
-### NoteController - rozbudowany GET
+**Zaimplementuj logikę w `TransactionService`:**
 
 ```java
-@GetMapping
-public List<NoteResponse> getAll(
-    @RequestParam(required = false) String author,
-    @RequestParam(required = false) String search
-) {
-    if (author != null) {
-        return noteService.findByAuthor(author);
-    }
-    if (search != null) {
-        return noteService.search(search);
-    }
-    return noteService.findAll();
-}
+public TransactionStats getStats() {
+    List<Transaction> all = repository.findAll();
 
-@GetMapping("/recent")
-public List<NoteResponse> getRecent(
-    @RequestParam(defaultValue = "10") int limit
-) {
-    return noteService.findRecent(limit);
-}
+    // 1. Liczba wszystkich
+    int total = all.size();
 
-@GetMapping("/stats")
-public NoteStatsResponse getStats() {
-    return noteService.getStats();
+    // 2. Grupowanie po typie (BUY/SELL)
+    Map<String, Long> byType = all.stream()
+        .collect(Collectors.groupingBy(Transaction::type, Collectors.counting()));
+
+    // 3. Wartość per instrument (zakładając uproszczenie: suma price * quantity)
+    Map<Long, Double> valueByInstrument = all.stream()
+        .collect(Collectors.groupingBy(
+            Transaction::instrumentId,
+            Collectors.summingDouble(t -> t.price() * t.quantity())
+        ));
+
+    return new TransactionStats(total, byType, valueByInstrument);
 }
 ```
 
-## Test
+### 3. Wyszukiwanie instrumentów "full text" (uproszczone)
 
-```bash
-# Filtrowanie
-curl "http://localhost:8080/api/notes?author=John"
+Dodaj endpoint `GET /api/instruments/search?query=app`
 
-# Szukanie
-curl "http://localhost:8080/api/notes?search=java"
-
-# Ostatnie
-curl "http://localhost:8080/api/notes/recent?limit=3"
-
-# Statystyki
-curl http://localhost:8080/api/notes/stats
-```
-
-## Bonus: Kombinowanie filtrów
+Przeszukaj listę instrumentów sprawdzając czy `query` występuje w `ticker`, `market` LUB `type` (case insensitive).
 
 ```java
-public List<NoteResponse> findAll(String author, String search) {
-    Stream<Note> stream = repository.findAll().stream();
-    
-    if (author != null) {
-        stream = stream.filter(n -> n.author().equalsIgnoreCase(author));
-    }
-    if (search != null) {
-        String kw = search.toLowerCase();
-        stream = stream.filter(n -> 
-            n.title().toLowerCase().contains(kw) ||
-            n.content().toLowerCase().contains(kw));
-    }
-    
-    return stream.map(this::toResponse).toList();
+public List<Instrument> search(String query) {
+    String lowerQuery = query.toLowerCase();
+    return repository.findAll().stream()
+        .filter(i -> 
+            i.ticker().toLowerCase().contains(lowerQuery) ||
+            i.market().toLowerCase().contains(lowerQuery) ||
+            i.type().toLowerCase().contains(lowerQuery)
+        )
+        .toList();
 }
 ```
+
+## Checklist
+
+- [ ] Endpoint `/api/transactions/stats` zwraca zagregowane dane.
+- [ ] Endpoint `/api/instruments` obsługuje proste sortowanie.
+- [ ] Kod wykorzystuje `Collectors.groupingBy`, `summingDouble`, etc.
+- [ ] Logika jest testowalna (jest w serwisie, nie w kontrolerze).

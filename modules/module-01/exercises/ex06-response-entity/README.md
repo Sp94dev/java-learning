@@ -2,90 +2,74 @@
 
 ## Zadanie
 
-Dodaj właściwe kody HTTP do wszystkich endpointów.
+Zaktualizuj `InstrumentController` w projekcie `wallet-manager`, aby zwracał precyzyjne kody HTTP i nagłówki.
 
-### Wymagane zmiany
+### Wymagane zmiany w `InstrumentController`
+
+Zmień typy zwracane metod z `Instrument` / `List<Instrument>` na `ResponseEntity<Instrument>` / `ResponseEntity<List<Instrument>>`.
 
 | Endpoint | Przed | Po |
 |----------|-------|-----|
-| POST /notes | 200 | 201 + Location |
-| GET /notes/{id} (found) | 200 | 200 |
-| GET /notes/{id} (not found) | 200 + null | 404 |
-| PUT /notes/{id} (found) | 200 | 200 |
-| PUT /notes/{id} (not found) | 200 + null | 404 |
-| DELETE /notes/{id} (found) | 200 | 204 |
-| DELETE /notes/{id} (not found) | 200 | 404 |
+| POST /api/instruments | 200 OK | 201 Created + Header `Location` |
+| GET /api/instruments/{id} (znaleziono) | 200 OK | 200 OK |
+| GET /api/instruments/{id} (nie znaleziono) | 500/Exception | 404 Not Found |
+| DELETE /api/instruments/{id} | 200 OK | 204 No Content |
 
-### Zaktualizowany NoteService
+### Wskazówki implementacyjne
 
-Service zwraca `Optional` dla pojedynczych wyników:
-
-```java
-public Optional<NoteResponse> findById(Long id) {
-    return repository.findById(id)
-        .map(this::toResponse);
-}
-
-public Optional<NoteResponse> update(Long id, UpdateNoteRequest request) {
-    return repository.findById(id)
-        .map(existing -> {
-            Note updated = new Note(
-                existing.id(),
-                request.title(),
-                request.content(),
-                existing.author(),
-                existing.createdAt()
-            );
-            return toResponse(repository.save(updated));
-        });
-}
-```
-
-### Zaktualizowany NoteController
+#### 1. POST - Created (201)
 
 ```java
 @PostMapping
-public ResponseEntity<NoteResponse> create(@RequestBody CreateNoteRequest request) {
-    NoteResponse created = noteService.create(request);
-    URI location = URI.create("/api/notes/" + created.id());
+public ResponseEntity<Instrument> createInstrument(@RequestBody Instrument instrument) {
+    Instrument created = instrumentService.create(instrument);
+    
+    URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(created.id())
+            .toUri();
+            
     return ResponseEntity.created(location).body(created);
-}
-
-@GetMapping("/{id}")
-public ResponseEntity<NoteResponse> getById(@PathVariable Long id) {
-    return noteService.findById(id)
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
-}
-
-@DeleteMapping("/{id}")
-public ResponseEntity<Void> delete(@PathVariable Long id) {
-    if (!noteService.existsById(id)) {
-        return ResponseEntity.notFound().build();
-    }
-    noteService.deleteById(id);
-    return ResponseEntity.noContent().build();
 }
 ```
 
-## Test
+#### 2. GET (Single) - OK (200) lub Not Found (404)
+
+Service może zwracać `Optional<Instrument>`.
+
+```java
+@GetMapping("/{id}")
+public ResponseEntity<Instrument> getInstrument(@PathVariable Long id) {
+    return instrumentService.findById(id)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+}
+```
+
+#### 3. DELETE - No Content (204)
+
+```java
+@DeleteMapping("/{id}")
+public ResponseEntity<Void> deleteInstrument(@PathVariable Long id) {
+    if (!instrumentService.existsById(id)) {
+        return ResponseEntity.notFound().build();
+    }
+    instrumentService.deleteById(id);
+    return ResponseEntity.noContent().build(); // 204
+}
+```
+
+### Zadanie dodatkowe
+
+Zastosuj te same zasady dla `TransactionController`.
+
+## Weryfikacja
+
+Użyj pliku `rest/instrument.rest` i sprawdzaj nagłówki odpowiedzi (np. w VS Code REST Client lub curl z flagą `-i`).
 
 ```bash
-# POST → 201
-curl -i -X POST http://localhost:8080/api/notes \
-  -H "Content-Type: application/json" \
-  -d '{"title":"Test","content":"Body","author":"Me"}'
-# Sprawdź: HTTP 201, Location header
-
-# GET existing → 200
-curl -i http://localhost:8080/api/notes/1
-# Sprawdź: HTTP 200
-
-# GET missing → 404
-curl -i http://localhost:8080/api/notes/999
-# Sprawdź: HTTP 404
-
-# DELETE existing → 204
-curl -i -X DELETE http://localhost:8080/api/notes/1
-# Sprawdź: HTTP 204, brak body
+curl -i -X POST http://localhost:8080/api/instruments ...
+# Oczekuj: HTTP/1.1 201 
+# Oczekuj: Location: http://localhost:8080/api/instruments/6
 ```

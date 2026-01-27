@@ -2,143 +2,77 @@
 
 ## Zadanie
 
-Dodaj pełną dokumentację API do aplikacji z notatkami.
+Dodaj automatycznie generowaną dokumentację API do projektu `wallet-manager`.
 
-### 1. Dodaj zależność
+### 1. Dodaj zależność (pom.xml)
 
 ```xml
 <dependency>
     <groupId>org.springdoc</groupId>
     <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-    <version>2.8.8</version>
+    <version>2.8.5</version> <!-- Sprawdź najnowszą wersję -->
 </dependency>
 ```
 
-### 2. Konfiguracja OpenAPI
+### 2. Konfiguracja
+
+Stwórz klasę `com.sp94dev.wallet.config.OpenApiConfig`:
 
 ```java
 @Configuration
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI noteApiDocs() {
+    public OpenAPI walletApiDocs() {
         return new OpenAPI()
             .info(new Info()
-                .title("Notes API")
-                .version("1.0.0")
-                .description("REST API for managing notes - Module 01 exercise"));
+                .title("Wallet Manager API")
+                .version("v1")
+                .description("API do zarządzania portfelem inwestycyjnym"));
     }
 }
 ```
 
-### 3. Opisz kontroler
+### 3. Opisz `InstrumentController`
+
+Użyj adnotacji Swaggera, aby opisać endpointy.
 
 ```java
-@RestController
-@RequestMapping("/api/notes")
-@Tag(name = "Notes", description = "Note management endpoints")
-public class NoteController {
+@Tag(name = "Instruments", description = "Zarządzanie instrumentami finansowymi")
+public class InstrumentController {
 
-    @Operation(
-        summary = "Get all notes",
-        description = "Returns all notes, optionally filtered by author or search term"
-    )
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "List of notes")
-    })
+    @Operation(summary = "Pobierz listę instrumentów", description = "Pozwala na filtrowanie po typie, walucie itp.")
     @GetMapping
-    public List<NoteResponse> getAll(
-        @Parameter(description = "Filter by author name")
-        @RequestParam(required = false) String author,
-        
-        @Parameter(description = "Search in title and content")
-        @RequestParam(required = false) String search
-    ) { }
+    public List<Instrument> getAll(...) { ... }
 
-    @Operation(summary = "Get note by ID")
+    @Operation(summary = "Dodaj nowy instrument")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Note found"),
-        @ApiResponse(responseCode = "404", description = "Note not found")
+        @ApiResponse(responseCode = "201", description = "Utworzono instrument"),
+        @ApiResponse(responseCode = "400", description = "Nieprawidłowe dane")
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<NoteResponse> getById(
-        @Parameter(description = "Note ID", required = true)
-        @PathVariable Long id
-    ) { }
-
-    @Operation(summary = "Create new note")
-    @ApiResponse(responseCode = "201", description = "Note created")
     @PostMapping
-    public ResponseEntity<NoteResponse> create(
-        @RequestBody CreateNoteRequest request
-    ) { }
+    public ResponseEntity<Instrument> create(...) { ... }
 }
 ```
 
-### 4. Opisz DTOs
+### 4. Opisz Rekordy (Modele)
+
+Dodaj opisy do pól w rekordzie `Instrument`.
 
 ```java
-@Schema(description = "Request to create a new note")
-public record CreateNoteRequest(
-    @Schema(description = "Note title", example = "Meeting Notes", requiredMode = REQUIRED)
-    String title,
-    
-    @Schema(description = "Note content", example = "Discussion about Q1 goals")
-    String content,
-    
-    @Schema(description = "Author name", example = "John Doe")
-    String author
-) {}
-
-@Schema(description = "Note response")
-public record NoteResponse(
-    @Schema(description = "Unique identifier", example = "1")
+public record Instrument(
+    @Schema(description = "Unikalne ID", accessMode = Schema.AccessMode.READ_ONLY)
     Long id,
     
-    @Schema(description = "Note title", example = "Meeting Notes")
-    String title,
+    @Schema(description = "Symbol giełdowy", example = "AAPL")
+    String ticker,
     
-    @Schema(description = "Note content")
-    String content,
-    
-    @Schema(description = "Author name")
-    String author,
-    
-    @Schema(description = "Creation timestamp")
-    LocalDateTime createdAt
+    // ...
 ) {}
 ```
 
-### 5. (Opcjonalnie) application.properties
+## Weryfikacja
 
-```properties
-# Custom path
-springdoc.swagger-ui.path=/docs
-
-# Show operation IDs
-springdoc.swagger-ui.displayOperationId=true
-
-# Sort tags alphabetically
-springdoc.swagger-ui.tagsSorter=alpha
-```
-
-## Test
-
-1. Uruchom aplikację
-2. Otwórz: http://localhost:8080/swagger-ui.html
-3. Sprawdź czy:
-   - Wszystkie endpointy są widoczne
-   - Opisy są czytelne
-   - Możesz wykonać request z UI
-   - Examples są sensowne
-
-## Bonus: Generowanie klienta Angular
-
-```bash
-# Pobierz spec
-curl http://localhost:8080/v3/api-docs -o api-spec.json
-
-# Lub użyj online: https://editor.swagger.io/
-# Import → URL → http://localhost:8080/v3/api-docs
-# Generate Client → typescript-angular
-```
+1. Uruchom aplikację: `./mvnw spring-boot:run`
+2. Wejdź na: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+3. Przetestuj endpointy bezpośrednio z przeglądarki.
