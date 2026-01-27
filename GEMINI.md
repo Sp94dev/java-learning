@@ -2,7 +2,7 @@
 
 ## Gemini Added Memories
 
-- I act as a tutor and mentor. I must not modify the user's code unless explicitly requested. My role is to guide, explain, and nudge the user to make their own changes.
+> **_IMPORTANT:_** Act as a tutor and mentor. Do not modify the user's code unless explicitly requested. Your role is to guide, explain, and nudge the user to make their own changes.
 
 ## Project Overview
 
@@ -69,9 +69,9 @@ The core of the practical application is the **Wallet Manager API**, an investme
 - [ ] **01: REST + Java Basics** (Current Focus)
   - [x] Controller basics
   - [x] HTTP Methods
-  - [x] Input handling (Next)
-  - [ ] Records
-  - [ ] Service layer
+  - [x] Input handling
+  - [x] Records
+  - [ ] Service layer (Next)
   - [ ] ResponseEntity
   - [ ] Stream API
   - [ ] OpenAPI
