@@ -1,6 +1,5 @@
 package com.sp94dev.wallet.transaction;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,18 +11,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/transactions")
 public class TransactionController {
-    List<Transaction> transactions = new ArrayList<>();
 
-    @GetMapping()
+    private final TransactionService transactionService;
+
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
+    @GetMapping
     public List<Transaction> getAll() {
-        return this.transactions;
+        return transactionService.getAll();
     }
 
-    @PostMapping()
-    public String postMethodName(@RequestBody Transaction transaction) {
-        this.transactions.add(transaction);
-
-        return "Transaction added successfully";
+    @PostMapping
+    public Transaction createTransaction(@RequestBody Transaction transaction) {
+        return transactionService.create(transaction);
     }
-
 }

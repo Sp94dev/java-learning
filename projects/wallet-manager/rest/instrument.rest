@@ -2,6 +2,9 @@
 http://localhost:8080/api/instruments
 
 
+### Get instrument by ID
+GET http://localhost:8080/api/instruments/1
+
 ### Create instrument
 POST http://localhost:8080/api/instruments
 Content-Type: application/json

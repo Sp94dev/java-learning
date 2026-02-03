@@ -1,14 +1,26 @@
-### Create transaction
+### Get all transactions
+GET http://localhost:8080/api/transactions
+
+### Create transaction (Buy AAPL)
 POST http://localhost:8080/api/transactions
 Content-Type: application/json
 
 {
-    "instrumentId": "1",
-    "type": "BUY",
-    "quantity": "10",
-    "price": "100.0"
+  "instrumentId": 1,
+  "type": "BUY",
+  "quantity": 10.0,
+  "price": 185.50,
+  "date": "2026-02-03"
 }
 
-### Get all transactions
-GET http://localhost:8080/api/transactions
+### Create transaction (Sell GOOGL)
+POST http://localhost:8080/api/transactions
 Content-Type: application/json
+
+{
+  "instrumentId": 2,
+  "type": "SELL",
+  "quantity": 5.0,
+  "price": 140.25,
+  "date": "2026-02-01"
+}

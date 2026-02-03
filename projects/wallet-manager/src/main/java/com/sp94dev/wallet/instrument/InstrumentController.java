@@ -1,9 +1,6 @@
 package com.sp94dev.wallet.instrument;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,13 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/instruments")
 public class InstrumentController {
-    private List<Instrument> instruments = new ArrayList<>(List.of(
-            new Instrument(1L, "AAPL", "USD", "NASDAQ", "STOCK"),
-            new Instrument(2L, "GOOGL", "USD", "NASDAQ", "ETF"),
-            new Instrument(3L, "TSLA", "USD", "NASDAQ", "STOCK"),
-            new Instrument(4L, "AMZN", "USD", "NASDAQ", "STOCK"),
-            new Instrument(5L, "MSFT", "USD", "NASDAQ", "STOCK")));
-    private final AtomicLong idCounter = new AtomicLong(1);
+    private final InstrumentService instrumentService;
+
+    public InstrumentController(InstrumentService instrumentService) {
+        this.instrumentService = instrumentService;
+    }
 
     @GetMapping()
     List<Instrument> getAll(
@@ -32,59 +27,27 @@ public class InstrumentController {
             @RequestParam(required = false) String currency,
             @RequestParam(required = false) String ticker,
             @RequestParam(required = false) String market) {
-        return this.instruments.stream()
-                .filter(instrument -> type == null || instrument.type().equals(type))
-                .filter(instrument -> currency == null || instrument.currency().equals(currency))
-                .filter(instrument -> ticker == null
-                        || instrument.ticker().toLowerCase().contains(ticker.toLowerCase()))
-                .filter(instrument -> market == null || instrument.market().equals(market))
-                .toList();
+        return this.instrumentService.getAllInstruments(type, currency, ticker, market);
     }
 
     @GetMapping("/{id}")
     public Instrument getInstrument(@PathVariable Long id) {
-        return this.instruments.stream()
-                .filter(instrument -> instrument.id().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new NoSuchElementException("Instrument not found" + id));
+        return instrumentService.getInstrumentById(id);
 
     };
 
     @PostMapping()
-    public List<Instrument> createInstrument(@RequestBody Instrument instrumentBody) {
-        Instrument newInstrument = new Instrument(
-                idCounter.getAndIncrement(),
-                instrumentBody.ticker(),
-                instrumentBody.currency(),
-                instrumentBody.market(),
-                instrumentBody.type());
-        this.instruments.add(newInstrument);
-        return this.instruments;
+    public void createInstrument(@RequestBody Instrument instrumentBody) {
+        this.instrumentService.createInstrument(instrumentBody);
     };
 
     @PutMapping("/{id}")
     public Instrument updateInstrument(@PathVariable Long id, @RequestBody Instrument instrument) {
-        return this.instruments.stream()
-                .filter(oldInstrument -> oldInstrument.id().equals(id))
-                .findFirst()
-                .map(oldInstrument -> {
-                    Instrument newInstrument = new Instrument(
-                            id,
-                            instrument.ticker(),
-                            instrument.currency(),
-                            instrument.market(),
-                            instrument.type());
-                    int index = instruments.indexOf(oldInstrument);
-                    instruments.set(index, newInstrument);
-                    return newInstrument;
-                }).orElseThrow(() -> new NoSuchElementException("Instrument not found " + id));
+        return this.instrumentService.updateInstrument(id, instrument);
     };
 
     @DeleteMapping("/{id}")
     public void deleteInstrument(@PathVariable Long id) {
-        boolean removed = this.instruments.removeIf(Instrument -> Instrument.id().equals(id));
-        if (!removed) {
-            throw new NoSuchElementException("Instrument not found " + id);
-        }
+        this.instrumentService.deleteInstrument(id);
     }
 }
