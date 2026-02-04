@@ -1,7 +1,7 @@
 package com.sp94dev.wallet.instrument;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -13,9 +13,8 @@ public class InstrumentService {
         this.inMemoryInstrumentRepository = inMemoryInstrumentRepository;
     }
 
-    public Instrument getInstrumentById(Long id) {
-        return this.inMemoryInstrumentRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Instrument not found " + id));
+    public Optional<Instrument> getInstrumentById(Long id) {
+        return this.inMemoryInstrumentRepository.findById(id);
     }
 
     public List<Instrument> getAllInstruments(String type, String currency, String ticker, String market) {
