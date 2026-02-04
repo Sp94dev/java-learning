@@ -10,8 +10,8 @@
 | 02 | HTTP Methods | GET, POST, PUT, DELETE - pełne CRUD | 🟢 |
 | 03 | Input Handling | `@PathVariable`, `@RequestParam`, `@RequestBody` | 🟢 |
 | 04 | Java Records | Niemutowalne DTO zamiast POJO | 🟢 |
-| 05 | Service Layer | Separacja logiki, `@Service`, Constructor Injection | 🟡 |
-| 06 | ResponseEntity | Kody HTTP, nagłówki, kontrola odpowiedzi | ⚪ |
+| 05 | Service Layer | Separacja logiki, `@Service`, Constructor Injection | 🟢 |
+| 06 | ResponseEntity | Kody HTTP, nagłówki, kontrola odpowiedzi | 🟢 |
 | 07 | Stream API | Funkcyjne przetwarzanie kolekcji | ⚪ |
 | 08 | OpenAPI/Swagger | Dokumentacja API, generowanie UI | ⚪ |
 

@@ -71,9 +71,9 @@ The core of the practical application is the **Wallet Manager API**, an investme
   - [x] HTTP Methods
   - [x] Input handling
   - [x] Records
-  - [ ] Service layer (Next)
-  - [ ] ResponseEntity
-  - [ ] Stream API
+  - [x] Service layer
+  - [x] ResponseEntity
+  - [ ] Stream API (Next)
   - [ ] OpenAPI
 - [ ] **02: Java Internals** (JVM, Memory, GC, Threads)
 
