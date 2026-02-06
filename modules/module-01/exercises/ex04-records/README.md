@@ -1,26 +1,26 @@
-# Ćwiczenie 04: Java Records
+# Exercise 04: Java Records
 
-## Zadanie
+## Task
 
-Przepisz model notatek na Records z separacją Request/Response.
+Refactor the note model to use Records with Request/Response separation.
 
-### DTOs do stworzenia
+### DTOs to Create
 
 ```java
-// Request - tworzenie (bez id, bez createdAt)
+// Request - creating (no id, no createdAt)
 public record CreateNoteRequest(
     String title,
     String content,
     String author
 ) {}
 
-// Request - aktualizacja (tylko edytowalne pola)
+// Request - updating (only editable fields)
 public record UpdateNoteRequest(
     String title,
     String content
 ) {}
 
-// Response - pełne dane
+// Response - full data
 public record NoteResponse(
     Long id,
     String title,
@@ -30,10 +30,10 @@ public record NoteResponse(
 ) {}
 ```
 
-### Model wewnętrzny (nie DTO)
+### Internal Model (not a DTO)
 
 ```java
-// Domenowy obiekt - może być klasą lub record
+// Domain object - can be a class or a record
 public record Note(
     Long id,
     String title,
@@ -45,7 +45,7 @@ public record Note(
 
 ## Hints
 
-- Record z walidacją w compact constructor:
+- Record with validation in a compact constructor:
   ```java
   public record CreateNoteRequest(String title, String content, String author) {
       public CreateNoteRequest {
@@ -56,7 +56,7 @@ public record Note(
   }
   ```
 
-- Mapowanie w kontrolerze:
+- Mapping in the controller:
   ```java
   Note note = new Note(
       generateId(),
@@ -69,12 +69,12 @@ public record Note(
 
 ## Test
 
-Upewnij się, że JSON serializacja działa poprawnie:
+Ensure that JSON serialization works correctly:
 
 ```bash
 curl -X POST http://localhost:8080/api/notes \
   -H "Content-Type: application/json" \
   -d '{"title":"Test","content":"Body","author":"Me"}'
 
-# Powinno zwrócić NoteResponse z id i createdAt
+# Should return NoteResponse with id and createdAt
 ```

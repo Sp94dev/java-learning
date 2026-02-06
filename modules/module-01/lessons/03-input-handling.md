@@ -1,10 +1,10 @@
-# Lekcja 03: Obsługa Danych Wejściowych
+# Lesson 03: Input Data Handling
 
 > `@PathVariable`, `@RequestParam`, `@RequestBody`
 
-## Trzy sposoby przekazywania danych
+## Three ways to pass data
 
-### 1. Path Variable - część adresu URL
+### 1. Path Variable - part of the URL address
 
 ```java
 // GET /api/users/42
@@ -19,7 +19,7 @@ public Order getOrder(
 ) { }
 ```
 
-### 2. Query Params - po znaku `?`
+### 2. Query Params - after the `?` character
 
 ```java
 // GET /api/users?page=1&size=10&sort=name
@@ -35,7 +35,7 @@ public List<User> getUsers(
 public List<Result> search(@RequestParam String q) { }
 ```
 
-### 3. Request Body - JSON w ciele żądania
+### 3. Request Body - JSON in the request body
 
 ```java
 // POST /api/users
@@ -44,25 +44,25 @@ public List<Result> search(@RequestParam String q) { }
 public User createUser(@RequestBody CreateUserRequest request) { }
 ```
 
-## Kiedy używać czego?
+## When to use which?
 
-| Typ | Kiedy | Przykład |
+| Type | When | Example |
 |-----|-------|----------|
-| PathVariable | Identyfikator zasobu | `/users/42` |
-| RequestParam | Filtrowanie, stronicowanie, opcje | `?status=active&page=2` |
-| RequestBody | Tworzenie/aktualizacja złożonych obiektów | JSON payload |
+| PathVariable | Resource identifier | `/users/42` |
+| RequestParam | Filtering, paging, optional settings | `?status=active&page=2` |
+| RequestBody | Creating/updating complex objects | JSON payload |
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie:** Rozszerz `NoteController`:
-- `GET /notes?author=John` - filtrowanie po autorze
-- `GET /notes?search=keyword` - szukanie w tytule
-- `GET /notes/{id}/comments/{commentId}` - zagnieżdżone zasoby
+**Task:** Extend the `NoteController`:
+- `GET /notes?author=John` - filtering by author
+- `GET /notes?search=keyword` - searching in the title
+- `GET /notes/{id}/comments/{commentId}` - nested resources
 
-**Pliki:** `exercises/ex03-input-handling/`
+**Files:** `exercises/ex03-input-handling/`
 
 ## Checklist
 
-- [ ] Wiem kiedy użyć PathVariable vs RequestParam
-- [ ] Potrafię obsługiwać parametry opcjonalne
-- [ ] Rozumiem jak Spring deserializuje JSON do obiektu
+- [ ] I know when to use PathVariable vs RequestParam
+- [ ] I can handle optional parameters
+- [ ] I understand how Spring deserializes JSON to an object

@@ -1,8 +1,8 @@
-# Ćwiczenie 02: CRUD Controller
+# Exercise 02: CRUD Controller
 
-## Zadanie
+## Task
 
-Stwórz `NoteController` z pełnym CRUD dla notatek.
+Create a `NoteController` with full CRUD operations for notes.
 
 ### Model
 ```java
@@ -13,21 +13,21 @@ class Note {
 }
 ```
 
-### Endpointy
+### Endpoints
 
-| Method | Path | Opis |
-|--------|------|------|
-| GET | `/api/notes` | Lista wszystkich |
-| GET | `/api/notes/{id}` | Pojedyncza notatka |
-| POST | `/api/notes` | Utwórz |
-| PUT | `/api/notes/{id}` | Aktualizuj |
-| DELETE | `/api/notes/{id}` | Usuń |
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/notes` | List all notes |
+| GET | `/api/notes/{id}` | Single note details |
+| POST | `/api/notes` | Create a new note |
+| PUT | `/api/notes/{id}` | Update an existing note |
+| DELETE | `/api/notes/{id}` | Delete a note |
 
 ## Hints
 
-- Na razie trzymaj dane w `List<Note>` wewnątrz kontrolera
-- Użyj `AtomicLong` do generowania ID
-- To celowo "brzydki" kod - będziemy refaktorować w lekcji 05
+- For now, keep the data in a `List<Note>` inside the controller.
+- Use `AtomicLong` for generating IDs.
+- This is intentionally "messy" code - we will refactor it in Lesson 05.
 
 ## Test
 

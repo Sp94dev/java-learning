@@ -1,20 +1,20 @@
-# Lekcja 02: HTTP Methods
+# Lesson 02: HTTP Methods
 
-> GET, POST, PUT, DELETE - pełne CRUD
+> GET, POST, PUT, DELETE - full CRUD
 
-## Koncept
+## Concept
 
-| Metoda | Akcja | Idempotentna | Body |
+| Method | Action | Idempotent | Body |
 |--------|-------|--------------|------|
-| GET | Pobierz | ✅ | ❌ |
-| POST | Utwórz | ❌ | ✅ |
-| PUT | Zastąp całość | ✅ | ✅ |
-| PATCH | Aktualizuj część | ❌ | ✅ |
-| DELETE | Usuń | ✅ | ❌ |
+| GET | Retrieve | ✅ | ❌ |
+| POST | Create | ❌ | ✅ |
+| PUT | Replace entirely | ✅ | ✅ |
+| PATCH | Partial update | ❌ | ✅ |
+| DELETE | Delete | ✅ | ❌ |
 
-**Idempotentna** = wielokrotne wywołanie daje ten sam efekt.
+**Idempotent** = calling the method multiple times has the same effect as calling it once.
 
-## Mapowania w Spring
+## Spring Mappings
 
 ```java
 @RestController
@@ -41,28 +41,28 @@ public class ItemController {
 ## REST Naming Conventions
 
 ```
-✅ GET    /wallets          - lista
-✅ GET    /wallets/123      - jeden
-✅ POST   /wallets          - utwórz
-✅ PUT    /wallets/123      - aktualizuj
-✅ DELETE /wallets/123      - usuń
+✅ GET    /wallets          - list
+✅ GET    /wallets/123      - single item
+✅ POST   /wallets          - create
+✅ PUT    /wallets/123      - update
+✅ DELETE /wallets/123      - delete
 
-❌ GET    /getWallets       - czasownik w URL
-❌ POST   /createWallet     - akcja w URL
-❌ GET    /wallet/123       - singular dla listy
+❌ GET    /getWallets       - verb in URL
+❌ POST   /createWallet     - action in URL
+❌ GET    /wallet/123       - singular for list access
 ```
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie:** Stwórz `NoteController` z pełnym CRUD:
-- Notatka ma: `id`, `title`, `content`
-- Dane trzymaj w `List<>` (in-memory)
-- Bez serwisu - wszystko w kontrolerze (celowo, żeby potem refaktorować)
+**Task:** Create a `NoteController` with full CRUD:
+- A note has: `id`, `title`, `content`
+- Store data in a `List<>` (in-memory)
+- No service layer yet - put everything in the controller (deliberately, for later refactoring)
 
-**Pliki:** `exercises/ex02-crud-controller/`
+**Files:** `exercises/ex02-crud-controller/`
 
 ## Checklist
 
-- [ ] Rozumiem różnicę między PUT a PATCH
-- [ ] Znam konwencje nazewnictwa REST
-- [ ] Potrafię zmapować wszystkie metody HTTP
+- [ ] I understand the difference between PUT and PATCH
+- [ ] I know the REST naming conventions
+- [ ] I can map all HTTP methods

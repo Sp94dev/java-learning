@@ -1,11 +1,11 @@
-# Lekcja 04: Java Records
+# Lesson 04: Java Records
 
-> Niemutowalne DTO zamiast POJO
+> Immutable DTOs instead of POJOs
 
-## Problem z klasycznym POJO
+## The problem with classic POJO
 
 ```java
-// 30+ linii boilerplate
+// 30+ lines of boilerplate
 public class WalletDto {
     private Long id;
     private String name;
@@ -21,15 +21,15 @@ public class WalletDto {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    // ... kolejne gettery i settery
+    // ... more getters and setters
     // ... equals(), hashCode(), toString()
 }
 ```
 
-## Record - Java 16+ (produkcyjny od Java 17)
+## Record - Java 16+ (standard in Java 17)
 
 ```java
-// 1 linia - wszystko wygenerowane
+// 1 line - everything generated
 public record WalletDto(
     Long id,
     String name,
@@ -37,20 +37,20 @@ public record WalletDto(
 ) {}
 ```
 
-**Dostajesz automatycznie:**
-- Konstruktor
-- Gettery (bez prefixu `get` - `wallet.name()` nie `wallet.getName()`)
+**You get automatically:**
+- Constructor
+- Getters (no `get` prefix - `wallet.name()` not `wallet.getName()`)
 - `equals()`, `hashCode()`, `toString()`
-- Niemutowalność (wszystkie pola `final`)
+- Immutability (all fields are `final`)
 
-## Customizacja Records
+## Customizing Records
 
 ```java
 public record CreateWalletRequest(
     String name,
     String currency
 ) {
-    // Compact constructor - walidacja
+    // Compact constructor - validation
     public CreateWalletRequest {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Name required");
@@ -58,7 +58,7 @@ public record CreateWalletRequest(
         currency = currency != null ? currency.toUpperCase() : "PLN";
     }
 
-    // Dodatkowe metody
+    // Additional methods
     public boolean isDefaultCurrency() {
         return "PLN".equals(currency);
     }
@@ -68,39 +68,39 @@ public record CreateWalletRequest(
 ## Pattern: Request vs Response DTO
 
 ```java
-// Wejście - bez ID (serwer generuje)
+// Input - without ID (server generates it)
 public record CreateWalletRequest(String name, String currency) {}
 
-// Wyjście - pełne dane
+// Output - full data
 public record WalletResponse(Long id, String name, BigDecimal balance, String currency) {}
 
-// Aktualizacja - tylko modyfikowalne pola
+// Update - only modifiable fields
 public record UpdateWalletRequest(String name) {}
 ```
 
-## Dlaczego DTO a nie Entity?
+## Why DTO instead of Entity?
 
 ```
 Controller → DTO → Service → Entity → Repository
            ↑                        ↓
-        granica API            granica bazy
+        API boundary            DB boundary
 ```
 
-- **Bezpieczeństwo**: nie eksponujesz wewnętrznej struktury
-- **Elastyczność**: API i baza mogą ewoluować niezależnie
-- **Kontrola**: wybierasz co zwracasz
+- **Security**: you don't expose your internal data structure
+- **Flexibility**: API and database can evolve independently
+- **Control**: you choose exactly what you return
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie:** Przepisz `NoteController` na Records:
-- `CreateNoteRequest` - tytuł, treść
-- `UpdateNoteRequest` - tylko treść
-- `NoteResponse` - id, tytuł, treść, createdAt
+**Task:** Refactor `NoteController` to use Records:
+- `CreateNoteRequest` - title, content
+- `UpdateNoteRequest` - content only
+- `NoteResponse` - id, title, content, createdAt
 
-**Pliki:** `exercises/ex04-records/`
+**Files:** `exercises/ex04-records/`
 
 ## Checklist
 
-- [ ] Rozumiem różnicę między Record a klasą
-- [ ] Wiem jak dodać walidację w compact constructor
-- [ ] Stosuję pattern Request/Response DTO
+- [ ] I understand the difference between a Record and a class
+- [ ] I know how to add validation in a compact constructor
+- [ ] I apply the Request/Response DTO pattern

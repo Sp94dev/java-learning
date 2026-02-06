@@ -1,24 +1,31 @@
-# Ćwiczenie 08: OpenAPI / Swagger
+# Exercise 08: OpenAPI / Swagger (Wallet Manager Edition)
 
-## Zadanie
+## Task
 
-Dodaj automatycznie generowaną dokumentację API do projektu `wallet-manager`.
+Add auto-generated API documentation to the `wallet-manager` project. The documentation must reflect the architecture using `ResponseEntity` and DTOs.
 
-### 1. Dodaj zależność (pom.xml)
+### 1. Add Dependency (pom.xml)
 
 ```xml
 <dependency>
     <groupId>org.springdoc</groupId>
     <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-    <version>2.8.5</version> <!-- Sprawdź najnowszą wersję -->
+    <version>2.8.5</version>
 </dependency>
 ```
 
-### 2. Konfiguracja
+### 2. Configuration (Programmatic)
 
-Stwórz klasę `com.sp94dev.wallet.config.OpenApiConfig`:
+Create the `com.sp94dev.wallet.config.OpenApiConfig` class. Pay attention to the imports – we use the `.models` package, not `.annotations`, for the `@Bean` method.
 
 ```java
+package com.sp94dev.wallet.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+
 @Configuration
 public class OpenApiConfig {
 
@@ -28,51 +35,62 @@ public class OpenApiConfig {
             .info(new Info()
                 .title("Wallet Manager API")
                 .version("v1")
-                .description("API do zarządzania portfelem inwestycyjnym"));
+                .description("Investment portfolio management API"));
     }
 }
 ```
 
-### 3. Opisz `InstrumentController`
+### 3. Describe `InstrumentController`
 
-Użyj adnotacji Swaggera, aby opisać endpointy.
+Use Swagger annotations to describe endpoints returning `ResponseEntity`.
 
 ```java
-@Tag(name = "Instruments", description = "Zarządzanie instrumentami finansowymi")
+@Tag(name = "Instruments", description = "Financial instruments management")
 public class InstrumentController {
 
-    @Operation(summary = "Pobierz listę instrumentów", description = "Pozwala na filtrowanie po typie, walucie itp.")
+    @Operation(summary = "Get instrument list", description = "Filtering by Query parameters")
     @GetMapping
-    public List<Instrument> getAll(...) { ... }
+    public ResponseEntity<List<InstrumentResponse>> getAll(...) { 
+        // ... 
+    }
 
-    @Operation(summary = "Dodaj nowy instrument")
+    @Operation(summary = "Add new instrument")
     @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "Utworzono instrument"),
-        @ApiResponse(responseCode = "400", description = "Nieprawidłowe dane")
+        @ApiResponse(responseCode = "201", description = "Instrument created successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data")
     })
     @PostMapping
-    public ResponseEntity<Instrument> create(...) { ... }
+    public ResponseEntity<InstrumentResponse> createInstrument(@RequestBody Instrument instrumentBody) {
+        // ...
+    }
 }
 ```
 
-### 4. Opisz Rekordy (Modele)
+### 4. Describe Records (Models/DTOs)
 
-Dodaj opisy do pól w rekordzie `Instrument`.
+Add metadata to record fields so Swagger generates nice examples (analogy to documenting interfaces in TS).
 
 ```java
-public record Instrument(
-    @Schema(description = "Unikalne ID", accessMode = Schema.AccessMode.READ_ONLY)
+public record InstrumentResponse(
+    @Schema(description = "Unique identifier", example = "1")
     Long id,
     
-    @Schema(description = "Symbol giełdowy", example = "AAPL")
+    @Schema(description = "Ticker symbol", example = "AAPL")
     String ticker,
     
-    // ...
-) {}
+    @Schema(description = "Instrument currency", example = "USD")
+    String currency,
+    
+    @Schema(description = "Exchange market", example = "NASDAQ")
+    String market,
+    
+    @Schema(description = "Instrument type", example = "STOCK")
+    String type
+) { ... }
 ```
 
-## Weryfikacja
+## Verification
 
-1. Uruchom aplikację: `./mvnw spring-boot:run`
-2. Wejdź na: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-3. Przetestuj endpointy bezpośrednio z przeglądarki.
+1. Run the application: `./mvnw spring-boot:run`
+2. Go to: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+3. Check if the return types (`InstrumentResponse`) are correctly visible in the **Schemas** section.

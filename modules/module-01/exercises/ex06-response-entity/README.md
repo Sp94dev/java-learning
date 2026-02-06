@@ -1,21 +1,21 @@
-# Ćwiczenie 06: ResponseEntity
+# Exercise 06: ResponseEntity
 
-## Zadanie
+## Task
 
-Zaktualizuj `InstrumentController` w projekcie `wallet-manager`, aby zwracał precyzyjne kody HTTP i nagłówki.
+Update the `InstrumentController` in the `wallet-manager` project to return precise HTTP status codes and headers.
 
-### Wymagane zmiany w `InstrumentController`
+### Required Changes in `InstrumentController`
 
-Zmień typy zwracane metod z `Instrument` / `List<Instrument>` na `ResponseEntity<Instrument>` / `ResponseEntity<List<Instrument>>`.
+Change the return types of methods from `Instrument` / `List<Instrument>` to `ResponseEntity<Instrument>` / `ResponseEntity<List<Instrument>>`.
 
-| Endpoint | Przed | Po |
+| Endpoint | Before | After |
 |----------|-------|-----|
-| POST /api/instruments | 200 OK | 201 Created + Header `Location` |
-| GET /api/instruments/{id} (znaleziono) | 200 OK | 200 OK |
-| GET /api/instruments/{id} (nie znaleziono) | 500/Exception | 404 Not Found |
+| POST /api/instruments | 200 OK | 201 Created + `Location` Header |
+| GET /api/instruments/{id} (found) | 200 OK | 200 OK |
+| GET /api/instruments/{id} (not found) | 500/Exception | 404 Not Found |
 | DELETE /api/instruments/{id} | 200 OK | 204 No Content |
 
-### Wskazówki implementacyjne
+### Implementation Hints
 
 #### 1. POST - Created (201)
 
@@ -34,9 +34,9 @@ public ResponseEntity<Instrument> createInstrument(@RequestBody Instrument instr
 }
 ```
 
-#### 2. GET (Single) - OK (200) lub Not Found (404)
+#### 2. GET (Single) - OK (200) or Not Found (404)
 
-Service może zwracać `Optional<Instrument>`.
+The Service should return `Optional<Instrument>`.
 
 ```java
 @GetMapping("/{id}")
@@ -60,16 +60,16 @@ public ResponseEntity<Void> deleteInstrument(@PathVariable Long id) {
 }
 ```
 
-### Zadanie dodatkowe
+### Extra Task
 
-Zastosuj te same zasady dla `TransactionController`.
+Apply the same principles to the `TransactionController`.
 
-## Weryfikacja
+## Verification
 
-Użyj pliku `rest/instrument.rest` i sprawdzaj nagłówki odpowiedzi (np. w VS Code REST Client lub curl z flagą `-i`).
+Use the `rest/instrument.rest` file and check the response headers (e.g., in VS Code REST Client or curl with the `-i` flag).
 
 ```bash
 curl -i -X POST http://localhost:8080/api/instruments ...
-# Oczekuj: HTTP/1.1 201 
-# Oczekuj: Location: http://localhost:8080/api/instruments/6
+# Expect: HTTP/1.1 201 
+# Expect: Location: http://localhost:8080/api/instruments/6
 ```

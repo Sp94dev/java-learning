@@ -1,19 +1,19 @@
-# Lekcja 05: Service Layer
+# Lesson 05: Service Layer
 
-> Separacja logiki, `@Service`, Constructor Injection
+> Logic separation, `@Service`, Constructor Injection
 
-## Analogia Angular
+## Angular Analogy
 
 | Spring | Angular |
 |--------|---------|
 | `@Service` | `@Injectable()` |
 | `@RestController` | Component |
 | Constructor Injection | Constructor Injection |
-| `@Autowired` (stare) | `inject()` (stare) |
+| `@Autowired` (old style) | `inject()` (older versions) |
 
-## Dlaczego Service Layer?
+## Why Service Layer?
 
-**Fat Controller (źle):**
+**Fat Controller (Bad):**
 ```java
 @RestController
 public class WalletController {
@@ -21,18 +21,18 @@ public class WalletController {
 
     @PostMapping
     public Wallet create(@RequestBody CreateRequest req) {
-        // walidacja
-        // logika biznesowa
-        // mapowanie
-        // zapis
-        // notyfikacje
-        // logowanie
-        // zwrot
+        // validation
+        // business logic
+        // mapping
+        // saving
+        // notifications
+        // logging
+        // return
     }
 }
 ```
 
-**Thin Controller + Service (dobrze):**
+**Thin Controller + Service (Good):**
 ```java
 @RestController
 public class WalletController {
@@ -49,7 +49,7 @@ public class WalletController {
 }
 ```
 
-## Constructor Injection (rekomendowane)
+## Constructor Injection (Recommended)
 
 ```java
 @Service
@@ -58,7 +58,7 @@ public class WalletService {
     private final WalletRepository repository;
     private final NotificationService notifications;
 
-    // Spring automatycznie wstrzykuje - bez @Autowired
+    // Spring automatically injects - no @Autowired needed
     public WalletService(
         WalletRepository repository,
         NotificationService notifications
@@ -69,25 +69,25 @@ public class WalletService {
 }
 ```
 
-**Dlaczego constructor injection?**
-- Jasne zależności
-- Łatwiejsze testowanie (możesz przekazać mock)
-- Niemutowalność (`final` pola)
-- Fail-fast przy brakujących zależnościach
+**Why constructor injection?**
+- Explicit dependencies
+- Easier testing (you can pass a mock)
+- Immutability (`final` fields)
+- Fail-fast if dependencies are missing
 
-## Warstwy aplikacji
+## Application Layers
 
 ```
 ┌─────────────────────────────────────┐
-│  Controller (HTTP)                  │  ← cienki, tylko routing
+│  Controller (HTTP)                  │  ← thin, only routing
 ├─────────────────────────────────────┤
-│  Service (Business Logic)           │  ← logika, walidacja
+│  Service (Business Logic)           │  ← logic, validation
 ├─────────────────────────────────────┤
-│  Repository (Data Access)           │  ← dostęp do danych
+│  Repository (Data Access)           │  ← data access
 └─────────────────────────────────────┘
 ```
 
-## In-Memory Repository (na razie)
+## In-Memory Repository (For Now)
 
 ```java
 @Repository
@@ -118,18 +118,18 @@ public class InMemoryWalletRepository {
 }
 ```
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie:** Refaktoruj `NoteController`:
-1. Wydziel `NoteService` z logiką
-2. Wydziel `InMemoryNoteRepository` z przechowywaniem
-3. Kontroler ma tylko wywoływać serwis
+**Task:** Refactor `NoteController`:
+1. Extract `NoteService` with the logic
+2. Extract `InMemoryNoteRepository` for storage
+3. The controller should only call the service
 
-**Pliki:** `exercises/ex05-service-layer/`
+**Files:** `exercises/ex05-service-layer/`
 
 ## Checklist
 
-- [ ] Controller nie ma logiki biznesowej
-- [ ] Service operuje na domenowych obiektach
-- [ ] Repository izoluje sposób przechowywania danych
-- [ ] Używam constructor injection bez `@Autowired`
+- [ ] Controller has no business logic
+- [ ] Service operates on domain objects
+- [ ] Repository isolates the data storage method
+- [ ] I'm using constructor injection without `@Autowired`

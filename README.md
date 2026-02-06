@@ -9,7 +9,7 @@
 | #   | Module                           | Status |
 | --- | -------------------------------- | ------ |
 | 00  | Setup + Tooling                  | 🟢     |
-| 01  | REST + Java Basics               | 🟡     |
+| 01  | REST + Java Basics               | 🟢     |
 | 02  | Java Internals (JVM, Memory, GC) | ⚪     |
 
 ### Phase 2: Architecture

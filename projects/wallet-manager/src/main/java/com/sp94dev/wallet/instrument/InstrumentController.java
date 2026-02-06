@@ -18,8 +18,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.sp94dev.wallet.instrument.dto.InstrumentResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/instruments")
+@Tag(name = "Instruments", description = "Financial instruments management (stocks, ETFs)")
 public class InstrumentController {
     private final InstrumentService instrumentService;
 
@@ -28,18 +34,26 @@ public class InstrumentController {
     }
 
     @GetMapping()
+    @Operation(summary = "Get list of instruments", description = "Returns a list of all instruments with filtering and sorting options")
     ResponseEntity<List<InstrumentResponse>> getAll(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String currency,
             @RequestParam(required = false) String ticker,
-            @RequestParam(required = false) String market) {
-        return ResponseEntity.ok(this.instrumentService.getAllInstruments(type, currency, ticker, market)
+            @RequestParam(required = false) String market,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) Number limit) {
+        return ResponseEntity.ok(this.instrumentService.getAllInstruments(type, currency, ticker, market, sort, limit)
                 .stream()
                 .map(InstrumentResponse::from)
                 .toList());
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get instrument by ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Instrument found"),
+            @ApiResponse(responseCode = "404", description = "Instrument not found")
+    })
     public ResponseEntity<InstrumentResponse> getInstrument(@PathVariable Long id) {
         return instrumentService.getInstrumentById(id)
                 .map(InstrumentResponse::from)
@@ -49,6 +63,11 @@ public class InstrumentController {
     };
 
     @PostMapping()
+    @Operation(summary = "Add new instrument")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Instrument created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
     public ResponseEntity<InstrumentResponse> createInstrument(@RequestBody Instrument instrumentBody) {
         Instrument savedInstrument = this.instrumentService.createInstrument(instrumentBody);
         InstrumentResponse instrumentResponse = InstrumentResponse.from(savedInstrument);
@@ -61,6 +80,11 @@ public class InstrumentController {
     };
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update existing instrument")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Instrument updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Instrument not found")
+    })
     public ResponseEntity<InstrumentResponse> updateInstrument(@PathVariable Long id,
             @RequestBody Instrument instrument) {
         Instrument updatedInstrument = this.instrumentService.updateInstrument(id, instrument);
@@ -71,6 +95,8 @@ public class InstrumentController {
     };
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete instrument")
+    @ApiResponse(responseCode = "204", description = "Instrument deleted successfully")
     public ResponseEntity<Void> deleteInstrument(@PathVariable Long id) {
         this.instrumentService.deleteInstrument(id);
         return ResponseEntity.noContent().build();

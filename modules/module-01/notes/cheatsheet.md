@@ -3,11 +3,11 @@
 ## Controller Annotations
 
 ```java
-@RestController                 // REST API (zwraca JSON)
-@RequestMapping("/api/v1/x")    // Prefix dla wszystkich endpointów
+@RestController                 // REST API (returns JSON)
+@RequestMapping("/api/v1/x")    // Prefix for all endpoints
 @GetMapping                     // GET request
 @PostMapping                    // POST request  
-@PutMapping("/{id}")            // PUT request z path variable
+@PutMapping("/{id}")            // PUT request with path variable
 @DeleteMapping("/{id}")         // DELETE request
 ```
 
@@ -18,14 +18,14 @@
 @RequestParam String name       // ?name=John → name = "John"
 @RequestParam(defaultValue = "0") int page
 @RequestParam(required = false) String filter
-@RequestBody CreateRequest req  // JSON body → obiekt
+@RequestBody CreateRequest req  // JSON body → object
 ```
 
 ## ResponseEntity
 
 ```java
 ResponseEntity.ok(body)                    // 200 + body
-ResponseEntity.ok().build()                // 200 bez body
+ResponseEntity.ok().build()                // 200 without body
 ResponseEntity.created(uri).body(body)     // 201 + Location + body
 ResponseEntity.noContent().build()         // 204
 ResponseEntity.notFound().build()          // 404
@@ -35,15 +35,15 @@ ResponseEntity.badRequest().body(error)    // 400 + body
 ## Records
 
 ```java
-// Definicja
+// Definition
 public record WalletDto(Long id, String name, BigDecimal balance) {}
 
-// Użycie
+// Usage
 WalletDto dto = new WalletDto(1L, "Main", BigDecimal.ZERO);
-dto.id()      // getter (bez "get" prefix!)
+dto.id()      // getter (no "get" prefix!)
 dto.name()
 
-// Z walidacją
+// With validation
 public record CreateRequest(String name) {
     public CreateRequest {
         Objects.requireNonNull(name, "Name required");

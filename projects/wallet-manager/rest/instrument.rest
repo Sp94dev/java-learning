@@ -1,5 +1,5 @@
 ### Get all instruments
-http://localhost:8080/api/instruments
+http://localhost:8080/api/instruments?sort=type
 
 
 ### Get instrument by ID

@@ -1,26 +1,27 @@
 # Roadmapa - Full Version
 
-## FAZA 1: FUNDAMENTY
+## PHASE 1: FUNDAMENTALS
 
-### Moduł 00: Setup + Tooling ✅
+### Module 00: Setup + Tooling ✅
 
-**Cel:** Działające środowisko.
+**Goal:** Working environment.
 
 - JDK 25, Maven, Docker, VS Code
 - Spring Boot 4.0.1 project
 
-### Moduł 01: REST + Java Basics 🟡
+### Module 01: REST + Java Basics ✅
 
-**Cel:** Pierwsze API, Records, Streams.
+**Goal:** First API, Records, Streams.
 
 - [x] Controller, HTTP methods
-- [ ] Java Records jako DTO
-- [x] Stream API (Basic usage)
+- [x] Java Records as DTOs
+- [x] Stream API (Advanced: sorting, grouping)
 - [x] In-memory storage
+- [x] OpenAPI Documentation
 
-### Moduł 02: Java Internals 🆕
+### Module 02: Java Internals 🆕
 
-**Cel:** Zrozumieć jak Java działa pod spodem.
+**Goal:** Understand how Java works under the hood.
 
 #### 1. JVM Architecture
 - [ ] Class Loader subsystem

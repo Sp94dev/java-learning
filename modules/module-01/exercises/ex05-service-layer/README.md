@@ -1,25 +1,25 @@
-# Ćwiczenie 05: Service Layer
+# Exercise 05: Service Layer
 
-## Zadanie
+## Task
 
-Refaktoruj `InstrumentController` w projekcie `projects/wallet-manager` do architektury warstwowej.
-Celem jest oddzielenie logiki biznesowej od warstwy HTTP.
+Refactor the `InstrumentController` in the `projects/wallet-manager` project into a layered architecture.
+The goal is to separate business logic from the HTTP layer.
 
-### Docelowa struktura (w pakiecie `com.sp94dev.wallet`)
+### Target Structure (in `com.sp94dev.wallet` package)
 
 ```
 instrument/
-├── InstrumentController.java      # Tylko routing HTTP
-├── InstrumentService.java         # Logika biznesowa
-├── InMemoryInstrumentRepository.java  # Przechowywanie danych
-└── Instrument.java                # Model domeny (Record)
+├── InstrumentController.java      # HTTP routing only
+├── InstrumentService.java         # Business logic
+├── InMemoryInstrumentRepository.java  # Data storage
+└── Instrument.java                # Domain model (Record)
 ```
 
-(Opcjonalnie możesz stworzyć podpakiet `dto` dla Request/Response, jeśli chcesz oddzielić model API od modelu domeny).
+(Optionally, you can create a `dto` sub-package for Request/Response if you want to separate the API model from the domain model).
 
-### 1. Stwórz `InMemoryInstrumentRepository`
+### 1. Create `InMemoryInstrumentRepository`
 
-To klasa, która przejmie odpowiedzialność za `List<Instrument>` (lub `Map`) oraz generowanie ID.
+This class will take over the responsibility for the `List<Instrument>` (or `Map`) and ID generation.
 
 ```java
 @Repository
@@ -28,11 +28,11 @@ public class InMemoryInstrumentRepository {
     private final Map<Long, Instrument> storage = new ConcurrentHashMap<>();
     private final AtomicLong idGenerator = new AtomicLong(1);
 
-    // Przenieś tutaj logikę inicjalizacji danych (AAPL, GOOGL...) z kontrolera
+    // Move data initialization logic (AAPL, GOOGL...) here from the controller
     
     public Instrument save(Instrument instrument) {
-        // Logika nadawania ID jeśli null
-        // Zapis do mapy
+        // Logic for assigning ID if null
+        // Save to map
     }
     
     public Optional<Instrument> findById(Long id) {
@@ -47,13 +47,13 @@ public class InMemoryInstrumentRepository {
         storage.remove(id);
     }
     
-    // ... inne metody potrzebne do filtrowania
+    // ... other methods needed for filtering
 }
 ```
 
-### 2. Stwórz `InstrumentService`
+### 2. Create `InstrumentService`
 
-Service pośredniczy między Controllerem a Repository. Tutaj trafi logika filtrowania.
+The service acts as an intermediary between the Controller and the Repository. This is where the filtering logic goes.
 
 ```java
 @Service
@@ -66,12 +66,12 @@ public class InstrumentService {
     }
     
     public List<Instrument> findAll(String type, String currency, String ticker, String market) {
-        // Przenieś tutaj logikę stream().filter(...) z kontrolera
-        // Pobierz wszystkie z repository i filtruj
+        // Move the stream().filter(...) logic here from the controller
+        // Fetch all from repository and filter
     }
     
     public Instrument create(Instrument instrument) {
-        // Walidacja? (później)
+        // Validation? (later)
         return repository.save(instrument);
     }
     
@@ -79,9 +79,9 @@ public class InstrumentService {
 }
 ```
 
-### 3. Odchudź `InstrumentController`
+### 3. Slim down `InstrumentController`
 
-Kontroler powinien tylko delegować zadania do serwisu.
+The controller should only delegate tasks to the service.
 
 ```java
 @RestController
@@ -102,17 +102,17 @@ public class InstrumentController {
         return instrumentService.findAll(type, currency, ticker, market);
     }
     
-    // ... reszta metod deleguje do service
+    // ... remaining methods delegate to the service
 }
 ```
 
-## Zadanie dodatkowe (Transaction)
+## Extra Task (Transaction)
 
-Wykonaj analogiczną refaktoryzację dla `TransactionController`.
+Perform a similar refactoring for the `TransactionController`.
 
 ### Checklist
 
-- [ ] `InstrumentController` nie ma pola `List` ani `AtomicLong`.
-- [ ] Logika filtrowania jest w `InstrumentService`.
-- [ ] Dane są przechowywane w `InMemoryInstrumentRepository`.
-- [ ] Aplikacja nadal działa tak samo (sprawdź `rest/instrument.rest`).
+- [ ] `InstrumentController` no longer has a `List` or `AtomicLong` field.
+- [ ] Filtering logic is in `InstrumentService`.
+- [ ] Data is stored in `InMemoryInstrumentRepository`.
+- [ ] The application still works the same (check `rest/instrument.rest`).

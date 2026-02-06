@@ -1,13 +1,13 @@
 # Gotchas - Module 01
 
-Rzeczy które mnie zaskoczyły lub na które traciłem czas.
+Things that surprised me or where I spent too much time.
 
 ---
 
-<!-- Dodawaj wpisy w formacie: -->
+<!-- Add entries in format: -->
 <!-- 
-## Tytuł problemu
-**Problem:** Co się stało
-**Rozwiązanie:** Jak to naprawiłem
-**Wniosek:** Co zapamiętać
+## Problem Title
+**Problem:** What happened
+**Solution:** How I fixed it
+**Key Takeaway:** What to remember
 -->

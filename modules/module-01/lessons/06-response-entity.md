@@ -1,19 +1,19 @@
-# Lekcja 06: ResponseEntity
+# Lesson 06: ResponseEntity
 
-> Kody HTTP, nagłówki, kontrola odpowiedzi
+> HTTP codes, headers, response control
 
-## Domyślne zachowanie
+## Default Behavior
 
 ```java
 @GetMapping("/{id}")
 public Wallet getById(@PathVariable Long id) {
-    return walletService.findById(id);  // zawsze 200 OK
+    return walletService.findById(id);  // always 200 OK
 }
 ```
 
-Problem: Co gdy wallet nie istnieje? Zwróci `null` i 200 OK.
+Problem: What if the wallet doesn't exist? It returns `null` and 200 OK.
 
-## ResponseEntity - pełna kontrola
+## ResponseEntity - Full Control
 
 ```java
 @GetMapping("/{id}")
@@ -24,20 +24,20 @@ public ResponseEntity<WalletResponse> getById(@PathVariable Long id) {
 }
 ```
 
-## Popularne kody HTTP
+## Popular HTTP Status Codes
 
-| Kod | Stała | Kiedy |
+| Code | Method | When |
 |-----|-------|-------|
-| 200 | `ok()` | Sukces z danymi |
-| 201 | `created(uri)` | Zasób utworzony |
-| 204 | `noContent()` | Sukces bez danych (DELETE) |
-| 400 | `badRequest()` | Błędne dane wejściowe |
-| 404 | `notFound()` | Zasób nie istnieje |
-| 409 | `status(CONFLICT)` | Konflikt (duplikat) |
+| 200 | `ok()` | Success with data |
+| 201 | `created(uri)` | Resource created |
+| 204 | `noContent()` | Success without data (DELETE) |
+| 400 | `badRequest()` | Invalid input data |
+| 404 | `notFound()` | Resource not found |
+| 409 | `status(CONFLICT)` | Conflict (duplicate) |
 
 ## Patterns
 
-### POST - zwróć 201 + Location header
+### POST - return 201 + Location header
 
 ```java
 @PostMapping
@@ -52,7 +52,7 @@ public ResponseEntity<WalletResponse> create(@RequestBody CreateWalletRequest re
 }
 ```
 
-### GET single - 200 lub 404
+### GET single - 200 or 404
 
 ```java
 @GetMapping("/{id}")
@@ -76,7 +76,7 @@ public ResponseEntity<Void> delete(@PathVariable Long id) {
 }
 ```
 
-### PUT - 200 lub 404
+### PUT - 200 or 404
 
 ```java
 @PutMapping("/{id}")
@@ -103,18 +103,18 @@ public ResponseEntity<List<WalletResponse>> getAll() {
 }
 ```
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie:** Dodaj właściwe kody HTTP do `NoteController`:
+**Task:** Add proper HTTP codes to the `NoteController`:
 - POST → 201 + Location
-- GET by id → 200 lub 404
-- DELETE → 204 lub 404
-- PUT → 200 lub 404
+- GET by id → 200 or 404
+- DELETE → 204 or 404
+- PUT → 200 or 404
 
-**Pliki:** `exercises/ex06-response-entity/`
+**Files:** `exercises/ex06-response-entity/`
 
 ## Checklist
 
-- [ ] Wiem kiedy użyć 200, 201, 204, 404
-- [ ] Potrafię zwrócić Location header przy POST
-- [ ] Używam `Optional` + `map` zamiast if-else
+- [ ] I know when to use 200, 201, 204, 404
+- [ ] I can return a Location header on POST
+- [ ] I use `Optional` + `map` instead of if-else

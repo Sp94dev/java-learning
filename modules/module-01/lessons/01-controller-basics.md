@@ -1,19 +1,19 @@
-# Lekcja 01: Controller Basics
+# Lesson 01: Controller Basics
 
-> `@RestController`, routing, pierwszy endpoint
+> `@RestController`, routing, first endpoint
 
-## Koncept
+## Concept
 
-| Annotation | Rola |
+| Annotation | Role |
 |------------|------|
-| `@Controller` | Zwraca widoki (HTML) - Spring MVC |
-| `@RestController` | Zwraca dane (JSON) - REST API |
-| `@RequestMapping` | Prefiks ścieżki dla całego kontrolera |
-| `@GetMapping` | Mapuje metodę na GET request |
+| `@Controller` | Returns views (HTML) - Spring MVC |
+| `@RestController` | Returns data (JSON) - REST API |
+| `@RequestMapping` | Path prefix for the entire controller |
+| `@GetMapping` | Maps a method to a GET request |
 
 `@RestController` = `@Controller` + `@ResponseBody`
 
-## Minimalny kontroler
+## Minimal Controller
 
 ```java
 @RestController
@@ -32,16 +32,16 @@ public class HelloController {
 }
 ```
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie:** Stwórz `HealthController` z endpointami:
-- `GET /api/health` → zwraca `"OK"`
-- `GET /api/health/info` → zwraca JSON z wersją aplikacji
+**Task:** Create a `HealthController` with the following endpoints:
+- `GET /api/health` → returns `"OK"`
+- `GET /api/health/info` → returns a JSON with the application version
 
-**Pliki:** `exercises/ex01-health-controller/`
+**Files:** `exercises/ex01-health-controller/`
 
 ## Checklist
 
-- [ ] Rozumiem różnicę między `@Controller` a `@RestController`
-- [ ] Potrafię ustawić prefix ścieżki przez `@RequestMapping`
-- [ ] Aplikacja startuje i endpoint odpowiada
+- [ ] I understand the difference between `@Controller` and `@RestController`
+- [ ] I can set a path prefix via `@RequestMapping`
+- [ ] The application starts and the endpoint responds

@@ -1,32 +1,30 @@
-# TODO: Wallet Manager - Etap 1 (Controller & Input Handling)
+# TODO: Wallet Manager
 
-Lista zadań wynikająca z Lekcji 3 (Input Handling) oraz wymagań MVP z PRD.
+## Phase 1: REST + Java Basics (Module 01) ✅
 
-## Instrument Controller (`/api/instruments`)
+### Instrument Controller (`/api/instruments`)
+- [x] **Get single instrument**: Implemented `GET /api/instruments/{id}` with `Optional` handling and `404 Not Found`.
+- [x] **Filter instruments**: Implemented `GET /api/instruments` with multiple `@RequestParam`, sorting, and limiting (Stream API).
+- [x] **Create instrument**: Implemented `POST /api/instruments` returning `201 Created` and `Location` header.
+- [x] **Full CRUD**: Added `PUT` (update) and `DELETE` (204 No Content) support.
 
-- [ ] **Pobieranie pojedynczego instrumentu**:
-    - Endpoint: `GET /api/instruments/{id}`
-    - Użycie: `@PathVariable` do pobrania ID.
-    - Logika: Znalezienie instrumentu w liście/mapie po ID.
-- [ ] **Filtrowanie instrumentów**:
-    - Endpoint: `GET /api/instruments`
-    - Użycie: `@RequestParam` do filtrowania (np. `?type=STOCK`, `?currency=PLN`).
-    - Wymagania: Obsługa parametrów opcjonalnych (zwraca wszystko, jeśli brak filtrów).
-- [ ] **Tworzenie instrumentu**:
-    - Endpoint: `POST /api/instruments`
-    - Użycie: `@RequestBody` do przyjęcia obiektu JSON.
-    - Pola (zgodnie z PRD): `ticker`, `currency`, `market`, `type`.
+### Transaction Controller (`/api/transactions`)
+- [x] **Create controller**: Implemented `TransactionController`.
+- [x] **Add transaction**: Handling `POST /api/transactions` with linking to instrument by ID.
+- [x] **Statistics**: Added `GET /api/transactions/stats` (Grouping and summing using `Collectors.groupingBy`).
 
-## Transaction Controller (`/api/transactions`) - *Zalążek*
+### Architecture & Best Practices
+- [x] **Layering**: Full separation of Controller -> Service -> Repository.
+- [x] **Modeling**: Usage of `Java Records` for models and DTOs.
+- [x] **ResponseEntity**: Correct HTTP status codes throughout the API.
+- [x] **OpenAPI / Swagger**: Added interactive documentation (`springdoc-openapi`) with English descriptions.
 
-- [ ] **Utworzenie kontrolera**:
-    - Stworzenie klasy `TransactionController` z mapowaniem `/api/transactions`.
-- [ ] **Dodawanie transakcji**:
-    - Endpoint: `POST /api/transactions`
-    - Użycie: `@RequestBody`.
-    - Pola (zgodnie z PRD): `instrumentId`, `type` (BUY/SELL), `quantity`, `price`, `date`.
+## Phase 2: API Extension & Standards (In Progress) 🟡
 
-## Weryfikacja
+- [ ] **Validation**: Transition from domain models to dedicated Request DTOs and adding `@Valid`.
+- [ ] **Error Handling**: Implementation of `@ControllerAdvice` and `Problem Details` standard.
 
-- [ ] Sprawdzić poprawność mapowania JSON -> Obiekt Java.
-- [ ] Przetestować endpointy w `rest/instrument.rest` (lub Postman).
+## Phase 3: Java Internals & Quality (Next Steps) 🆕
+
+- [ ] **Profiling**: Memory usage analysis in `ConcurrentHashMap`.
+- [ ] **Unit Tests**: JUnit 5 + Mockito for service logic.

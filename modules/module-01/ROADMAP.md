@@ -1,27 +1,27 @@
 # Module 01: REST Architecture & Spring MVC
 
-> Goal: Build complete REST API with CRUD, get familar witg Records and Stream API.
+> Goal: Build a complete REST API with CRUD, master Records and Stream API.
 
 ## Lessons
 
-| # | Topic | Desc | Status |
-|---|-------|------|--------|
+| # | Topic | Description | Status |
+|---|-------|-------------|--------|
 | 01 | Controller Basics | `@RestController`, routing, first endpoint | 🟢 |
-| 02 | HTTP Methods | GET, POST, PUT, DELETE - pełne CRUD | 🟢 |
+| 02 | HTTP Methods | GET, POST, PUT, DELETE - full CRUD | 🟢 |
 | 03 | Input Handling | `@PathVariable`, `@RequestParam`, `@RequestBody` | 🟢 |
-| 04 | Java Records | Niemutowalne DTO zamiast POJO | 🟢 |
-| 05 | Service Layer | Separacja logiki, `@Service`, Constructor Injection | 🟢 |
-| 06 | ResponseEntity | Kody HTTP, nagłówki, kontrola odpowiedzi | 🟢 |
-| 07 | Stream API | Funkcyjne przetwarzanie kolekcji | ⚪ |
-| 08 | OpenAPI/Swagger | Dokumentacja API, generowanie UI | ⚪ |
+| 04 | Java Records | Immutable DTOs instead of POJOs | 🟢 |
+| 05 | Service Layer | Logic separation, `@Service`, Constructor Injection | 🟢 |
+| 06 | ResponseEntity | HTTP codes, headers, response control | 🟢 |
+| 07 | Stream API | Functional collection processing | 🟢 |
+| 08 | OpenAPI/Swagger | API documentation, UI generation | 🟢 |
 
 `⚪ Not Started` · `🟡 In Progress` · `🟢 Done`
 
-## Projekt końcowy
+## Capstone Project
 
-Po ukończeniu lekcji → implementacja pierwszej wersji **WalletManager API** w `projects/wallet-manager/`.
+After completing lessons → implementation of the first version of **WalletManager API** in `projects/wallet-manager/`.
 
-## Wymagania wstępne
+## Prerequisites
 
-- ✅ Module 00 ukończony
-- ✅ Java 25 + Maven + Docker działają
+- ✅ Module 00 completed
+- ✅ Java 25 + Maven + Docker installed

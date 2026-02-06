@@ -1,46 +1,46 @@
-# Ćwiczenie 07: Stream API
+# Exercise 07: Stream API
 
-## Zadanie
+## Task
 
-Rozbuduj warstwę serwisową w `wallet-manager` o bardziej zaawansowane operacje na danych z użyciem Java Stream API.
+Expand the service layer in `wallet-manager` with more advanced data operations using the Java Stream API.
 
-### 1. Rozbudowa `InstrumentService`
+### 1. Expanding `InstrumentService`
 
-Dodaj metody pozwalające na sortowanie i limitowanie wyników.
+Add methods that allow for sorting and limiting results.
 
-**Nowe parametry w kontrolerze:**
+**New parameters in the controller:**
 `GET /api/instruments?sort=ticker&limit=5`
 
-**Implementacja w serwisie:**
-Wykorzystaj `sorted(Comparator...)` i `limit(long)`.
+**Implementation in the service:**
+Use `sorted(Comparator...)` and `limit(long)`.
 
-### 2. Statystyki Transakcji (`TransactionService`)
+### 2. Transaction Statistics (`TransactionService`)
 
-Stwórz nowy endpoint `GET /api/transactions/stats`, który zwróci podsumowanie portfela.
+Create a new endpoint `GET /api/transactions/stats` that returns a portfolio summary.
 
-**Stwórz rekord DTO `TransactionStats`:**
+**Create a DTO record `TransactionStats`:**
 ```java
 public record TransactionStats(
     int totalTransactions,
-    Map<String, Long> countByType, // BUY: 5, SELL: 2
-    Map<Long, Double> totalValueByInstrument // InstrumentID: Suma (price * quantity)
+    Map<String, Long> countByType, // e.g., BUY: 5, SELL: 2
+    Map<Long, Double> totalValueByInstrument // e.g., InstrumentID: Sum (price * quantity)
 ) {}
 ```
 
-**Zaimplementuj logikę w `TransactionService`:**
+**Implement the logic in `TransactionService`:**
 
 ```java
 public TransactionStats getStats() {
     List<Transaction> all = repository.findAll();
 
-    // 1. Liczba wszystkich
+    // 1. Total count
     int total = all.size();
 
-    // 2. Grupowanie po typie (BUY/SELL)
+    // 2. Grouping by type (BUY/SELL)
     Map<String, Long> byType = all.stream()
         .collect(Collectors.groupingBy(Transaction::type, Collectors.counting()));
 
-    // 3. Wartość per instrument (zakładając uproszczenie: suma price * quantity)
+    // 3. Value per instrument (simplified: sum of price * quantity)
     Map<Long, Double> valueByInstrument = all.stream()
         .collect(Collectors.groupingBy(
             Transaction::instrumentId,
@@ -51,11 +51,11 @@ public TransactionStats getStats() {
 }
 ```
 
-### 3. Wyszukiwanie instrumentów "full text" (uproszczone)
+### 3. "Full Text" Instrument Search (Simplified)
 
-Dodaj endpoint `GET /api/instruments/search?query=app`
+Add endpoint `GET /api/instruments/search?query=app`
 
-Przeszukaj listę instrumentów sprawdzając czy `query` występuje w `ticker`, `market` LUB `type` (case insensitive).
+Search the list of instruments by checking if `query` appears in `ticker`, `market`, OR `type` (case-insensitive).
 
 ```java
 public List<Instrument> search(String query) {
@@ -72,7 +72,7 @@ public List<Instrument> search(String query) {
 
 ## Checklist
 
-- [ ] Endpoint `/api/transactions/stats` zwraca zagregowane dane.
-- [ ] Endpoint `/api/instruments` obsługuje proste sortowanie.
-- [ ] Kod wykorzystuje `Collectors.groupingBy`, `summingDouble`, etc.
-- [ ] Logika jest testowalna (jest w serwisie, nie w kontrolerze).
+- [ ] The `/api/transactions/stats` endpoint returns aggregated data.
+- [ ] The `/api/instruments` endpoint supports simple sorting.
+- [ ] The code uses `Collectors.groupingBy`, `summingDouble`, etc.
+- [ ] The logic is testable (it's in the service, not in the controller).

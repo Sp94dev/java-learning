@@ -1,8 +1,8 @@
-# Lekcja 07: Stream API
+# Lesson 07: Stream API
 
-> Funkcyjne przetwarzanie kolekcji
+> Functional collection processing
 
-## Analogia do RxJS/TypeScript
+## RxJS/TypeScript Analogy
 
 | Java Stream | RxJS/TS Array |
 |-------------|---------------|
@@ -10,29 +10,29 @@
 | `.map()` | `.map()` |
 | `.flatMap()` | `.flatMap()` |
 | `.reduce()` | `.reduce()` |
-| `.collect(toList())` | (nie potrzebne) |
+| `.collect(toList())` | (not needed) |
 | `.findFirst()` | `.find()` |
 | `.anyMatch()` | `.some()` |
 | `.allMatch()` | `.every()` |
 
-**Kluczowa różnica:** Java Stream jest lazy i jednorazowy.
+**Key difference:** Java Stream is lazy and can only be consumed once.
 
-## Podstawowe operacje
+## Basic Operations
 
 ```java
 List<Wallet> wallets = repository.findAll();
 
-// Filtrowanie
+// Filtering
 List<Wallet> activeWallets = wallets.stream()
     .filter(w -> w.balance().compareTo(BigDecimal.ZERO) > 0)
     .toList();  // Java 16+
 
-// Mapowanie
+// Mapping
 List<String> names = wallets.stream()
     .map(Wallet::name)
     .toList();
 
-// Filtr + Map + Sort
+// Filter + Map + Sort
 List<WalletDto> result = wallets.stream()
     .filter(w -> w.currency().equals("PLN"))
     .map(w -> new WalletDto(w.id(), w.name(), w.balance()))
@@ -40,32 +40,32 @@ List<WalletDto> result = wallets.stream()
     .toList();
 ```
 
-## Znajdowanie elementów
+## Finding Elements
 
 ```java
-// Pierwszy pasujący (Optional!)
+// First matching (Optional!)
 Optional<Wallet> found = wallets.stream()
     .filter(w -> w.name().equals("Main"))
     .findFirst();
 
-// Czy istnieje?
+// Does it exist?
 boolean hasEmpty = wallets.stream()
     .anyMatch(w -> w.balance().equals(BigDecimal.ZERO));
 
-// Czy wszystkie spełniają?
+// Do all match?
 boolean allPositive = wallets.stream()
     .allMatch(w -> w.balance().compareTo(BigDecimal.ZERO) >= 0);
 ```
 
-## Agregacje
+## Aggregations
 
 ```java
-// Suma
+// Sum
 BigDecimal total = wallets.stream()
     .map(Wallet::balance)
     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-// Zliczanie
+// Counting
 long count = wallets.stream()
     .filter(w -> w.currency().equals("EUR"))
     .count();
@@ -75,16 +75,16 @@ Optional<Wallet> richest = wallets.stream()
     .max(Comparator.comparing(Wallet::balance));
 ```
 
-## Grupowanie (Collectors)
+## Grouping (Collectors)
 
 ```java
 import static java.util.stream.Collectors.*;
 
-// Grupuj po walucie
+// Group by currency
 Map<String, List<Wallet>> byCurrency = wallets.stream()
     .collect(groupingBy(Wallet::currency));
 
-// Suma per waluta
+// Sum per currency
 Map<String, BigDecimal> totalByCurrency = wallets.stream()
     .collect(groupingBy(
         Wallet::currency,
@@ -92,7 +92,7 @@ Map<String, BigDecimal> totalByCurrency = wallets.stream()
     ));
 ```
 
-## Praktyczne użycie w Service
+## Practical usage in Service
 
 ```java
 @Service
@@ -125,19 +125,19 @@ public class WalletService {
 }
 ```
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie:** Dodaj do `NoteService` metody używające Stream:
-- `findByAuthor(String author)` - filtrowanie
-- `searchByTitle(String keyword)` - `contains()` w filter
-- `getRecentNotes(int limit)` - sortowanie po dacie + limit
-- `countByAuthor()` - zwraca `Map<String, Long>`
+**Task:** Add methods using Stream to the `NoteService`:
+- `findByAuthor(String author)` - filtering
+- `searchByTitle(String keyword)` - `contains()` in filter
+- `getRecentNotes(int limit)` - sorting by date + limit
+- `countByAuthor()` - returns `Map<String, Long>`
 
-**Pliki:** `exercises/ex07-stream-api/`
+**Files:** `exercises/ex07-stream-api/`
 
 ## Checklist
 
-- [ ] Potrafię użyć filter + map + collect
-- [ ] Rozumiem różnicę między `findFirst()` a `filter().toList()`
-- [ ] Używam method references (`Wallet::name`) gdzie możliwe
-- [ ] Wiem jak grupować i agregować dane
+- [ ] I can use filter + map + collect
+- [ ] I understand the difference between `findFirst()` and `filter().toList()`
+- [ ] I use method references (`Wallet::name`) where possible
+- [ ] I know how to group and aggregate data
