@@ -1,0 +1,232 @@
+Enterprise Java with Spring Boot
+Josh Long
+Josh Long
+Broadcom
+7 hours, 7 minutes CC
+Enterprise Java with Spring Boot
+
+Course Description
+Learn how the world’s leading companies build Java applications. Start by rapid prototyping with start.spring.io and build production-ready backends with Spring Data and REST APIs. Then grow into advanced topics like microservices, Docker, GraalVM, and AI-powered features. Architect modern, scalable Java applications with confidence!
+
+Watch Course
+Course Details
+Published: July 24, 2025
+Rating
+4.7
+Learning Paths
+Backend Languages
+Topics
+databasesapisprogramming-language
+Resources & Downloads
+Course Repo
+Table of Contents
+Introduction
+Section Duration: 4 minutes
+Introduction
+Introduction
+00:00:00 - 00:04:37
+Josh Long, a Java Champion and Spring Developer Advocate, begins the course by sharing his experience in the Java community and highlights his "Coffee and Software" YouTube channel.
+Development Environment Setup
+Section Duration: 1 hour
+Spring Boot Speed Run
+Spring Boot Speed Run
+00:04:38 - 00:14:50
+Josh demonstrates how fast a full-featured Java Spring app can be scaffolded using start.spring.io. In a matter of minutes, Josh creates the project, connects to a data source, and spins up a web server to display data returned from the API endpoint. This isn't an example that needs to be followed, but a speed-run-style demonstration of Spring.
+Managing Java VM Distributions
+Managing Java VM Distributions
+00:14:51 - 00:22:18
+Josh introduces SDKMAN for installing and managing Java distributions on your computer and within a project. The .sdkmanrc configuration file can specify the Java VM used in a project, and SDKMAN will automatically switch to that version when the project directory is entered.
+Spring Boot Setup & Code Formatting
+Spring Boot Setup & Code Formatting
+00:22:19 - 00:31:40
+Josh revisits start.spring.io and explains and highlights the ergonomics of creating a new project. Many IDEs, such as IntelliJ, VS Code, and Eclipse, also rely on start.spring.io. The spring-javaformat code formatter is also discussed.
+Build & Run Spring Boot with Docker
+Build & Run Spring Boot with Docker
+00:31:41 - 00:44:03
+Josh walks through running a Spring app inside a Docker container. Through Docker virtualization, binaries for other operating systems can be generated with minimal configuration. Data sources can also be quickly created within a container, allowing for easier connection configuration.
+Understanding the Project Structure
+Understanding the Project Structure
+00:44:04 - 00:57:17
+Josh breaks down the project structure generated from start.spring.io and explains the dependencies in the pom.xml file. Josh also demonstrates how to use the application.properties file to customize the behavior of the Postgres database. The Dev Tools are included in the demo project to highlight how to quickly see updates to the application in the browser.
+Configuration
+Configuration
+00:57:18 - 01:04:58
+Josh continues customizing the application through application.properties and overrides default values through environment variables. This lesson also discusses password manager integration.
+Java & Spring Basics
+Section Duration: 47 minutes
+Java Language Review
+Java Language Review
+01:04:59 - 01:16:22
+Josh reviews some new additions to the Java programming language, including pattern matching, smart switch statements, and records/sealed types. These features make it easier to manage data directly inside the language.
+Java Development Best Practices
+Java Development Best Practices
+01:16:23 - 01:28:33
+Josh discusses some general Java/Spring best practices. These include RAII (resource acquisition is initialization), dependency injection, portable service abstraction, and aspect-oriented programming. These topics are not Spring-specific, but create better-architected Spring applications.
+Spring Features
+Spring Features
+01:28:34 - 01:41:20
+Josh introduces the Spring framework and walks through some ergonomic features, such as dependency injection, component scanning, and life cycles. With life cycles, the InitializeBean and DisposableBean interfaces provide afterPropertySet and destroy methods for validating the state of the object before use and cleaning up any dependencies prior to its disposal.
+Spring Boot Features
+Spring Boot Features
+01:41:21 - 01:52:54
+Josh transitions to Spring Boot, which provides the same expressive configuration as the Spring framework, but with useful defaults that eliminate unnecessary boilerplate. Dynamic autoconfigurations are discussed. Environmental properties and Spring's event API is also demonstrated in this lesson.
+Pet Clinic App
+Section Duration: 41 minutes
+Spring Data & Migrations
+Spring Data & Migrations
+01:52:55 - 02:02:41
+Josh explores strategies for persisting data in SQL stores with plain JDBC using Spring Data. A migrations directory is created and database migrations are added to ensure modifications are repeatable/reversible and data stores are not edited directly through the application.
+Fetching Data Models
+Fetching Data Models
+02:02:42 - 02:11:10
+Josh demonstrates how to use the @Repository, which acts primarily as a marker interface to capture the types needed to work. For example, the CrudRepository provides CRUD functionality for the managed entity class. Spring Data can also generate the underlying queries given the function signature of the CRUD methods defined in the class.
+One-to-Many Relationships
+One-to-Many Relationships
+02:11:11 - 02:13:47
+Josh highlights how quickly Spring Data picks up on many-to-many relationships. A database migration is added to insert dogs into the dog table. A new Dog record is created and displayed in the console alongside the Person data.
+Spring Batch
+Spring Batch
+02:13:48 - 02:34:45
+Josh introduces Spring Batch, which helps with ETL processes (extract, transform, and load). A Spring Batch job is created, and data is loaded from a CSV file and written to a SQL database. The chunk size used in the batch processing should be an amount of data that can be handled in memory.
+Web Programming
+Section Duration: 59 minutes
+Building an HTTP Client
+Building an HTTP Client
+02:34:46 - 02:54:07
+Josh scaffolds a new Spring project for building an HTTP Client. The client loads data from a remote JSON endpoint. A declarative client technique is introduced to make adding additional REST clients to the application easier. Additional features are added through composable annotations.
+GET & POST Requests Controller
+GET & POST Requests Controller
+02:54:08 - 03:01:45
+Josh builds an HTTP controller to handle GET and POST requests within the HTTP client.
+Spring HATEAOS
+Spring HATEAOS
+03:01:46 - 03:07:27
+Josh introduces HATEAOS, hypermedia as the engine of application state. This pattern provides link metadata along with the payload so the rest client does not require prior knowledge of interacting with an application or server beyond a generic understanding of hypermedia.
+MVC with Thymeleaf
+MVC with Thymeleaf
+03:07:28 - 03:10:41
+Josh demonstrates the capabilities of Thymeleaf, a Java template engine for processing and creating HTML, XML, JavaScript, CSS, and text. A controller is added to the application, and the `mvc` endpoint output is mapped to a `users.html` server-side template.
+GraphQL
+GraphQL
+03:10:42 - 03:18:25
+Josh codes a GraphQL example to highlight how Spring handles GraphQL endpoints flexibly. A GraphQL controller is added to the application. QueryMapping, SchemaMapping, and BatchMapping annotations are added to explore how to handle different use cases. These mappings can be switched out on the server without affecting the client APIs.
+gRPC
+gRPC
+03:18:26 - 03:28:04
+Josh adds a gRPC endpoint to the Spring application. gRPC is a high-performance, open-source RPC framework initially developed by Google. The API is based on Protocol Buffers.
+HTTP Client with Database Exercise
+HTTP Client with Database Exercise
+03:28:05 - 03:34:16
+Josh guides students through creating a basic HTTP client to review all the topics covered in the Web Programming section. The client utilizes the Spring Web and Spring JDBC starters to communicate with a Postgres database in a Docker container.
+Spring in Production
+Section Duration: 25 minutes
+Enabling Actuator Endpoints
+Enabling Actuator Endpoints
+03:34:17 - 03:50:03
+Josh introduces some production-related topics, beginning with the Spring Actuator. The Spring Actuator provides API endpoints for system information like health, custom server properties, recent git history, configuration properties, and other server-related metrics. These endpoints would typically be served on another port or private domain for internal monitoring.
+Building for Production with GraalVM
+Building for Production with GraalVM
+03:50:04 - 03:53:51
+Josh builds a native image using GraalVM. Once the image is built and run, any application or environment properties can be provided externally through the terminal as environment variables or through an application.properties file in the target directory.
+Building a Docker Image
+Building a Docker Image
+03:53:52 - 03:59:27
+Josh builds a containerized version of the application using Docker, which allows it to be built for other platforms. Application properties are passed to the Docker image on startup through the Docker CLI.
+Messaging & Integration
+Section Duration: 44 minutes
+Spring for Kafka
+Spring for Kafka
+03:59:28 - 04:07:34
+Josh discusses the messaging integrations with Spring. A Kafka messaging broker is started in a Docker container. The initial Spring application is scaffolded, and the ApplicationRunner is coded with the injected Kafka template. A DogAdoptionRequest payload is stubbed out, and the event listener is configured.
+Serializing & Deserializing JSON
+Serializing & Deserializing JSON
+04:07:35 - 04:12:37
+Josh adds JSON support to the Kafka messaging application. The serialization support is provided through producer and consumer application properties. Pulsar and RabbitMQ support is also discussed in this lesson.
+Enterprise Integration Patterns
+Enterprise Integration Patterns
+04:12:38 - 04:20:39
+Josh discusses the integration patterns enterprise applications face as they interface with distributed systems. Most integration styles fall into four categories: file transfer, shared databases, remote procedure calls, and messaging. The Enterprise Integration Patterns book is mentioned and offered as a recommended reading for enterprise architects.
+Building an Order Integration Flow
+Building an Order Integration Flow
+04:20:40 - 04:33:50
+Josh develops an integration flow using a purchase ordering system as an example. The inbound adaptor is sent through a series of transforms to move file data from a string format to JSON, and finally, to Java domain objects which are logged to the console.
+Multi-Channel Integration Flows
+Multi-Channel Integration Flows
+04:33:51 - 04:44:09
+Josh adds MessageChannels to the application, serving as the logical pipe through which the messages flow. This allows the application to have multiple sources for the inbound flow. One source is the original file system flow. The other is a post request.
+Architecting for Modularity
+Section Duration: 53 minutes
+Modularity in Spring
+Modularity in Spring
+04:44:10 - 04:51:25
+Josh emphasises the importance of modularity in Spring applications. The separation of concerns is core to Java, and modularity at scale keeps applications maintainable. A pet adoption app is scaffolded to highlight modularity techniques. Initial classes for Dog and Vet objects are created.
+Event-Based Integration
+Event-Based Integration
+04:51:26 - 04:56:39
+Josh explains that too many concerns and dependencies inside a controller can lead to undue complexity. Asynchronous, event-based integration is introduced as a solution. Event-based integrations decouple the producer and consumer of the event because all the necessary details are contained in the message sent in the event.
+Asynchronous Event Publishers
+Asynchronous Event Publishers
+04:56:40 - 05:05:31
+Josh refactors the application so that an event is published when a dog is adopted. A listener is added to the Dogtor module to decouple it from the adoption service. The outbox pattern is introduced to further decouple the two systems. This pattern provides an asynchronous messaging approach to reconcile transactional systems.
+Testing for Modularity
+Testing for Modularity
+05:05:32 - 05:13:15
+Josh introduces the @Externalized annotation, allowing messages to be published across multiple JVMs. The testing features of Spring Modulith are also highlighted, including the ability to print the modules and their dependencies. The Documenter is used to generate a UML diagram of these dependencies.
+Microservices with Spring Cloud
+Microservices with Spring Cloud
+05:13:16 - 05:26:53
+Josh creates a microservice registry with the Eureka module from Spring Cloud Discovery. Any discoverable service will appear in the service registry, which can be interacted with programmatically, enabling features like client-side load balancing.
+Building a Microservice Client App
+Building a Microservice Client App
+05:26:54 - 05:30:04
+Josh builds a REST client to consume the services. The client will utilize the load-balanced builder. This means the load balancing will occur in the client as it's accessing the downstream services.
+Spring Cloud Gateway Microproxy
+Spring Cloud Gateway Microproxy
+05:30:05 - 05:38:04
+Josh refactors the microservice to use a proxy. The Gateway Proxy module behaves similarly to Apache mod_rewrite or Nginx. Requests from the client are proxied through the load balancer, which eliminates CORS or other network-related issues.
+Security
+Section Duration: 45 minutes
+Securing Application Endpoints
+Securing Application Endpoints
+05:38:05 - 05:42:58
+Josh introduces Spring Security and scaffolds a basic application with a secured endpoint. A principal or currently authenticated user is passed along to every secured endpoint, and an exception is thrown if the user is not permitted.
+Hashing & Storing Passwords
+Hashing & Storing Passwords
+05:42:59 - 05:55:20
+Josh uses a PasswordEncoder to encode the plaintext password provided by the user and store it in the database. Any passwords using the deprecated SHA256 algorithm are migrated to bcrypt after the user successfully logs in.
+Supporting Passkeys with WebAuthn
+Supporting Passkeys with WebAuthn
+05:55:21 - 06:08:22
+Josh implements two password-alternative authentication systems. One system uses a magic link sent via email or text message. The other leverages passkeys, a replacement for passwords, which involve a secret stored on a user's devices that can be unlocked with biometrics.
+Creating an OAuth Authorization Server
+Creating an OAuth Authorization Server
+06:08:23 - 06:23:20
+Josh adds OAuth support to the application. OAuth is an open standard for authorization that allows users to grant third-party applications access to their information on other websites without sharing their passwords. The security layer can be scaled across multiple applications within an organization.
+Spring & AI
+Section Duration: 42 minutes
+Spring AI
+Spring AI
+06:23:21 - 06:36:31
+Josh introduces Spring AI and discusses how Java developers can leverage their knowledge of building robust APIs and backend applications as they integrate with AI systems. A Spring application is scaffolded with Spring AI, support for MCPs, and a Postgres vector database.
+Building an AI Assistant
+Building an AI Assistant
+06:36:32 - 06:44:27
+Josh creates an AI assistant to help with dog adoption. The assistant uses the OpenAI API to process requests. Chat messages are managed in memory, so the full history can be passed along in the context window with each request.
+PGVector Store
+PGVector Store
+06:44:28 - 06:52:41
+Josh explains the importance of vector databases when working with AI. These databases offer features like similarity search and enable efficient storage and searching of vector data. Josh uses the OpenAI API to generate a vector store of the adoption database. The AI agent is updated to use the vector store when returning results.
+Tool Calling
+Tool Calling
+06:52:42 - 06:57:13
+Josh builds a scheduling tool for the AI adoption application to highlight Spring AI's tool calling capabilities. The assistant will look at the tools available and determine which one to call, given the context of the request from the user.
+Model Context Protocol
+Model Context Protocol
+06:57:14 - 07:05:55
+Josh extracts the scheduler tool from the application and puts it into an MCP server. The application is then refactored to use the MPC server for its tool calling.
+Wrapping Up
+Section Duration: 1 minute
+Wrapping Up
+Wrapping Up
+07:05:56 - 07:07:28
+Josh wraps up the course with a summary of the topics and a few closing thoughts.

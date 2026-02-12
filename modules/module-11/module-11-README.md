@@ -1,6 +1,9 @@
 # Moduł 11: Debugowanie & Profiling
 
+> `opt` = optional
+
 ## Cel
+
 Znajdować i rozwiązywać problemy w aplikacji.
 
 ---
@@ -8,6 +11,7 @@ Znajdować i rozwiązywać problemy w aplikacji.
 ## Tematy do opanowania
 
 ### 1. Debugger (IDE)
+
 - [ ] Breakpoints - zatrzymanie na linii
 - [ ] Conditional breakpoints - zatrzymanie gdy warunek spełniony
 - [ ] Exception breakpoints - zatrzymanie przy wyjątku
@@ -16,12 +20,14 @@ Znajdować i rozwiązywać problemy w aplikacji.
 - [ ] Step Out - wyjdź z metody
 - [ ] Evaluate Expression - wykonaj kod w runtime
 
-### 2. Remote Debugging
+### 2. Remote Debugging `opt`
+
 - [ ] Uruchomienie z opcjami debug: `-agentlib:jdwp=...`
 - [ ] Podłączenie IDE do remote JVM
 - [ ] Port debug (5005)
 
 ### 3. Logging
+
 - [ ] SLF4J - facade
 - [ ] Logback - implementacja (default w Spring Boot)
 - [ ] Log levels: TRACE < DEBUG < INFO < WARN < ERROR
@@ -29,6 +35,7 @@ Znajdować i rozwiązywać problemy w aplikacji.
 - [ ] Logger per klasa: `@Slf4j` (Lombok)
 
 ### 4. Konfiguracja logowania
+
 - [ ] `logging.level.root=INFO`
 - [ ] `logging.level.com.example=DEBUG`
 - [ ] `logging.level.org.hibernate.SQL=DEBUG` (show SQL)
@@ -36,11 +43,13 @@ Znajdować i rozwiązywać problemy w aplikacji.
 - [ ] Logowanie do pliku
 
 ### 5. Structured Logging
+
 - [ ] JSON format (dla ELK, CloudWatch)
 - [ ] Logstash encoder
 - [ ] Correlation ID (request tracking)
 
 ### 6. Common Exceptions - rozpoznawanie
+
 - [ ] `NullPointerException` - null reference
 - [ ] `LazyInitializationException` - dostęp do lazy poza sesją
 - [ ] `DataIntegrityViolationException` - constraint violation
@@ -48,18 +57,21 @@ Znajdować i rozwiązywać problemy w aplikacji.
 - [ ] `MethodArgumentNotValidException` - validation failed
 
 ### 7. Stack Trace Reading
+
 - [ ] Czytanie od góry (gdzie błąd)
 - [ ] "Caused by" - root cause
 - [ ] Filtrowanie frameworkowych klas
 - [ ] Znajdowanie swojego kodu
 
-### 8. Profiling
+### 8. Profiling `opt`
+
 - [ ] JVisualVM / JConsole - monitoring JVM
 - [ ] CPU profiling - co zużywa CPU
 - [ ] Memory profiling - co zużywa pamięć
 - [ ] Flame graphs
 
-### 9. Heap Dump & Thread Dump
+### 9. Heap Dump & Thread Dump `opt`
+
 - [ ] Heap dump - snapshot pamięci
 - [ ] `jmap -dump:format=b,file=heap.hprof <pid>`
 - [ ] Thread dump - snapshot wątków
@@ -67,6 +79,7 @@ Znajdować i rozwiązywać problemy w aplikacji.
 - [ ] Analiza w VisualVM / Eclipse MAT
 
 ### 10. Spring Boot Actuator
+
 - [ ] Dependency: `spring-boot-starter-actuator`
 - [ ] `/actuator/health` - status aplikacji
 - [ ] `/actuator/metrics` - metryki
@@ -75,29 +88,39 @@ Znajdować i rozwiązywać problemy w aplikacji.
 - [ ] Security dla actuator endpoints
 
 ### 11. Troubleshooting Checklist
+
 - [ ] 1. Sprawdź logi (gdzie błąd, stack trace)
 - [ ] 2. Reprodukuj lokalnie
 - [ ] 3. Izoluj problem (który komponent)
 - [ ] 4. Debug (breakpoint przed błędem)
 - [ ] 5. Szukaj wzorców (zawsze ten sam input?)
 
+### 12. GraalVM Native Image 🆕 `opt`
+
+- [ ] Co to native image — AOT vs JIT
+- [ ] Kompilacja Spring Boot do natywnego pliku
+- [ ] Ograniczenia (reflection, dynamic proxies)
+- [ ] Kiedy ma sens (serverless, CLI)
+
 ---
 
 ## Powiązana teoria
+
 - `docs/theory/08-testing-devops.md` → sekcja Observability
 
 ---
 
 ## Przykład: Logging
+
 ```java
 @Slf4j
 @Service
 public class InstrumentService {
-    
+
     public InstrumentResponse create(CreateRequest request) {
         log.info("Creating instrument: {}", request.ticker());
         log.debug("Full request: {}", request);
-        
+
         try {
             var result = repository.save(toEntity(request));
             log.info("Created with id: {}", result.getId());
@@ -113,6 +136,7 @@ public class InstrumentService {
 ---
 
 ## application.properties (Logging)
+
 ```properties
 # Levels
 logging.level.root=INFO
@@ -129,6 +153,7 @@ logging.file.max-history=30
 ---
 
 ## Actuator Config
+
 ```properties
 management.endpoints.web.exposure.include=health,info,metrics,loggers
 management.endpoint.health.show-details=always
@@ -137,6 +162,7 @@ management.endpoint.health.show-details=always
 ---
 
 ## Ćwiczenia
+
 1. Ustaw breakpoint i debug prosty flow
 2. Skonfiguruj logi na poziomie DEBUG dla swojego pakietu
 3. Dodaj Actuator i sprawdź /health, /metrics
@@ -147,6 +173,7 @@ management.endpoint.health.show-details=always
 ---
 
 ## Sprawdzian gotowości
+
 - [ ] Umiem używać debuggera (breakpoints, step, evaluate)
 - [ ] Loguję na odpowiednich poziomach
 - [ ] Potrafię czytać stack trace

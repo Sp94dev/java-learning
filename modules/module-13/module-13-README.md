@@ -1,6 +1,8 @@
 # Moduł 13: CI/CD (GitHub Actions)
 
+
 ## Cel
+
 Automatyzacja build, test, deploy z GitHub Actions.
 
 ---
@@ -8,12 +10,14 @@ Automatyzacja build, test, deploy z GitHub Actions.
 ## Tematy do opanowania
 
 ### 1. CI/CD Concepts
+
 - [ ] **CI (Continuous Integration):** Auto build + test przy każdym commit
 - [ ] **CD (Continuous Delivery):** Każdy commit MOŻE być deployed
 - [ ] **CD (Continuous Deployment):** Każdy commit JEST deployed
 - [ ] Fail fast, fix fast
 
 ### 2. GitHub Actions Basics
+
 - [ ] Workflow file: `.github/workflows/*.yml`
 - [ ] Trigger: `on: [push, pull_request]`
 - [ ] Jobs - niezależne zadania
@@ -21,6 +25,7 @@ Automatyzacja build, test, deploy z GitHub Actions.
 - [ ] Actions - reusable steps
 
 ### 3. Workflow Structure
+
 - [ ] `name` - nazwa workflow
 - [ ] `on` - trigger (push, pull_request, schedule)
 - [ ] `jobs` - lista jobów
@@ -28,12 +33,14 @@ Automatyzacja build, test, deploy z GitHub Actions.
 - [ ] `steps` - lista kroków
 
 ### 4. Common Actions
+
 - [ ] `actions/checkout@v4` - checkout kodu
 - [ ] `actions/setup-java@v4` - setup JDK
 - [ ] `actions/cache@v4` - cache dependencies
 - [ ] `docker/build-push-action@v5` - build & push Docker
 
 ### 5. Basic CI Pipeline
+
 - [ ] Checkout
 - [ ] Setup Java
 - [ ] Cache Maven dependencies
@@ -41,39 +48,46 @@ Automatyzacja build, test, deploy z GitHub Actions.
 - [ ] Upload test results (artifact)
 
 ### 6. CI with Database (Testcontainers/Services)
+
 - [ ] `services:` - kontenery dla testów
 - [ ] PostgreSQL service
 - [ ] Environment variables dla testów
 
 ### 7. Build & Push Docker Image
+
 - [ ] Trigger on tag: `on: push: tags: ['v*']`
 - [ ] Login to Docker Hub: `docker/login-action`
 - [ ] Build and push: `docker/build-push-action`
 - [ ] Tagging: `latest` + version tag
 
 ### 8. Secrets Management
+
 - [ ] Repository Secrets w GitHub
 - [ ] `${{ secrets.DOCKER_USERNAME }}`
 - [ ] `${{ secrets.DOCKER_TOKEN }}`
 - [ ] Nigdy nie commituj secrets!
 
 ### 9. Quality Gates
+
 - [ ] Code coverage (JaCoCo)
 - [ ] Static analysis (opcjonalnie: SonarQube)
 - [ ] Dependency scanning
 - [ ] Fail pipeline jeśli quality gate nie przejdzie
 
 ### 10. Caching
+
 - [ ] Cache Maven: `~/.m2/repository`
 - [ ] Cache Docker layers
 - [ ] Przyspieszenie pipeline
 
 ### 11. Artifacts
+
 - [ ] Upload test results
 - [ ] Upload coverage reports
 - [ ] Download w kolejnych jobs
 
 ### 12. Branch Protection
+
 - [ ] Require CI pass before merge
 - [ ] Require reviews
 - [ ] Settings → Branches → Branch protection rules
@@ -81,11 +95,13 @@ Automatyzacja build, test, deploy z GitHub Actions.
 ---
 
 ## Powiązana teoria
+
 - `docs/theory/08-testing-devops.md` → sekcja CI/CD
 
 ---
 
 ## Przykład: Basic CI
+
 ```yaml
 # .github/workflows/ci.yml
 name: CI
@@ -99,20 +115,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up JDK 25
         uses: actions/setup-java@v4
         with:
-          java-version: '25'
-          distribution: 'temurin'
+          java-version: "25"
+          distribution: "temurin"
           cache: maven
-      
+
       - name: Build and Test
         run: mvn clean verify
-      
+
       - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
@@ -124,11 +140,12 @@ jobs:
 ---
 
 ## Przykład: CI with PostgreSQL
+
 ```yaml
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     services:
       postgres:
         image: postgres:16
@@ -143,15 +160,15 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
-          java-version: '25'
-          distribution: 'temurin'
+          java-version: "25"
+          distribution: "temurin"
           cache: maven
-      
+
       - name: Run tests
         run: mvn test
         env:
@@ -163,29 +180,30 @@ jobs:
 ---
 
 ## Przykład: Build & Push Docker
+
 ```yaml
 name: Build and Push
 
 on:
   push:
-    tags: ['v*']
+    tags: ["v*"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
-      
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -201,6 +219,7 @@ jobs:
 ---
 
 ## Ćwiczenia
+
 1. Stwórz `.github/workflows/ci.yml`
 2. Skonfiguruj build + test
 3. Dodaj caching dla Maven
@@ -212,6 +231,7 @@ jobs:
 ---
 
 ## Sprawdzian gotowości
+
 - [ ] Mam CI pipeline w GitHub Actions
 - [ ] Testy uruchamiają się na każdy PR
 - [ ] Docker image jest budowany automatycznie

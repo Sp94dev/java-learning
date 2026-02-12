@@ -1,6 +1,8 @@
 # Moduł 12: Konteneryzacja (Docker)
 
+
 ## Cel
+
 Aplikacja działa w Docker, pełny stack w Docker Compose.
 
 ---
@@ -8,12 +10,14 @@ Aplikacja działa w Docker, pełny stack w Docker Compose.
 ## Tematy do opanowania
 
 ### 1. Docker Basics (przypomnienie)
+
 - [ ] Image vs Container
 - [ ] Image layers - cachowanie
 - [ ] Registry (Docker Hub)
 - [ ] Podstawowe komendy: `build`, `run`, `ps`, `logs`, `exec`
 
 ### 2. Dockerfile
+
 - [ ] `FROM` - bazowy obraz
 - [ ] `WORKDIR` - katalog roboczy
 - [ ] `COPY` - kopiowanie plików
@@ -22,12 +26,14 @@ Aplikacja działa w Docker, pełny stack w Docker Compose.
 - [ ] `ENTRYPOINT` vs `CMD` - co uruchomić
 
 ### 3. Multi-stage Build
+
 - [ ] Stage 1: Build (JDK, Maven)
 - [ ] Stage 2: Run (tylko JRE)
 - [ ] Mniejszy finalny obraz
 - [ ] Bezpieczniejszy (bez source code)
 
 ### 4. Dockerfile Best Practices
+
 - [ ] Kolejność warstw (rzadko zmieniane najpierw)
 - [ ] Cache dependencies oddzielnie od kodu
 - [ ] Non-root user
@@ -35,6 +41,7 @@ Aplikacja działa w Docker, pełny stack w Docker Compose.
 - [ ] JVM flags dla kontenerów
 
 ### 5. Docker Compose
+
 - [ ] `docker-compose.yml` - definicja stacku
 - [ ] Services, networks, volumes
 - [ ] `depends_on` - kolejność startu
@@ -42,6 +49,7 @@ Aplikacja działa w Docker, pełny stack w Docker Compose.
 - [ ] Environment variables
 
 ### 6. Pełny stack (app + db + redis)
+
 - [ ] Service: app (twoja aplikacja)
 - [ ] Service: postgres
 - [ ] Service: redis
@@ -49,12 +57,14 @@ Aplikacja działa w Docker, pełny stack w Docker Compose.
 - [ ] Volumes dla persystencji
 
 ### 7. Environment Variables
+
 - [ ] `SPRING_PROFILES_ACTIVE`
 - [ ] `SPRING_DATASOURCE_URL`
 - [ ] `.env` file
 - [ ] Secrets management (podstawy)
 
 ### 8. Docker Commands
+
 - [ ] `docker-compose up -d` - start w tle
 - [ ] `docker-compose down` - stop
 - [ ] `docker-compose down -v` - stop + usuń volumes
@@ -62,12 +72,14 @@ Aplikacja działa w Docker, pełny stack w Docker Compose.
 - [ ] `docker-compose exec app sh` - shell w kontenerze
 
 ### 9. Debugging w Docker
+
 - [ ] `docker logs <container>`
 - [ ] `docker exec -it <container> sh`
 - [ ] `docker stats` - resource usage
 - [ ] Health check status
 
 ### 10. Docker Profiles (dev/prod)
+
 - [ ] `docker-compose.override.yml` (auto-ładowane dla dev)
 - [ ] `docker-compose.prod.yml`
 - [ ] `docker-compose -f ... -f ... up`
@@ -75,11 +87,13 @@ Aplikacja działa w Docker, pełny stack w Docker Compose.
 ---
 
 ## Powiązana teoria
+
 - `docs/theory/08-testing-devops.md` → sekcja Containers & Docker
 
 ---
 
 ## Przykład: Dockerfile (Multi-stage)
+
 ```dockerfile
 # Stage 1: Build
 FROM eclipse-temurin:25-jdk AS builder
@@ -111,8 +125,9 @@ ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-j
 ---
 
 ## Przykład: docker-compose.yml
+
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   app:
@@ -164,6 +179,7 @@ volumes:
 ---
 
 ## Ćwiczenia
+
 1. Napisz Dockerfile (single stage)
 2. Przebuduj na multi-stage
 3. Dodaj non-root user
@@ -175,6 +191,7 @@ volumes:
 ---
 
 ## Sprawdzian gotowości
+
 - [ ] Mam Dockerfile z multi-stage build
 - [ ] docker-compose uruchamia app + db + redis
 - [ ] Health checks działają

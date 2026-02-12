@@ -1,0 +1,303 @@
+Java Fundamentals
+Angie Jones
+Angie Jones
+Java Champion
+8 hours, 55 minutes CC
+Java Fundamentals
+
+Course Description
+Java is one of the most popular programming languages in the world, especially for enterprise applications. Quickly learn object-oriented programming (OOP) principles, functional programming techniques, and how to use conditionals, loops, and data structures. Inspired by Java's capacity to model real-world systems, the course offers hands-on coding challenges to reinforce everything you learn along the way!
+
+This course and others like it are available as part of our Frontend Masters video subscription.
+
+Join Now
+What They're Saying
+Everything is covered in the shortest possible time while ensuring nothing is missed. Angie is a world class instructor.
+Syed Harif Fayaz
+Syed Harif Fayaz
+This isn't my first time trying to learn the Java programming language but it's the first time the language has actually made sense to me. Absolutely worth every minute.
+Aremu Oluwagbamila
+Aremu Oluwagbamila
+Really enjoyed this course by Angie. I think the way she explains it is really clear if you're coming with no knowledge about the language. She's also super fun. Totally recommended!
+Andres Morales
+Show More
+Course Details
+Published: May 9, 2023
+Rating
+4.8
+Learning Paths
+Fullstack to BackendBackend Languages
+Topics
+programming-languagefunctionalobject-oriented
+Learn Straight from the Experts Who Shape the Modern Web
+Your Path to Senior Developer and Beyond
+250+ In-depth courses
+24 Learning Paths
+Industry Leading Experts
+Live Interactive Workshops
+Join Now
+Table of Contents
+Introduction
+Section Duration: 3 minutes
+Introduction
+Introduction
+00:00:00 - 00:03:33
+Angie Jones introduces the course by providing some professional background and course set-up instructions. Installing IntelliJ and Java is also covered in this segment.
+Conditions & Loops
+Section Duration: 1 hour, 28 minutes
+Java Basics Exercise
+Java Basics Exercise
+00:03:34 - 00:17:32
+Angie walks through creating a gross pay calculator, files, packages, main methods, and Java naming conventions. The built-in text scanner class Scanner, defining variables, setting variable types, and how to make comments are also covered in this segment.
+If Statement
+If Statement
+00:17:33 - 00:24:01
+Angie discusses the function of an if statement and walks through coding an example if statement. If statements must evaluate to true or false and will apply if the defined condition is met.
+If-Else Statement
+If-Else Statement
+00:24:02 - 00:29:58
+Angie adds an else statement to the previously created if statement which will be applied if the condition is not met.
+Nested If Statement
+Nested If Statement
+00:29:59 - 00:36:41
+Angie demonstrates nesting multiple logic paths in an if statement to check for a condition, and if that condition is met, then check for another condition. If-else-if statements can also be used in decisions with more than one path.
+Switch Statements
+Switch Statements
+00:36:42 - 00:48:44
+Angie discusses using switch statements instead of if-else-if to check conditionals. Unlike if-else-if statements, switch statements check for equality.
+Switch Expressions
+Switch Expressions
+00:48:45 - 00:56:37
+Angie demonstrates switch expressions, which are similar to switch statements, but allow values to be directly assigned when a case is matched.
+Operators
+Operators
+00:56:38 - 01:00:54
+Angie discusses relational operators in Java, including > greater than, < less than, greater than or equal to >=, less than or equal to <=, equal to ==, and not equal to !=. The logical operators && AND, || OR, and ! NOT are also covered in this segment.
+While Loops
+While Loops
+01:00:55 - 01:12:05
+Angie walks through using a while loop to create a program with input validation that runs until the defined condition is met. Adding extra input restrictions using the logical operator || OR is also covered in this segment.
+Do While Loops
+Do While Loops
+01:12:06 - 01:20:49
+Angie demonstrates repeatedly running a program while a condition is being met using a do while loop. Student questions regarding valid boolean responses and if data from the loop can be used the next time it runs are also covered in this segment.
+For Loop
+For Loop
+01:20:50 - 01:27:58
+Angie walks through creating a program that will scan a given number of items and keep a running total. A for loop will run a specified number of times and the condition is tested before entering the loop.
+Nested Loop
+Nested Loop
+01:27:59 - 01:32:11
+Angie discusses nested loops as a loop inside a loop where the inner loop will execute once for each iteration of the outer loop. A student question regarding how to decide how deeply nested loops should be is also covered in this segment.
+Methods, Objects & Data Types
+Section Duration: 1 hour, 25 minutes
+Methods
+Methods
+01:32:12 - 01:39:30
+Angie discusses a collection of statements that perform a task, known as a method. Parts of the method, including the access modifier, non-access modifier, return type, method name, parameter list, and method body are also discussed in this segment.
+Greet User & Overloaded Methods
+Greet User & Overloaded Methods
+01:39:31 - 01:48:25
+Angie walks through writing two methods to get a user's name and greet that user and discusses the function of the main method. Methods must have a unique parameter list and can be overloaded if they share a signature.
+Variable Scope
+Variable Scope
+01:48:26 - 02:05:07
+Angie demonstrates the scope of a variable, where variables can be accessed from, and discusses the scope of variables in reusable methods. How to define global variables is also covered in this segment.
+Local Variable Type Inference
+Local Variable Type Inference
+02:05:08 - 02:07:10
+Angie discusses inferring a local variable's type by declaring it using var. Global variables cannot be inferred using var.
+Objects & Encapsulation
+Objects & Encapsulation
+02:07:11 - 02:15:19
+Angie demonstrates using classes to define the makeup of an object. A discussion regarding one of Java's core principles, encapsulation, is also provided in this segment.
+Constructors
+Constructors
+02:15:20 - 02:23:45
+Angie discusses constructors, which are structures within a class that are used to set an object's initial state. Default constructors and a student's question regarding if static classes have default constructors are also covered in this segment.
+Instantiating Objects
+Instantiating Objects
+02:23:46 - 02:33:07
+Angie walks through writing a class that creates instances of the Rectangle class to find the total area of two rooms in a house. Student questions regarding how the HomeAreaCalculator knows to reference Rectangle and if objects can contain other types of objects are also covered in this segment.
+Sending & Receiving Objects
+Sending & Receiving Objects
+02:33:08 - 02:45:55
+Angie demonstrates how to pass objects into methods and how to return objects from methods. Student questions regarding why getRoom() and calculateAreaOfRoom() are not static and if instantiating a class within its own main function is a common practice are also covered in this segment.
+Records & Wrapper Classes
+Records & Wrapper Classes
+02:45:56 - 02:57:42
+Angie discusses using record classes for simple objects to reduce boilerplate code. Wrapper classes can be used to represent some primitive data types as objects and allow the variable to be operated on by methods.
+Arrays & Text Processing
+Section Duration: 1 hour, 1 minute
+Arrays
+Arrays
+02:57:43 - 03:02:04
+Angie discusses how to define an array variable. Arrays can hold multiple value, but only if they are the same data type.
+Random Number Array
+Random Number Array
+03:02:05 - 03:23:44
+Angie walks through creating a program that generates random numbers and inserts them into an array with a fixed length.
+Arrays Q&A
+Arrays Q&A
+03:23:45 - 03:30:31
+Angie demonstrates writing the printTicket for loop using i and discusses why a do while loop was used instead of a while loop. Student questions regarding how to print on one line and if the terms mutable and immutable are used in Java are also answered in this segment.
+Strings & Text Processing
+Strings & Text Processing
+03:30:32 - 03:40:17
+Angie discusses that strings are objects that contain a sequence of characters and walks through building a word count program. Appending variables in the middle of a string using String.format to allow placeholders is also covered in this segment.
+Backwards String & StringBuilder
+Backwards String & StringBuilder
+03:40:18 - 03:47:35
+Angie walks through writing a method that prints a given string backwards. Creating a mutable string that can be modified with StringBuilder is also discussed in this segment.
+Jumbled String
+Jumbled String
+03:47:36 - 03:54:40
+Angie demonstrates using the StringBuilder class to create a method that inserts a space before each capital letter in a string.
+Text Blocks
+Text Blocks
+03:54:41 - 03:58:55
+Angie discusses working with multi-line strings using text blocks and demonstrates how to define them with three quotation marks. Student questions regarding what data type text blocks are and the return type of the function containing StringBuilder are also covered in this segment.
+Inheritance
+Section Duration: 52 minutes
+Inheritance
+Inheritance
+03:58:56 - 04:15:27
+Angie discusses the inheritance of class members when a class becomes an extension of another class. Constructors in superclasses execute before constructors of the subclass.
+Overriding Parameters
+Overriding Parameters
+04:15:28 - 04:24:37
+Angie demonstrates overriding the behavior of a method inherited by a subclass. Changing the superclass variable's access modifier from private to protected will allow subclasses to access that variable while retaining encapsulation.
+Overloading Methods
+Overloading Methods
+04:24:38 - 04:31:51
+Angie walks through overloading methods that were inherited from a superclass. Student questions regarding whether constructors need to be set to public and whether there are any differences between overloading inherited and non-inherited methods are also covered in this segment.
+Chain of Inheritance
+Chain of Inheritance
+04:31:52 - 04:37:54
+Angie discusses restrictions of inheritance between classes, including classes inheriting from only one superclass. A walkthrough of an example chain of classes is also provided in this segment.
+Limiting Access & Access Modifiers
+Limiting Access & Access Modifiers
+04:37:55 - 04:42:36
+Angie discusses limited member access with inheritance, such as public, protected, and final members being inherited, but final methods cannot be overridden. When overriding an inherited method, the access modifier must be the same or less strict than the superclass.
+Sealed Classes
+Sealed Classes
+04:42:37 - 04:51:42
+Angie demonstrates restricting inheritance to specific classes using sealed classes. The NonSealed keyword is also briefly discussed in this segment.
+Polymorphism & Abstraction
+Section Duration: 1 hour, 8 minutes
+Polymorphism
+Polymorphism
+04:51:43 - 05:00:07
+Angie demonstrates a subclass's ability to define unique behavior while sharing behaviors of their superclass. A polymorphic object will execute its overriding method at runtime.
+Type Casting
+Type Casting
+05:00:08 - 05:09:54
+Angie discusses converting an object's type into another via type casting and demonstrates how to downcast a type. When casting types, the objects must be related in the inheritance hierarchy tree.
+instanceof Operator
+instanceof Operator
+05:09:55 - 05:18:42
+Angie discusses using the instanceof operator to check if an object is a specified class. A walkthrough of creating a method using instanceof is also covered in this segment.
+instanceof Pattern Matching
+instanceof Pattern Matching
+05:18:43 - 05:22:17
+Angie discusses using the instanceof operator to perform two actions simultaneously with pattern matching. The scope of the newly created object is restricted to within the if statement's curly brackets.
+Abstraction
+Abstraction
+05:22:18 - 05:39:42
+Angie discusses one of object-oriented programming's core principles, abstraction, using structures to represent abstract ideas. Abstract classes are designed to be implemented by their subclasses.
+Interfaces
+Interfaces
+05:39:43 - 05:47:48
+Angie discusses interfaces as stateless constructs with abstract behaviors and demonstrates creating an interface and a class that implements it. By default, methods in interfaces are considered abstract.
+Multiple Inheritance
+Multiple Inheritance
+05:47:49 - 06:00:06
+Angie demonstrates how classes achieve multiple inheritance by implementing multiple interfaces. An example of an interface method using the default type is also covered in this segment.
+Data Structures
+Section Duration: 1 hour, 10 minutes
+Set
+Set
+06:00:07 - 06:13:30
+Angie briefly overviews data structures and discusses an unordered collection of unique objects called Set. Adding data to a Set using the Set.of method will make the Set immutable.
+List
+List
+06:13:31 - 06:26:52
+Angie demonstrates how to define a collection of ordered elements accessible by position, also known as a List. Replacing items in an array list using .set and removing an item using .remove are also covered in this segment.
+Queue
+Queue
+06:26:53 - 06:32:44
+Angie demonstrates how to define a queue, a collection of elements that are processed in the order in which they are added. When a new item is added to a queue, it is added to the end of the array.
+Map
+Map
+06:32:45 - 06:44:22
+Angie discusses Maps as unordered unique key-value pairs that do not inherit from the collection interface. The put and putIfAbsent operators and how to set immutable objects are also covered in this segment.
+Collection Iterators
+Collection Iterators
+06:44:23 - 06:50:19
+Angie demonstrates looping through a Set. List, or Queue collection using an iterator. Map can be looped through using entrySet() to gain access to iterator.
+Iterating with Enhanced For Loop
+Iterating with Enhanced For Loop
+06:50:20 - 06:59:14
+Angie demonstrates looping through an array using an enhanced for loop. Looping through a Map using an enhanced loop is also covered in this segment.
+Iterating with forEach
+Iterating with forEach
+06:59:15 - 07:10:38
+Angie demonstrates using forEach(), a built-in convenience method, to iterate over a collection. The forEach() method can be used with all of the previously mentioned data structures.
+Functional Interfaces & Streams
+Section Duration: 47 minutes
+Functional Interfaces
+Functional Interfaces
+07:10:39 - 07:20:37
+Angie discusses functional programming in Java by utilizing the java.util.function package to access several functional interfaces. A functional interface is an interface with a single abstract method which can be implemented by lambda expressions and method references.
+Streams Overview
+Streams Overview
+07:20:38 - 07:25:00
+Angie discusses streams, a sequence of elements from a data source, that can be accessed by using the java.util.stream package. An overview of intermediate and terminal stream operations is also covered in this segment.
+anyMatch, allMatch, & filter
+anyMatch, allMatch, & filter
+07:25:01 - 07:37:38
+Angie demonstrates using the anyMatch, allMatch, and filter operations to return the desired data from an array of strings. The filter operation allows for a more precise return in that it will only return items that match the given condition.
+map & reduce
+map & reduce
+07:37:39 - 07:49:36
+Angie demonstrates the stream operations map and reduce, which allow manipulation of the data within the stream. Examples using both strings and integers are provided in this segment.
+collect
+collect
+07:49:37 - 07:57:46
+Angie walks through assigning a stream to a defined collection using the collect operation. A demonstration of combining multiple stream operations is also covered in this segment.
+Exceptions
+Section Duration: 55 minutes
+Handling Exceptions
+Handling Exceptions
+07:57:47 - 08:04:48
+Angie discusses handling events that disrupt the normal flow of a program and walks through creating a program with exception handling. Printing out the error message using the getMessage method is also demonstrated in this segment.
+Checked & Unchecked Exceptions
+Checked & Unchecked Exceptions
+08:04:49 - 08:08:44
+Angie discusses the two categories of exceptions, checked and unchecked, and the differences between the two. Check exceptions are exceptions that are checked by the compiler, while unchecked exceptions are not checked by the compiler.
+Handling Multiple Exceptions
+Handling Multiple Exceptions
+08:08:45 - 08:23:16
+Angie demonstrates three ways to handle multiple thrown exceptions, including polymorphism, multiple catch blocks, and catching multiple exceptions in a single block.
+Closing the File Reader
+Closing the File Reader
+08:23:17 - 08:32:00
+Angie walks through updating the previously created file reader program to close when an exception is thrown.
+Print to File
+Print to File
+08:32:01 - 08:36:27
+Angie demonstrates updating the printer from System to PrintWriter and auto-closing both resources within the try block.
+Throwing Exceptions
+Throwing Exceptions
+08:36:28 - 08:47:54
+Angie demonstrates flagging errors within code by manually throwing exceptions. The thrown error messages can be customized or left as default.
+Rethrow Exceptions
+Rethrow Exceptions
+08:47:55 - 08:53:28
+Angie walks through how to rethrow an exception to avoid catching the exception in a try catch block.
+Wrapping Up
+Section Duration: 2 minutes
+Wrapping Up
+Wrapping Up
+08:53:29 - 08:56:09
+Angie wraps up the course by answering student questions regarding resources for finding bugs and if there is a preference for where the print statement is located in a stream.

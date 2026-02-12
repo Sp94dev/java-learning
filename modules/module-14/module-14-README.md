@@ -1,13 +1,17 @@
 # Moduł 14: Cloud Deployment
 
+> `opt` = optional
+
 ## Cel
-Wdrożenie aplikacji na cloud (Railway/Render) i podstawy AWS.
+
+Wdrożenie aplikacji na cloud (Railway/Render) i podstawy enterprise (AWS/K8s).
 
 ---
 
 ## Tematy do opanowania
 
 ### 1. Deployment Options Overview
+
 - [ ] **Railway** - bardzo łatwy, free tier
 - [ ] **Render** - łatwy, free tier
 - [ ] **Heroku** - łatwy, paid
@@ -15,11 +19,13 @@ Wdrożenie aplikacji na cloud (Railway/Render) i podstawy AWS.
 - [ ] **Kubernetes** - wysoka złożoność, enterprise
 
 ### 2. Wybór platformy
+
 - [ ] Hobby/MVP → Railway lub Render
 - [ ] Startup → Heroku, Railway Pro
 - [ ] Production/Scale → AWS, GCP, Azure
 
 ### 3. Railway Deployment
+
 - [ ] Utworzenie konta na railway.app
 - [ ] Połączenie z GitHub
 - [ ] Auto-detection Spring Boot
@@ -28,6 +34,7 @@ Wdrożenie aplikacji na cloud (Railway/Render) i podstawy AWS.
 - [ ] Custom domain (opcjonalnie)
 
 ### 4. Render Deployment
+
 - [ ] Utworzenie konta na render.com
 - [ ] Web Service → Connect GitHub
 - [ ] Build command: `./mvnw clean package`
@@ -36,28 +43,33 @@ Wdrożenie aplikacji na cloud (Railway/Render) i podstawy AWS.
 - [ ] Managed PostgreSQL
 
 ### 5. Environment Configuration
+
 - [ ] `SPRING_PROFILES_ACTIVE=prod`
 - [ ] `DATABASE_URL` - connection string
 - [ ] `PORT` - dynamiczny port (cloud przydziela)
 - [ ] Secrets (JWT_SECRET, etc.)
 
 ### 6. application-prod.properties
+
 - [ ] Datasource z env vars
 - [ ] Wyłączony ddl-auto (`validate` lub `none`)
 - [ ] Wyłączony show-sql
 - [ ] Production-ready settings
 
 ### 7. Health Checks
+
 - [ ] `/actuator/health` endpoint
 - [ ] Platform sprawdza czy app żyje
 - [ ] Restart jeśli unhealthy
 
 ### 8. Logging w Cloud
+
 - [ ] Stdout/Stderr → Cloud logs
 - [ ] Log aggregation (Railway, Render dashboards)
 - [ ] Structured logging (JSON) dla lepszego parsowania
 
-### 9. AWS Basics (awareness)
+### 9. AWS Basics (awareness) `opt`
+
 - [ ] **EC2** - Virtual machines
 - [ ] **ECS** - Container orchestration
 - [ ] **RDS** - Managed databases
@@ -65,30 +77,42 @@ Wdrożenie aplikacji na cloud (Railway/Render) i podstawy AWS.
 - [ ] **Lambda** - Serverless functions
 - [ ] **VPC** - Networking
 
-### 10. AWS ECS Fargate (opcjonalnie)
+### 10. AWS ECS Fargate
+
 - [ ] Task Definition - jak uruchomić kontener
 - [ ] Service - ile instancji, load balancing
 - [ ] Fargate - serverless containers (brak zarządzania serwerami)
 
-### 11. Infrastructure as Code (awareness)
+### 11. Infrastructure as Code (awareness) `opt`
+
 - [ ] Terraform - provisioning cloud resources
 - [ ] CloudFormation (AWS native)
 - [ ] Korzyści: powtarzalność, wersjonowanie
 
 ### 12. Cost Management
+
 - [ ] Free tiers - limity
 - [ ] Railway: $5 credit/month
 - [ ] Render: Free tier limits (spin down after inactivity)
 - [ ] AWS: Pay-per-use (uważaj na koszty!)
 
+### 13. Spring Cloud 🆕
+
+- [ ] Eureka — service discovery
+- [ ] Spring Cloud Gateway — proxy, routing, load balancing
+- [ ] Config Server — centralna konfiguracja
+- [ ] Resilience4j — circuit breaker, retry, rate limiter
+
 ---
 
 ## Powiązana teoria
+
 - `docs/theory/08-testing-devops.md` → sekcja Deployment
 
 ---
 
 ## application-prod.properties
+
 ```properties
 # Database from environment
 spring.datasource.url=${DATABASE_URL}
@@ -107,6 +131,7 @@ management.endpoints.web.exposure.include=health,info
 ---
 
 ## Railway Deployment Steps
+
 ```
 1. railway.app → New Project → Deploy from GitHub
 2. Select repository
@@ -124,6 +149,7 @@ management.endpoints.web.exposure.include=health,info
 ---
 
 ## Render Deployment Steps
+
 ```
 1. render.com → New → Web Service
 2. Connect GitHub repository
@@ -142,6 +168,7 @@ management.endpoints.web.exposure.include=health,info
 ---
 
 ## Ćwiczenia
+
 1. Stwórz `application-prod.properties`
 2. Deploy na Railway (lub Render)
 3. Dodaj PostgreSQL jako managed service
@@ -153,6 +180,7 @@ management.endpoints.web.exposure.include=health,info
 ---
 
 ## Sprawdzian gotowości
+
 - [ ] Aplikacja działa na Railway/Render
 - [ ] Baza danych jest w chmurze
 - [ ] Environment variables są bezpiecznie przechowywane

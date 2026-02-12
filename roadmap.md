@@ -1,5 +1,7 @@
 # Roadmapa - Full Version
 
+> `opt` = optional
+
 ## PHASE 1: FUNDAMENTALS
 
 ### Module 00: Setup + Tooling ✅
@@ -8,6 +10,7 @@
 
 - JDK 25, Maven, Docker, VS Code
 - Spring Boot 4.0.1 project
+- SDKMAN — zarządzanie wersjami JDK
 
 ### Module 01: REST + Java Basics ✅
 
@@ -17,55 +20,44 @@
 - [x] Java Records as DTOs
 - [x] Stream API (Advanced: sorting, grouping)
 - [x] In-memory storage
+- [x] Service layer, ResponseEntity
 - [x] OpenAPI Documentation
 
 ### Module 02: Java Internals 🆕
 
-**Goal:** Understand how Java works under the hood.
+**Goal:** Understand how Java works under the hood + core language features.
 
-#### 1. JVM Architecture
-- [ ] Class Loader subsystem
-- [ ] Runtime Data Areas (Stack, Heap, Method Area)
-- [ ] Execution Engine
+#### JVM & Memory
 
-#### 2. JIT Compilation
-- [ ] Interpreter vs JIT
-- [ ] Hot spots & Warm-up
-- [ ] Native code generation
+- [ ] JVM Architecture — Class Loader, Runtime Data Areas, Execution Engine
+- [ ] JIT Compilation — Interpreter vs JIT, hot spots, warm-up
+- [ ] Memory Model — Stack vs Heap, primitives vs objects, stack frames
+- [ ] Pass by Value — reference copying
+- [ ] `opt` String Pool — interning, immutability, StringBuilder
+- [ ] Garbage Collection — generational hypothesis, GC algorithms
+- [ ] Memory Leaks — static references, unclosed resources, listener leaks
 
-#### 3. Memory Model
-- [ ] Stack vs Heap details
-- [ ] Primitives vs Objects storage
-- [ ] Stack frames
+#### Core Language Features
 
-#### 4. Pass by Value
-- [ ] Zrozumienie mechanizmu przekazywania
-- [ ] Reference copying
+- [ ] Generics + Type Erasure — bounded types, wildcards, erasure na runtime
+- [ ] Collections Framework — List, Set, Map, Queue, implementacje, kiedy co
+- [ ] Enums jako klasy — metody, pola, implementacja interfejsów
+- [ ] Optional + Null Handling — Optional<T>, Objects.requireNonNull()
+- [ ] Functional Interfaces + Lambdy — Predicate, Function, Consumer, Supplier, ::
+- [ ] Date/Time API — LocalDate, ZonedDateTime, Instant, Duration, Period
+- [ ] Sealed Classes + Pattern Matching — restricted hierarchies, instanceof patterns
+- [ ] Switch Expressions — arrow syntax, pattern matching w switch
+- [ ] `var` — local variable type inference, kiedy (nie) używać
+- [ ] `final` keyword — klasy, metody, zmienne
 
-#### 5. String Pool
-- [ ] Interning stringów
-- [ ] Immutability & Security
-- [ ] StringBuilder
+#### Exceptions & Wrappers
 
-#### 6. Garbage Collection
-- [ ] Reachability analysis
-- [ ] Generational Hypothesis (Eden, Survivor, Old)
-- [ ] GC Algorithms types
+- [ ] Exceptions — Checked vs Unchecked, try-with-resources, hierarchy
+- [ ] Primitives vs Wrappers — autoboxing, Integer Cache, identity vs equality
 
-#### 7. Memory Leaks
-- [ ] Static references
-- [ ] Unclosed resources
-- [ ] Listener leaks
+#### Context
 
-#### 8. Primitives vs Wrappers
-- [ ] Autoboxing/Unboxing cost
-- [ ] Integer Cache
-- [ ] Identity vs Equality
-
-#### 9. Exceptions
-- [ ] Hierarchy (Error vs Exception)
-- [ ] Checked vs Unchecked philosophy
-- [ ] Try-with-resources
+- [ ] Java EE → Jakarta EE → Spring — historia i most do Springa
 
 ---
 
@@ -84,61 +76,13 @@
 
 **Cel:** Poznać popularne wzorce architektoniczne.
 
-#### Layered Architecture (domyślna)
-
-```
-Controller → Service → Repository → Database
-```
-
-- Kiedy wystarczy
-- Problemy przy większych projektach
-
-#### Clean Architecture / Hexagonal
-
-```
-        [Adapters]
-            ↓
-[Ports] ← Domain → [Ports]
-            ↑
-        [Adapters]
-```
-
-- Domain-centric design
-- Ports & Adapters
-- Dependency Rule
-
-#### Package Structure
-
-```
-# By layer (proste projekty)
-com.example/
-├── controller/
-├── service/
-└── repository/
-
-# By feature (większe projekty)
-com.example/
-├── wallet/
-│   ├── WalletController
-│   ├── WalletService
-│   └── WalletRepository
-└── transaction/
-    └── ...
-
-# Hexagonal
-com.example/
-├── domain/
-├── application/
-├── infrastructure/
-└── api/
-```
-
-#### Wzorce
-
-- Repository Pattern
-- DTO Pattern
-- Factory Pattern
-- Builder Pattern (Lombok @Builder)
+- Layered Architecture — Controller → Service → Repository → Database
+- Package by Feature
+- Repository / DTO / Factory / Builder patterns
+- Clean Architecture / Hexagonal — Ports & Adapters, Dependency Rule
+- Spring Modulith — modularność, eventy, @Externalized, UML zależności
+- `opt` Enterprise Integration Patterns — overview (file, DB, RPC, messaging)
+- Monolith vs Microservices — trade-offs, "monolith first"
 
 ---
 
@@ -152,15 +96,17 @@ com.example/
 - Entity, Repository
 - Spring Data JPA
 - @Transactional
+- MongoDB — Spring Data Mongo, teoria + porównanie z SQL
+- Spring Batch — ETL, import CSV → DB
 
 ### Moduł 06: Bazy Danych Deep Dive 🆕
 
 **Cel:** Efektywna praca z bazą.
 
-#### SQL Fundamentals
+#### SQL & Performance
 
 - JOINs (INNER, LEFT, RIGHT)
-- Indexy - kiedy i jak
+- Indexy — kiedy i jak
 - EXPLAIN ANALYZE
 - N+1 problem (i jak go rozwiązać)
 
@@ -175,7 +121,6 @@ com.example/
 
 - Flyway setup
 - Versioned migrations
-- Rollback strategies
 
 #### Query Optimization
 
@@ -198,7 +143,6 @@ com.example/
 
 - Redis basics
 - Spring Data Redis
-- Session storage
 - Cache invalidation patterns
 
 ---
@@ -213,7 +157,6 @@ com.example/
 
 - Authentication vs Authorization
 - Stateless vs Stateful
-- Session-based vs Token-based
 
 #### Spring Security
 
@@ -227,17 +170,20 @@ com.example/
 - Access Token + Refresh Token
 - Token storage (gdzie NIE przechowywać)
 
-#### OAuth2 Basics
+#### OAuth2
 
-- Flow types
-- Integration z Google/GitHub
+- Flow types + integracja z Google/GitHub
+- OAuth Authorization Server — implementacja
+
+#### Modern Auth
+
+- Passkeys / WebAuthn — nowoczesna autentykacja
 
 #### Best Practices
 
 - CORS configuration
 - HTTPS everywhere
 - Rate limiting
-- Input validation (security perspective)
 
 ---
 
@@ -259,6 +205,7 @@ com.example/
 - Mockito
 - @WebMvcTest, @DataJpaTest
 - Testcontainers
+- `opt` Testing for Modularity — Spring Modulith tests
 
 ### Moduł 11: Debugowanie & Profiling 🆕
 
@@ -266,24 +213,19 @@ com.example/
 
 #### Debugging
 
-- IntelliJ/VS Code debugger
-- Breakpoints (conditional, exception)
-- Remote debugging
+- Debugger (breakpoints, conditional, exception)
+- `opt` Remote debugging
 - Logging best practices (SLF4J, Logback)
+
+#### Monitoring
+
+- Spring Actuator — health, metrics, endpointy produkcyjne
+- Stack trace reading
 
 #### Profiling
 
-- JVisualVM / JConsole
-- Memory dumps analysis
-- CPU profiling
-- Flame graphs
-
-#### Troubleshooting
-
-- Common exceptions i co oznaczają
-- Stack trace reading
-- Thread dumps
-- OutOfMemoryError hunting
+- `opt` JVisualVM / JConsole — memory/CPU profiling
+- `opt` GraalVM native image — kompilacja do natywnego binarnego
 
 ---
 
@@ -318,28 +260,26 @@ com.example/
 
 **Cel:** Wdrożenie produkcyjne.
 
-#### Options Overview
+| Platform       | Complexity  | Cost        | Approach   |
+| -------------- | ----------- | ----------- | ---------- |
+| Railway/Render | Low         | Free tier   | Startup    |
+| AWS ECS / K8s  | Medium-High | Pay-per-use | Enterprise |
 
-| Platform       | Complexity | Cost        |
-| -------------- | ---------- | ----------- |
-| Railway/Render | Low        | Free tier   |
-| Heroku         | Low        | Paid        |
-| AWS ECS        | Medium     | Pay-per-use |
-| Kubernetes     | High       | Varies      |
-
-#### Practical: Railway/Render
+#### Startup: Railway/Render
 
 - Deploy from GitHub
 - Environment config
 - Database provisioning
-- Custom domain
 
-#### AWS Basics (optional)
+#### Enterprise: Spring Cloud
 
-- EC2 vs ECS vs Lambda
-- RDS for PostgreSQL
-- S3 for files
-- Basic networking (VPC, Security Groups)
+- Eureka — service discovery
+- Gateway — proxy, load balancing
+- AWS ECS / Kubernetes basics
+
+#### AWS Basics (awareness)
+
+- `opt` EC2, RDS, S3, VPC
 
 ---
 
@@ -349,85 +289,54 @@ com.example/
 
 **Cel:** Pisać kod jak Senior.
 
-#### Code Quality
-
-```java
-// ❌ Bad
-public void process(String s) {
-    if (s != null) {
-        if (!s.isEmpty()) {
-            // logic
-        }
-    }
-}
-
-// ✅ Good
-public void process(String input) {
-    if (input == null || input.isBlank()) {
-        return;
-    }
-    // logic
-}
-```
-
-#### Common Anti-patterns
-
-- God class
-- Primitive obsession
-- Feature envy
-- Anemic domain model
-
-#### Spring-specific
-
-- Field injection (❌) vs Constructor injection (✅)
-- @Transactional na private method (nie działa!)
-- Circular dependencies
-- N+1 queries
-
-#### REST API
-
-- Proper HTTP status codes
-- Consistent error format
-- Versioning strategies
-- HATEOAS (kiedy warto)
+- Code quality, anti-patterns
+- Spring-specific pitfalls
+- REST API best practices
 
 ### Moduł 16: Interview Prep 🆕
 
 **Cel:** Przejść rozmowę rekrutacyjną.
 
-#### Java Core Questions
+- Java Core Questions
+- Spring Questions
+- System Design Basics
+- Behavioral (STAR method)
 
-- equals() vs ==
-- HashMap internals
-- Immutability
-- Exception handling (checked vs unchecked)
-- Generics (Type erasure)
+### Moduł 17: Frontend Integration 🆕
 
-#### Spring Questions
+**Cel:** Połączyć Java backend z Angular.
 
-- Bean lifecycle
-- @Transactional propagation
-- Circular dependency resolution
-- Profiles & conditional beans
+- Static Files (Monolith)
+- Proxy Setup (Angular + Spring Boot)
+- Docker Compose (Nginx + Java)
 
-#### System Design Basics
+---
 
-- Load balancing
-- Database scaling (read replicas, sharding)
-- Message queues (kiedy używać)
-- Microservices vs Monolith
+## FAZA 8: ZAAWANSOWANE
 
-#### Coding Challenges
+### 🆕 Moduł 18: Web Beyond REST
 
-- LeetCode Easy/Medium (Arrays, Strings, HashMaps)
-- Live coding tips
-- Thinking out loud
+**Cel:** Alternatywne protokoły komunikacji.
 
-#### Behavioral
+- GraphQL w Spring — @QueryMapping, @SchemaMapping, @BatchMapping
+- `opt` gRPC + Protocol Buffers — high-performance RPC
+- Deklaratywny HTTP Client — @HttpExchange
 
-- STAR method
-- "Tell me about a time..."
-- Questions to ask interviewer
+### 🆕 Moduł 19: Messaging
+
+**Cel:** Event-driven architecture.
+
+- Kafka — producer/consumer, serializacja JSON
+- `opt` Spring Integration — flows, channels, adaptery
+- Event-driven architecture + Outbox pattern
+
+### 🆕 Moduł 20: Spring AI
+
+**Cel:** Integracja z AI.
+
+- `opt` Spring AI + LLM integracja
+- `opt` PGVector — vector database, similarity search
+- `opt` Tool Calling + MCP — agenci AI w Spring
 
 ---
 
@@ -446,7 +355,7 @@ Aplikacja łącząca wszystkie moduły:
 - [ ] Redis cache dla cen
 - [ ] Full test coverage
 - [ ] Dockerized
-- [ ] Deployed to cloud
+- [ ] Deployed to cloud (startup: Railway)
 - [ ] CI/CD pipeline
 
 **Architecture:**
@@ -481,7 +390,8 @@ Aplikacja łącząca wszystkie moduły:
 | 4. Security     | 08             | 3 tyg |
 | 5. Quality      | 09-11          | 5 tyg |
 | 6. DevOps       | 12-14          | 4 tyg |
-| 7. Praktyka     | 15-16          | 4 tyg |
+| 7. Praktyka     | 15-17          | 4 tyg |
+| 8. Zaawansowane | 18-20          | 4 tyg |
 | Projekt         | Wallet Manager | 6 tyg |
 
-**Total: ~38 tygodni + buffer**
+**Total: ~42 tygodnie + buffer**
