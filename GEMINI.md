@@ -66,16 +66,17 @@ The core of the practical application is the **Wallet Manager API**, an investme
 **Phase 1: Fundamentals**
 
 - [x] **00: Setup + Tooling**
-- [ ] **01: REST + Java Basics** (Current Focus)
+- [ ] **01: REST + Java Basics**
   - [x] Controller basics
   - [x] HTTP Methods
   - [x] Input handling
   - [x] Records
   - [x] Service layer
   - [x] ResponseEntity
-  - [ ] Stream API (Next)
+  - [ ] Stream API
   - [ ] OpenAPI
-- [ ] **02: Java Internals** (JVM, Memory, GC, Threads)
+- [x] **02: Java Internals** (JVM, Memory, GC, Core Language — teoria przejrzana)
+- [ ] **03: Dependency Injection + Warstwy** (Next)
 
 **Future Phases:**
 
