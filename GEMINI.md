@@ -76,7 +76,7 @@ The core of the practical application is the **Wallet Manager API**, an investme
   - [ ] Stream API
   - [ ] OpenAPI
 - [x] **02: Java Internals** (JVM, Memory, GC, Core Language — teoria przejrzana)
-- [ ] **03: Dependency Injection + Warstwy** (Next)
+- [ ] **03: Dependency Injection + Warstwy** (In Progress)
 
 **Future Phases:**
 

@@ -202,8 +202,8 @@ Ale to jak nazwanie pliku Angular `instrument.component.ts` zamiast `instrument.
 
 ## Checklist
 
-- [ ] Znam 5 stereotypów: @Component, @Service, @Repository, @Controller, @Configuration
-- [ ] Wiem że wszystkie dziedziczą po @Component (technicznie identyczne)
-- [ ] Rozumiem różnicę semantyczną (rola w architekturze)
-- [ ] Wiem kiedy użyć @Bean w @Configuration (klasy z zewnętrznych bibliotek)
-- [ ] Potrafię przypisać stereotyp do każdej klasy w projekcie
+- [x] Znam 5 stereotypów: @Component, @Service, @Repository, @Controller, @Configuration
+- [x] Wiem że wszystkie dziedziczą po @Component (technicznie identyczne)
+- [x] Rozumiem różnicę semantyczną (rola w architekturze)
+- [x] Wiem kiedy użyć @Bean w @Configuration (klasy z zewnętrznych bibliotek)
+- [x] Potrafię przypisać stereotyp do każdej klasy w projekcie

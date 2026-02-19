@@ -218,8 +218,8 @@ Uruchom aplikację i sprawdź logi — kiedy dokładnie się wypisuje?
 
 ## Checklist
 
-- [ ] Wiem że domyślny scope to Singleton (jedna instancja)
-- [ ] Rozumiem kiedy użyć Prototype (stateful, temporary)
-- [ ] Wiem czym jest @PostConstruct (init po wstrzyknięciu ≈ ngOnInit)
-- [ ] Wiem czym jest @PreDestroy (cleanup przed zamknięciem ≈ ngOnDestroy)
-- [ ] Rozumiem dlaczego Singleton Service NIE powinien mieć mutable state
+- [x] Wiem że domyślny scope to Singleton (jedna instancja)
+- [x] Rozumiem kiedy użyć Prototype (stateful, temporary)
+- [x] Wiem czym jest @PostConstruct (init po wstrzyknięciu ≈ ngOnInit)
+- [x] Wiem czym jest @PreDestroy (cleanup przed zamknięciem ≈ ngOnDestroy)
+- [x] Rozumiem dlaczego Singleton Service NIE powinien mieć mutable state

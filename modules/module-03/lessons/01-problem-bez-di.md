@@ -145,8 +145,8 @@ Controller wie TYLKO o Service (nie obchodzi go reszta)
 
 ## Checklist
 
-- [ ] Rozumiem problem tight coupling (klasa tworzy swoje zależności)
-- [ ] Wiem czym jest Dependency Injection (zależności z zewnątrz)
-- [ ] Rozumiem Inversion of Control (kontener zarządza, nie ja)
-- [ ] Widzę analogię do Angular DI (`@Injectable()` ≈ `@Service`)
-- [ ] Potrafię wskazać tight coupling w kodzie (szukam `new` w konstruktorze)
+- [x] Rozumiem problem tight coupling (klasa tworzy swoje zależności)
+- [x] Wiem czym jest Dependency Injection (zależności z zewnątrz)
+- [x] Rozumiem Inversion of Control (kontener zarządza, nie ja)
+- [x] Widzę analogię do Angular DI (`@Injectable()` ≈ `@Service`)
+- [x] Potrafię wskazać tight coupling w kodzie (szukam `new` w konstruktorze)

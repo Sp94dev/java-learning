@@ -8,11 +8,11 @@
 
 | #   | Temat                    | Opis                                                             | Status |
 | --- | ------------------------ | ---------------------------------------------------------------- | ------ |
-| 01  | Problem bez DI + Koncept | Tight coupling, ukryte zależności, Inversion of Control.         | ⚪     |
-| 02  | Spring IoC Container     | ApplicationContext, Bean, Component Scanning.                    | ⚪     |
-| 03  | Typy Injection           | Constructor ✅, Setter, Field ❌ — dlaczego Constructor wygrywa. | ⚪     |
-| 04  | Stereotypy (Adnotacje)   | @Component, @Service, @Repository, @Controller, @Configuration.  | ⚪     |
-| 05  | Bean Scopes + Lifecycle  | Singleton, Prototype, Request, @PostConstruct, @PreDestroy.      | ⚪     |
+| 01  | Problem bez DI + Koncept | Tight coupling, ukryte zależności, Inversion of Control.         | 🟢     |
+| 02  | Spring IoC Container     | ApplicationContext, Bean, Component Scanning.                    | 🟢     |
+| 03  | Typy Injection           | Constructor ✅, Setter, Field ❌ — dlaczego Constructor wygrywa. | 🟢     |
+| 04  | Stereotypy (Adnotacje)   | @Component, @Service, @Repository, @Controller, @Configuration.  | 🟢     |
+| 05  | Bean Scopes + Lifecycle  | Singleton, Prototype, Request, @PostConstruct, @PreDestroy.      | 🟢     |
 | 06  | Architektura Warstwowa   | Controller → Service → Repository. Thin Controller.              | ⚪     |
 | 07  | Lombok                   | @RequiredArgsConstructor, @Data, @Builder, @Slf4j.               | ⚪     |
 

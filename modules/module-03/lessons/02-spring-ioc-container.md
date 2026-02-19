@@ -164,8 +164,8 @@ public class WalletApplication {
 
 ## Checklist
 
-- [ ] Wiem że ApplicationContext = kontener na wszystkie Beany
-- [ ] Rozumiem Component Scanning (skanuje pakiet @SpringBootApplication + pod-pakiety)
-- [ ] Wiem że Bean = obiekt zarządzany przez Spring (nie tworzony przez `new`)
-- [ ] Rozumiem co @SpringBootApplication robi pod spodem (3 adnotacje)
-- [ ] Potrafię zdiagnozować błąd "bean not found" (brak adnotacji sterotypowej)
+- [x] Wiem że ApplicationContext = kontener na wszystkie Beany
+- [x] Rozumiem Component Scanning (skanuje pakiet @SpringBootApplication + pod-pakiety)
+- [x] Wiem że Bean = obiekt zarządzany przez Spring (nie tworzony przez `new`)
+- [x] Rozumiem co @SpringBootApplication robi pod spodem (3 adnotacje)
+- [x] Potrafię zdiagnozować błąd "bean not found" (brak adnotacji sterotypowej)

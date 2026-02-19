@@ -117,8 +117,11 @@ public class InstrumentService {
 | **Reflection magic**  | Spring używa refleksji — łamie enkapsulację             |
 | **God Object**        | Łatwo dodać 15 pól `@Autowired` i nie zauważyć problemu |
 
-**Analogia Angular:** To jak `inject()` function w Angular 14+.
-Działa, ale ukrywa zależności. Constructor injection pozostaje czytelniejsze.
+**Analogia Angular:** Często mylony z `inject()` function w nowym Angularze.
+⚠️ **Uwaga:** Choć składniowo podobne (`private service = inject(Service)`),
+w Angularze to **nowoczesne i zalecane podejście** (funkcyjne, jawne).
+W Javie `@Autowired private Service` to **przestarzały anty-wzorzec** (ukrywa zależności, utrudnia testy).
+Nie przenoś nawyków `inject()` na `@Autowired` w polu!
 
 ---
 
@@ -180,8 +183,8 @@ Constructor Injection sprawia, że ten problem jest **widoczny** — to zaleta, 
 
 ## Checklist
 
-- [ ] Wiem że Constructor Injection to jedyny rekomendowany sposób
-- [ ] Rozumiem dlaczego Field Injection jest złe (ukryte zależności, brak final)
-- [ ] Wiem kiedy `@Autowired` jest opcjonalne (jeden konstruktor)
-- [ ] Rozumiem że wiele zależności w konstruktorze = sygnał do refaktoryzacji
-- [ ] Widzę analogię do Angular Constructor DI
+- [x] Wiem że Constructor Injection to jedyny rekomendowany sposób
+- [x] Rozumiem dlaczego Field Injection jest złe (ukryte zależności, brak final)
+- [x] Wiem kiedy `@Autowired` jest opcjonalne (jeden konstruktor)
+- [x] Rozumiem że wiele zależności w konstruktorze = sygnał do refaktoryzacji
+- [x] Widzę analogię do Angular Constructor DI
