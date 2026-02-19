@@ -8,13 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.sp94dev.wallet.transaction.dto.TransactionStats;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class TransactionService {
     private final InMemoryTransactionRepository repository;
-
-    public TransactionService(InMemoryTransactionRepository repository) {
-        this.repository = repository;
-    }
 
     public List<Transaction> getAll() {
         return repository.findAll();

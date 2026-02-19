@@ -1,128 +1,128 @@
-# Lekcja 02: Spring IoC Container
+# Lesson 02: Spring IoC Container
 
-> ApplicationContext, Bean, Component Scanning — silnik DI w Spring Boot.
+> ApplicationContext, Bean, Component Scanning — the DI engine in Spring Boot.
 
-## Koncept
+## Concept
 
-### Co to jest Spring IoC Container?
+### What is the Spring IoC Container?
 
-W Angularze masz **Injector** — obiekt który wie jak tworzyć serwisy.
-W Springu masz **ApplicationContext** — to jest Twój Injector na sterydach.
-
-```
-Angular:    Injector → tworzy @Injectable() serwisy → wstrzykuje
-Spring:     ApplicationContext → tworzy @Component beany → wstrzykuje
-```
-
-### ApplicationContext — "rejestr wszystkich beanów"
-
-Kiedy uruchamiasz `./mvnw spring-boot:run`, Spring Boot:
-
-1. **Skanuje** pakiety w poszukiwaniu adnotacji (`@Component`, `@Service`, etc.)
-2. **Tworzy** instancje znalezionych klas (Beany)
-3. **Wstrzykuje** zależności między nimi
-4. **Przechowuje** je w `ApplicationContext`
-5. **Serwuje** je gdy ktoś ich potrzebuje
+In Angular you have the **Injector** — an object that knows how to create services.
+In Spring you have **ApplicationContext** — it's your Injector on steroids.
 
 ```
-Start aplikacji:
+Angular:    Injector → creates @Injectable() services → injects
+Spring:     ApplicationContext → creates @Component beans → injects
+```
+
+### ApplicationContext — "the registry of all beans"
+
+When you run `./mvnw spring-boot:run`, Spring Boot:
+
+1. **Scans** packages looking for annotations (`@Component`, `@Service`, etc.)
+2. **Creates** instances of found classes (Beans)
+3. **Injects** dependencies between them
+4. **Stores** them in the `ApplicationContext`
+5. **Serves** them when someone needs them
+
+```
+Application start:
   @SpringBootApplication
         ↓
-  Component Scan (skanuje pakiety)
+  Component Scan (scans packages)
         ↓
-  Znalezione: InstrumentController, InstrumentService, InMemoryRepository
+  Found: InstrumentController, InstrumentService, InMemoryRepository
         ↓
-  Spring tworzy: Repository → Service(repository) → Controller(service)
+  Spring creates: Repository → Service(repository) → Controller(service)
         ↓
-  Wszystko siedzi w ApplicationContext — gotowe do użycia
+  Everything sits in ApplicationContext — ready to use
 ```
 
-### Co to jest Bean?
+### What is a Bean?
 
-**Bean = obiekt zarządzany przez Spring.** Nie Ty go tworzysz `new` — Spring to robi.
+**Bean = an object managed by Spring.** You don't create it with `new` — Spring does.
 
-| Aspekt         | Zwykły obiekt (`new`)  | Spring Bean                     |
-| -------------- | ---------------------- | ------------------------------- |
-| Kto tworzy?    | Ty (`new MyService()`) | Spring (automatycznie)          |
-| Kto zarządza?  | Ty (cykl życia)        | Spring (init → use → destroy)   |
-| Ile instancji? | Ile razy zrobisz `new` | Domyślnie 1 (Singleton)         |
-| Zależności?    | Ręcznie przekazujesz   | Spring wstrzykuje automatycznie |
+| Aspect        | Regular object (`new`)  | Spring Bean                   |
+| ------------- | ----------------------- | ----------------------------- |
+| Who creates?  | You (`new MyService()`) | Spring (automatically)        |
+| Who manages?  | You (lifecycle)         | Spring (init → use → destroy) |
+| How many?     | As many as you `new`    | Default: 1 (Singleton)        |
+| Dependencies? | Manually passed         | Spring injects automatically  |
 
-**Analogia Angular:**
+**Angular Analogy:**
 
 ```typescript
-// Angular: serwis zarejestrowany jako Bean
+// Angular: service registered as a Bean
 @Injectable({
-  providedIn: "root", // ≈ Singleton Bean w Springu
+  providedIn: "root", // ≈ Singleton Bean in Spring
 })
 export class InstrumentService {}
 ```
 
 ```java
-// Spring: serwis zarejestrowany jako Bean
+// Spring: service registered as a Bean
 @Service  // ≈ @Injectable({ providedIn: 'root' })
 public class InstrumentService { }
 ```
 
-### Component Scanning — jak Spring znajduje Beany
+### Component Scanning — how Spring finds Beans
 
-Spring skanuje **pakiet główny** (gdzie jest `@SpringBootApplication`) i **wszystkie pod-pakiety**.
+Spring scans the **main package** (where `@SpringBootApplication` is) and **all sub-packages**.
 
 ```
 com.sp94dev.wallet/
-├── WalletApplication.java       ← @SpringBootApplication (stąd skanuje)
+├── WalletApplication.java       ← @SpringBootApplication (scans from here)
 ├── instrument/
-│   ├── InstrumentController.java  ← @RestController → znaleziony! ✅
-│   ├── InstrumentService.java     ← @Service → znaleziony! ✅
-│   └── InMemoryInstrumentRepository.java ← @Repository → znaleziony! ✅
+│   ├── InstrumentController.java  ← @RestController → found! ✅
+│   ├── InstrumentService.java     ← @Service → found! ✅
+│   └── InMemoryInstrumentRepository.java ← @Repository → found! ✅
 └── transaction/
-    ├── TransactionController.java ← @RestController → znaleziony! ✅
+    ├── TransactionController.java ← @RestController → found! ✅
     └── ...
 ```
 
-**⚠️ Pułapka:** Jeśli klasa jest POZA pakietem `com.sp94dev.wallet`, Spring jej **NIE znajdzie**.
+**⚠️ Gotcha:** If a class is OUTSIDE the `com.sp94dev.wallet` package, Spring **won't find it**.
 
 ```
-com.sp94dev.wallet/          ← skanowane ✅
-com.sp94dev.wallet.instrument/ ← skanowane ✅ (pod-pakiet)
-com.sp94dev.other/           ← NIE skanowane ❌ (inny pakiet!)
+com.sp94dev.wallet/          ← scanned ✅
+com.sp94dev.wallet.instrument/ ← scanned ✅ (sub-package)
+com.sp94dev.other/           ← NOT scanned ❌ (different package!)
 ```
 
-**Analogia Angular:** To jak Angular Module — jeśli nie zadeklarujesz komponentu
-w `declarations` (lub nie ma `providedIn`), Angular go nie widzi.
+**Angular Analogy:** It's like Angular Module — if you don't declare a component
+in `declarations` (or it doesn't have `providedIn`), Angular won't see it.
 
-### @SpringBootApplication — co robi pod spodem
+### @SpringBootApplication — what it does under the hood
 
 ```java
-@SpringBootApplication  // = 3 adnotacje w jednej:
-// @Configuration      → ta klasa to konfiguracja
-// @EnableAutoConfiguration → Spring Boot konfiguruje automatycznie (Tomcat, Jackson, etc.)
-// @ComponentScan      → skanuj ten pakiet i pod-pakiety
+@SpringBootApplication  // = 3 annotations in one:
+// @Configuration      → this class is a configuration
+// @EnableAutoConfiguration → Spring Boot auto-configures (Tomcat, Jackson, etc.)
+// @ComponentScan      → scan this package and sub-packages
 public class WalletApplication {
     public static void main(String[] args) {
         SpringApplication.run(WalletApplication.class, args);
-        // ↑ tutaj Spring tworzy ApplicationContext, skanuje, tworzy beany
+        // ↑ here Spring creates ApplicationContext, scans, creates beans
     }
 }
 ```
 
-### Jak Spring buduje graf zależności?
+### How does Spring build the dependency graph?
 
-Spring analizuje konstruktory Beanów i automatycznie rozwiązuje zależności:
+Spring analyzes Bean constructors and automatically resolves dependencies:
 
 ```
-Analiza:
-  InstrumentController(InstrumentService) → potrzebuje InstrumentService
-  InstrumentService(InstrumentRepository) → potrzebuje InstrumentRepository
-  InMemoryInstrumentRepository() → nie potrzebuje niczego
+Analysis:
+  InstrumentController(InstrumentService) → needs InstrumentService
+  InstrumentService(InstrumentRepository) → needs InstrumentRepository
+  InMemoryInstrumentRepository() → needs nothing
 
-Kolejność tworzenia (od "liści" do "korzenia"):
-  1. InMemoryInstrumentRepository  (brak zależności)
-  2. InstrumentService(repository) (wstrzykuje repository)
-  3. InstrumentController(service) (wstrzykuje service)
+Creation order (from "leaves" to "root"):
+  1. InMemoryInstrumentRepository  (no dependencies)
+  2. InstrumentService(repository) (injects repository)
+  3. InstrumentController(service) (injects service)
 ```
 
-**Co jeśli Spring nie może rozwiązać zależności?**
+**What if Spring can't resolve a dependency?**
 
 ```
 ***************************
@@ -132,16 +132,16 @@ Parameter 0 of constructor in InstrumentService required a bean
 of type 'InstrumentRepository' that could not be found.
 ```
 
-Ten błąd zobaczysz często — oznacza: "Potrzebuję Beana typu X, ale nie znalazłem go
-w ApplicationContext". Rozwiązanie? Dodaj odpowiednią adnotację (`@Service`, `@Repository`, etc.).
+You'll see this error often — it means: "I need a Bean of type X, but I didn't find it
+in the ApplicationContext." Solution? Add the appropriate annotation (`@Service`, `@Repository`, etc.).
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie:** Zbadaj ApplicationContext swojej aplikacji.
+**Task:** Explore your application's ApplicationContext.
 
-1. Uruchom Wallet Manager: `./mvnw spring-boot:run`
-2. Poszukaj w logach linii: `Tomcat started on port 8080`
-3. Dodaj tymczasowo do `WalletApplication.java`:
+1. Run Wallet Manager: `./mvnw spring-boot:run`
+2. Look for this line in the logs: `Tomcat started on port 8080`
+3. Temporarily add to `WalletApplication.java`:
 
 ```java
 @SpringBootApplication
@@ -149,9 +149,9 @@ public class WalletApplication {
     public static void main(String[] args) {
         var context = SpringApplication.run(WalletApplication.class, args);
 
-        // Wypisz wszystkie beany
+        // Print all beans
         String[] beanNames = context.getBeanDefinitionNames();
-        System.out.println("=== Załadowane beany: " + beanNames.length + " ===");
+        System.out.println("=== Loaded beans: " + beanNames.length + " ===");
         for (String name : beanNames) {
             System.out.println("  → " + name);
         }
@@ -159,13 +159,13 @@ public class WalletApplication {
 }
 ```
 
-4. Znajdź na liście swoje beany (instrument, transaction).
-5. Zwróć uwagę ile beanów Spring tworzy automatycznie (auto-configuration).
+4. Find your beans on the list (instrument, transaction).
+5. Notice how many beans Spring creates automatically (auto-configuration).
 
 ## Checklist
 
-- [x] Wiem że ApplicationContext = kontener na wszystkie Beany
-- [x] Rozumiem Component Scanning (skanuje pakiet @SpringBootApplication + pod-pakiety)
-- [x] Wiem że Bean = obiekt zarządzany przez Spring (nie tworzony przez `new`)
-- [x] Rozumiem co @SpringBootApplication robi pod spodem (3 adnotacje)
-- [x] Potrafię zdiagnozować błąd "bean not found" (brak adnotacji sterotypowej)
+- [x] I know that ApplicationContext = container for all Beans
+- [x] I understand Component Scanning (scans @SpringBootApplication package + sub-packages)
+- [x] I know that Bean = object managed by Spring (not created via `new`)
+- [x] I understand what @SpringBootApplication does under the hood (3 annotations)
+- [x] I can diagnose a "bean not found" error (missing stereotype annotation)

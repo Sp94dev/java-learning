@@ -1,96 +1,96 @@
-# Lekcja 01: Problem bez DI + Koncept Dependency Injection
+# Lesson 01: The Problem Without DI + Dependency Injection Concept
 
-> Dlaczego `new` to problem i jak Inversion of Control zmienia zasady gry.
+> Why `new` is a problem and how Inversion of Control changes the game.
 
-## Koncept
+## Concept
 
-### Problem: Tight Coupling (bez DI)
+### Problem: Tight Coupling (without DI)
 
-Wyobraź sobie, że w Angularze nie masz DI i musisz tworzyć wszystko ręcznie:
+Imagine that in Angular you don't have DI and have to create everything manually:
 
 ```typescript
-// ❌ Angular BEZ Dependency Injection (gdyby nie istniało)
+// ❌ Angular WITHOUT Dependency Injection (if it didn't exist)
 export class InstrumentComponent {
   private service: InstrumentService;
 
   constructor() {
-    const http = new HttpClient(); // sam tworzysz HttpClient
-    const cache = new CacheService(); // sam tworzysz CacheService
-    this.service = new InstrumentService(http, cache); // sam składasz
+    const http = new HttpClient(); // you create HttpClient yourself
+    const cache = new CacheService(); // you create CacheService yourself
+    this.service = new InstrumentService(http, cache); // you wire it up yourself
   }
 }
 ```
 
-**Co jest źle?**
+**What's wrong?**
 
-1. **Tight coupling** — komponent ZALEŻY od konkretnych implementacji.
-2. **Trudne testowanie** — nie możesz podmienić na mock.
-3. **Ukryte zależności** — nie wiadomo czego klasa naprawdę potrzebuje.
-4. **Kaskada zmian** — zmiana konstruktora `CacheService` psuje WSZYSTKO co go tworzy.
+1. **Tight coupling** — the component DEPENDS on concrete implementations.
+2. **Hard to test** — you can't swap in a mock.
+3. **Hidden dependencies** — it's unclear what the class actually needs.
+4. **Cascade of changes** — changing the `CacheService` constructor breaks EVERYTHING that creates it.
 
-### Ten sam problem w Javie
+### The same problem in Java
 
 ```java
-// ❌ Java BEZ Dependency Injection
+// ❌ Java WITHOUT Dependency Injection
 public class InstrumentController {
     private final InstrumentService service;
 
     public InstrumentController() {
-        // Controller TWORZY Service → Service TWORZY Repository → ...
+        // Controller CREATES Service → Service CREATES Repository → ...
         InMemoryInstrumentRepository repo = new InMemoryInstrumentRepository();
         this.service = new InstrumentService(repo);  // tight coupling!
     }
 }
 ```
 
-**Problemy:**
+**Problems:**
 
-- Controller **wie** jaką implementację Repository używa Service → to nie jego sprawa!
-- Chcesz zmienić z `InMemory` na `JPA`? Musisz zmienić Controller → absurd.
-- Chcesz przetestować Controller bez prawdziwego Service? Nie da się.
+- Controller **knows** which Repository implementation the Service uses → that's not its concern!
+- Want to switch from `InMemory` to `JPA`? You have to change the Controller → absurd.
+- Want to test the Controller without a real Service? Not possible.
 
 ---
 
-### Rozwiązanie: Dependency Injection (DI)
+### Solution: Dependency Injection (DI)
 
-**DI = zależności przekazywane Z ZEWNĄTRZ, a nie tworzone wewnątrz.**
+**DI = dependencies provided FROM THE OUTSIDE, not created internally.**
 
 ```java
-// ✅ Java Z Dependency Injection
+// ✅ Java WITH Dependency Injection
 public class InstrumentController {
     private final InstrumentService service;
 
-    // Ktoś Z ZEWNĄTRZ daje mi Service — nie obchodzi mnie skąd
+    // Someone FROM THE OUTSIDE gives me the Service — I don't care where it comes from
     public InstrumentController(InstrumentService service) {
         this.service = service;
     }
 }
 ```
 
-**Analogia Angular:** Dokładnie to, co robisz codziennie!
+**Angular Analogy:** Exactly what you do every day!
 
 ```typescript
-// ✅ Angular — DI przez konstruktor (to samo co powyżej!)
+// ✅ Angular — DI via constructor (same thing as above!)
 export class InstrumentComponent {
   constructor(private service: InstrumentService) {}
-  // Angular Injector tworzy InstrumentService ZA CIEBIE
+  // Angular Injector creates InstrumentService FOR YOU
 }
 ```
 
-### Inversion of Control (IoC) — odwrócenie kontroli
+### Inversion of Control (IoC)
 
-| Bez IoC                         | Z IoC                                 |
-| ------------------------------- | ------------------------------------- |
-| **Ty** tworzysz obiekty (`new`) | **Kontener** tworzy obiekty za Ciebie |
-| **Ty** zarządzasz zależnościami | **Kontener** wstrzykuje zależności    |
-| **Ty** decydujesz o kolejności  | **Kontener** decyduje o kolejności    |
+| Without IoC                    | With IoC                              |
+| ------------------------------ | ------------------------------------- |
+| **You** create objects (`new`) | **Container** creates objects for you |
+| **You** manage dependencies    | **Container** injects dependencies    |
+| **You** decide the order       | **Container** decides the order       |
 
 ```
-Bez IoC:  Twój kod → tworzy zależności → używa ich
-Z IoC:    Kontener → tworzy zależności → wstrzykuje do Twojego kodu → Twój kod ich używa
+Without IoC:  Your code → creates dependencies → uses them
+With IoC:     Container → creates dependencies → injects into your code → your code uses them
 ```
 
-**Analogia Angular:**
+**Angular Analogy:**
 
 ```
 Angular Injector  =  Spring IoC Container
@@ -98,55 +98,55 @@ providedIn: 'root' =  @Service (Singleton Bean)
 @Injectable()      =  @Component / @Service
 ```
 
-### Trzy korzyści DI — zapamiętaj
+### Three benefits of DI — remember these
 
-1. **Luźne powiązania (Loose Coupling)**
-   - Klasa zależy od **interfejsu**, nie od implementacji.
-   - Zmiana `InMemoryRepo` → `JpaRepo`? Zmiana w JEDNYM miejscu.
+1. **Loose Coupling**
+   - Class depends on an **interface**, not an implementation.
+   - Switching `InMemoryRepo` → `JpaRepo`? Change in ONE place.
 
-2. **Testowalność**
-   - W teście wstrzykujesz **mock** zamiast prawdziwej implementacji.
-   - Bez DI = brak mocków = brak unit testów.
+2. **Testability**
+   - In tests you inject a **mock** instead of the real implementation.
+   - No DI = no mocks = no unit tests.
 
-3. **Separacja odpowiedzialności**
-   - Controller nie wie JAK Service działa.
-   - Service nie wie JAK Repository przechowuje dane.
-   - Każdy robi SWOJE.
+3. **Separation of Concerns**
+   - Controller doesn't know HOW the Service works.
+   - Service doesn't know HOW the Repository stores data.
+   - Everyone does THEIR OWN thing.
 
 ---
 
-### Wizualizacja: Przed i Po DI
+### Visualization: Before and After DI
 
 ```
-❌ BEZ DI (tight coupling):
+❌ WITHOUT DI (tight coupling):
 
 Controller ──new──▶ Service ──new──▶ Repository ──new──▶ DataSource
      ↑                ↑                  ↑
-  wie o wszystkim   wie o repo       wie o DS
+  knows everything   knows about repo  knows about DS
 
-✅ Z DI (loose coupling):
+✅ WITH DI (loose coupling):
 
-Container tworzy:  DataSource → Repository → Service → Controller
+Container creates:  DataSource → Repository → Service → Controller
                                                               ↓
-Controller wie TYLKO o Service (nie obchodzi go reszta)
+Controller only knows about Service (doesn't care about the rest)
 ```
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie:** Przeanalizuj swój obecny kod Wallet Manager.
+**Task:** Analyze your current Wallet Manager code.
 
-1. Otwórz `InstrumentController.java` i `InstrumentService.java`.
-2. Sprawdź: **Czy Controller tworzy Service przez `new`?**
-3. Sprawdź: **Czy Service tworzy Repository przez `new`?**
-4. Jeśli tak — zidentyfikuj gdzie jest tight coupling.
-5. Zastanów się: co byś musiał zmienić, gdybyś chciał podmienić `InMemoryRepository` na `JpaRepository`?
+1. Open `InstrumentController.java` and `InstrumentService.java`.
+2. Check: **Does the Controller create the Service via `new`?**
+3. Check: **Does the Service create the Repository via `new`?**
+4. If yes — identify where tight coupling exists.
+5. Think: what would you need to change if you wanted to swap `InMemoryRepository` for `JpaRepository`?
 
-**Nie zmieniaj jeszcze kodu** — to zrobimy w Lekcji 03 i 06.
+**Don't change the code yet** — we'll do that in Lessons 03 and 06.
 
 ## Checklist
 
-- [x] Rozumiem problem tight coupling (klasa tworzy swoje zależności)
-- [x] Wiem czym jest Dependency Injection (zależności z zewnątrz)
-- [x] Rozumiem Inversion of Control (kontener zarządza, nie ja)
-- [x] Widzę analogię do Angular DI (`@Injectable()` ≈ `@Service`)
-- [x] Potrafię wskazać tight coupling w kodzie (szukam `new` w konstruktorze)
+- [x] I understand the tight coupling problem (class creates its own dependencies)
+- [x] I know what Dependency Injection is (dependencies from outside)
+- [x] I understand Inversion of Control (container manages, not me)
+- [x] I see the analogy to Angular DI (`@Injectable()` ≈ `@Service`)
+- [x] I can identify tight coupling in code (look for `new` in the constructor)

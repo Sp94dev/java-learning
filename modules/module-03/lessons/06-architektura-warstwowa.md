@@ -1,37 +1,37 @@
-# Lekcja 06: Architektura Warstwowa
+# Lesson 06: Layered Architecture
 
-> Controller → Service → Repository. Thin Controller. Zależności tylko W DÓŁ.
+> Controller → Service → Repository. Thin Controller. Dependencies only go DOWN.
 
-## Koncept
+## Concept
 
-### Trzy warstwy — podział odpowiedzialności
+### Three layers — separation of responsibilities
 
 ```
 ┌──────────────────────────────────────────────────────┐
 │  HTTP REQUEST                                        │
 │         ↓                                            │
 │  ┌────────────────────────────────────────────────┐  │
-│  │  @RestController (WARSTWA WEB)                 │  │
-│  │  • Odbiera HTTP request                        │  │
-│  │  • Parsuje input (path vars, body, params)     │  │
-│  │  • Deleguje do Service                         │  │
-│  │  • Buduje HTTP response (status code, body)    │  │
-│  │  • NIE MA logiki biznesowej!                   │  │
+│  │  @RestController (WEB LAYER)                   │  │
+│  │  • Receives HTTP request                       │  │
+│  │  • Parses input (path vars, body, params)      │  │
+│  │  • Delegates to Service                        │  │
+│  │  • Builds HTTP response (status code, body)    │  │
+│  │  • NO business logic!                          │  │
 │  └────────────────┬───────────────────────────────┘  │
 │                   ↓                                  │
 │  ┌────────────────────────────────────────────────┐  │
-│  │  @Service (WARSTWA BIZNESOWA)                  │  │
-│  │  • Logika, reguły, obliczenia                  │  │
-│  │  • Orkiestruje operacje na danych              │  │
-│  │  • Walidacja biznesowa                         │  │
-│  │  • Może wołać WIELE Repository                 │  │
+│  │  @Service (BUSINESS LAYER)                     │  │
+│  │  • Logic, rules, calculations                  │  │
+│  │  • Orchestrates data operations                │  │
+│  │  • Business validation                         │  │
+│  │  • Can call MULTIPLE Repositories              │  │
 │  └────────────────┬───────────────────────────────┘  │
 │                   ↓                                  │
 │  ┌────────────────────────────────────────────────┐  │
-│  │  @Repository (WARSTWA DANYCH)                  │  │
+│  │  @Repository (DATA LAYER)                      │  │
 │  │  • CRUD (Create, Read, Update, Delete)         │  │
-│  │  • Komunikacja z bazą / storage                │  │
-│  │  • NIE MA logiki biznesowej!                   │  │
+│  │  • Communication with database / storage       │  │
+│  │  • NO business logic!                          │  │
 │  └────────────────────────────────────────────────┘  │
 │                   ↓                                  │
 │  ┌────────────────────────────────────────────────┐  │
@@ -40,73 +40,73 @@
 └──────────────────────────────────────────────────────┘
 ```
 
-### Zasada: Zależności TYLKO w dół
+### Rule: Dependencies ONLY go down
 
 ```
 Controller  →  Service  →  Repository
     ↓              ↓            ↓
-  widzi          widzi        widzi
+  sees           sees         sees
   Service       Repository   Database
 
-Controller NIE widzi Repository (nie importuje, nie wstrzykuje)
-Repository NIE widzi Controller ani Service
+Controller does NOT see Repository (doesn't import, doesn't inject)
+Repository does NOT see Controller or Service
 ```
 
-**Analogia Angular:**
+**Angular Analogy:**
 
 ```
 Component → Service → HttpClient
      ↓          ↓
-   widzi      widzi
+   sees       sees
    Service   HttpClient
 
-Component NIE woła HttpClient bezpośrednio
+Component does NOT call HttpClient directly
 ```
 
 ---
 
-### Thin Controller — "Cienki Kontroler"
+### Thin Controller
 
-**Zasada:** Controller robi **3 rzeczy** i nic więcej:
+**Rule:** Controller does **3 things** and nothing more:
 
-1. **Przyjmij** — rozpakuj HTTP request (parametry, body, headers)
-2. **Deleguj** — wywołaj Service
-3. **Odpowiedz** — zwróć HTTP response (status code, body)
+1. **Accept** — unpack the HTTP request (parameters, body, headers)
+2. **Delegate** — call the Service
+3. **Respond** — return the HTTP response (status code, body)
 
-#### ❌ Fat Controller (Źले)
+#### ❌ Fat Controller (BAD)
 
 ```java
 @RestController
 @RequestMapping("/api/instruments")
 public class InstrumentController {
-    private final InstrumentRepository repository;  // ❌ Controller wie o Repository!
+    private final InstrumentRepository repository;  // ❌ Controller knows about Repository!
 
     @PostMapping
     public ResponseEntity<Instrument> create(@RequestBody Instrument instrument) {
-        // ❌ Logika biznesowa W KONTROLERZE
+        // ❌ Business logic IN THE CONTROLLER
         if (instrument.ticker() == null || instrument.ticker().isBlank()) {
             throw new IllegalArgumentException("Ticker required");
         }
 
-        // ❌ Sprawdzanie duplikatów w kontrolerze
+        // ❌ Duplicate checking in the controller
         if (repository.findByTicker(instrument.ticker()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
-        // ❌ Bezpośredni dostęp do Repository
+        // ❌ Direct Repository access
         Instrument saved = repository.save(instrument);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 }
 ```
 
-#### ✅ Thin Controller (DOBRZE)
+#### ✅ Thin Controller (GOOD)
 
 ```java
 @RestController
 @RequestMapping("/api/instruments")
 public class InstrumentController {
-    private final InstrumentService service;  // ✅ Zna TYLKO Service
+    private final InstrumentService service;  // ✅ Knows ONLY the Service
 
     public InstrumentController(InstrumentService service) {
         this.service = service;
@@ -114,10 +114,10 @@ public class InstrumentController {
 
     @PostMapping
     public ResponseEntity<Instrument> create(@RequestBody Instrument instrument) {
-        // ✅ 1. Przyjmij (Spring robi to automatycznie — @RequestBody)
-        // ✅ 2. Deleguj
+        // ✅ 1. Accept (Spring does this automatically — @RequestBody)
+        // ✅ 2. Delegate
         Instrument saved = service.create(instrument);
-        // ✅ 3. Odpowiedz
+        // ✅ 3. Respond
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 }
@@ -133,7 +133,7 @@ public class InstrumentService {
     }
 
     public Instrument create(Instrument instrument) {
-        // ✅ Logika biznesowa tu gdzie powinna być
+        // ✅ Business logic where it belongs
         if (instrument.ticker() == null || instrument.ticker().isBlank()) {
             throw new IllegalArgumentException("Ticker required");
         }
@@ -148,30 +148,30 @@ public class InstrumentService {
 }
 ```
 
-### Dlaczego to ważne?
+### Why does this matter?
 
-| Aspekt       | Fat Controller                | Thin Controller                           |
-| ------------ | ----------------------------- | ----------------------------------------- |
-| Testowanie   | Trudne (HTTP + logika razem)  | Łatwe (Service testujemy osobno)          |
-| Reużywalność | Logika zamknięta w HTTP layer | Service można użyć z CLI, Scheduler, etc. |
-| Czytelność   | Kontroler 200+ linii          | Kontroler 30 linii                        |
-| Zmiana DB    | Musisz zmienić Controller     | Zmieniasz tylko Repository                |
+| Aspect      | Fat Controller               | Thin Controller                          |
+| ----------- | ---------------------------- | ---------------------------------------- |
+| Testing     | Hard (HTTP + logic together) | Easy (Service tested separately)         |
+| Reusability | Logic locked in HTTP layer   | Service usable from CLI, Scheduler, etc. |
+| Readability | Controller 200+ lines        | Controller 30 lines                      |
+| DB change   | Must change Controller       | Only change Repository                   |
 
-**Analogia Angular:** Identycznie! W Angularze:
+**Angular Analogy:** Identical! In Angular:
 
-- Komponent NIE woła `HttpClient` bezpośrednio
-- Komponent deleguje do Service
-- Service enkapsuluje logikę i komunikację z API
+- Component does NOT call `HttpClient` directly
+- Component delegates to Service
+- Service encapsulates logic and API communication
 
 ---
 
-### Kiedy Service może wołać wiele Repository?
+### When can a Service call multiple Repositories?
 
 ```java
 @Service
 public class TransactionService {
     private final TransactionRepository transactionRepo;
-    private final InstrumentRepository instrumentRepo;  // ✅ OK — Service może wołać wiele Repo
+    private final InstrumentRepository instrumentRepo;  // ✅ OK — Service can call multiple Repos
 
     public TransactionService(
             TransactionRepository transactionRepo,
@@ -182,73 +182,73 @@ public class TransactionService {
     }
 
     public Transaction create(String ticker, int qty, BigDecimal price) {
-        // Sprawdź czy instrument istnieje (w innym Repo)
+        // Check if instrument exists (in another Repo)
         Instrument instrument = instrumentRepo.findByTicker(ticker)
                 .orElseThrow(() -> new RuntimeException("Instrument not found: " + ticker));
 
-        // Zapisz transakcję (w swoim Repo)
+        // Save transaction (in its own Repo)
         Transaction tx = new Transaction(UUID.randomUUID(), instrument, qty, price, LocalDate.now());
         return transactionRepo.save(tx);
     }
 }
 ```
 
-### Kiedy Service może wołać inny Service?
+### When can a Service call another Service?
 
 ```java
 @Service
 public class PortfolioService {
-    private final TransactionService transactionService;  // ✅ Service → Service jest OK
+    private final TransactionService transactionService;  // ✅ Service → Service is OK
     private final InstrumentService instrumentService;
 
-    // Orkiestruje logikę wyższego poziomu, delegując do wyspecjalizowanych serwisów
+    // Orchestrates higher-level logic, delegating to specialized services
 }
 ```
 
-**⚠️ Unikaj cyklicznych zależności:**
+**⚠️ Avoid circular dependencies:**
 
 ```
-// ❌ Service A wstrzykuje Service B, a B wstrzykuje A
-// Spring rzuci: BeanCurrentlyInCreationException
-ServiceA → ServiceB → ServiceA → 💥 cykl!
+// ❌ Service A injects Service B, and B injects A
+// Spring will throw: BeanCurrentlyInCreationException
+ServiceA → ServiceB → ServiceA → 💥 cycle!
 ```
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie:** Refaktoryzacja Wallet Manager!
+**Task:** Wallet Manager Refactoring!
 
-To jest **kluczowe ćwiczenie** tego modułu. Upewnij się że Twój kod spełnia te kryteria:
+This is the **key exercise** of this module. Make sure your code meets these criteria:
 
 1. **Controller:**
-   - Ma TYLKO `@RestController` + `@RequestMapping`
-   - Wstrzykuje TYLKO Service (nie Repository!)
-   - Metody: przyjmij → deleguj → odpowiedz (max 3-5 linii)
-   - NIE ma logiki `if/else` biznesowej
+   - Has ONLY `@RestController` + `@RequestMapping`
+   - Injects ONLY Service (not Repository!)
+   - Methods: accept → delegate → respond (max 3-5 lines)
+   - Has NO business `if/else` logic
 
 2. **Service:**
-   - Ma `@Service`
-   - Wstrzykuje Repository (Constructor Injection, `final`)
-   - Zawiera CAŁĄ logikę biznesową
-   - Może wstrzykiwać wiele Repository
+   - Has `@Service`
+   - Injects Repository (Constructor Injection, `final`)
+   - Contains ALL business logic
+   - Can inject multiple Repositories
 
 3. **Repository:**
-   - Ma `@Repository`
-   - Tylko CRUD: `findAll()`, `findById()`, `save()`, `delete()`
-   - NIE ma logiki biznesowej
-   - `ConcurrentHashMap` jako storage (do modułu 05)
+   - Has `@Repository`
+   - Only CRUD: `findAll()`, `findById()`, `save()`, `delete()`
+   - Has NO business logic
+   - `ConcurrentHashMap` as storage (until Module 05)
 
-**Sprawdź linijka po linijce:**
+**Check line by line:**
 
-- Czy Controller importuje cokolwiek z warstwy Repository? → ❌ Usuń
-- Czy Controller ma `new` gdziekolwiek? → ❌ Usuń
-- Czy Service ma adnotację `@Service`? → ✅ Dodaj
-- Czy Repository ma adnotację `@Repository`? → ✅ Dodaj
+- Does Controller import anything from the Repository layer? → ❌ Remove
+- Does Controller have `new` anywhere? → ❌ Remove
+- Does Service have the `@Service` annotation? → ✅ Add
+- Does Repository have the `@Repository` annotation? → ✅ Add
 
 ## Checklist
 
-- [ ] Controller deleguje do Service — nie ma logiki biznesowej
-- [ ] Service zawiera logikę — używa Repository
-- [ ] Repository robi tylko CRUD — nie ma logiki
-- [ ] Zależności idą TYLKO w dół (Controller → Service → Repository)
-- [ ] Controller NIE importuje Repository
-- [ ] Wszystkie zależności są `final` i wstrzyknięte przez konstruktor
+- [x] Controller delegates to Service — no business logic
+- [x] Service contains logic — uses Repository
+- [x] Repository does only CRUD — no logic
+- [x] Dependencies go ONLY downward (Controller → Service → Repository)
+- [x] Controller does NOT import Repository
+- [x] All dependencies are `final` and injected via constructor

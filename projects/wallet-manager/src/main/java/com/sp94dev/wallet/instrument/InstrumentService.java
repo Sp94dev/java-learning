@@ -8,7 +8,10 @@ import java.util.function.Function;
 
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class InstrumentService {
     private final InMemoryInstrumentRepository inMemoryInstrumentRepository;
 
@@ -17,10 +20,6 @@ public class InstrumentService {
             "market", Instrument::market,
             "type", Instrument::type,
             "currency", Instrument::currency);
-
-    public InstrumentService(InMemoryInstrumentRepository inMemoryInstrumentRepository) {
-        this.inMemoryInstrumentRepository = inMemoryInstrumentRepository;
-    }
 
     public Optional<Instrument> getInstrumentById(Long id) {
         return this.inMemoryInstrumentRepository.findById(id);

@@ -1,57 +1,57 @@
-# Lekcja 05: Bean Scopes + Lifecycle
+# Lesson 05: Bean Scopes + Lifecycle
 
-> Singleton, Prototype, @PostConstruct, @PreDestroy — cykl życia Beana.
+> Singleton, Prototype, @PostConstruct, @PreDestroy — the lifecycle of a Bean.
 
-## Koncept
+## Concept
 
-### Bean Scopes — ile instancji Spring tworzy?
+### Bean Scopes — how many instances does Spring create?
 
-Scope (zakres) decyduje, **ile instancji** danego Beana Spring utworzy.
+Scope determines **how many instances** of a given Bean Spring will create.
 
-### 1. Singleton (DOMYŚLNY) — jedna instancja na całą aplikację
+### 1. Singleton (DEFAULT) — one instance for the entire application
 
 ```java
-@Service  // domyślnie Singleton — nie musisz nic dodawać
+@Service  // Singleton by default — no need to add anything
 public class InstrumentService {
-    // Spring tworzy JEDNĄ instancję
-    // Każdy kto potrzebuje InstrumentService → dostaje TĘ SAMĄ instancję
+    // Spring creates ONE instance
+    // Everyone who needs InstrumentService → gets THE SAME instance
 }
 ```
 
 ```
 Controller A ──▶ InstrumentService (0x001)
-Controller B ──▶ InstrumentService (0x001)  ← ta sama instancja!
-ScheduledTask ──▶ InstrumentService (0x001)  ← ta sama instancja!
+Controller B ──▶ InstrumentService (0x001)  ← same instance!
+ScheduledTask ──▶ InstrumentService (0x001)  ← same instance!
 ```
 
-**Analogia Angular:**
+**Angular Analogy:**
 
 ```typescript
 @Injectable({
-  providedIn: "root", // ← Singleton! Jeden na całą aplikację
+  providedIn: "root", // ← Singleton! One for the entire application
 })
 export class InstrumentService {}
 ```
 
-**⚠️ Uwaga:** Singleton Bean jest **współdzielony między wątkami** (HTTP requesty).
-Dlatego **NIE przechowuj stanu** w polach Service'u (chyba że thread-safe jak `ConcurrentHashMap`).
+**⚠️ Note:** A Singleton Bean is **shared between threads** (HTTP requests).
+That's why you should **NOT store state** in Service fields (unless thread-safe like `ConcurrentHashMap`).
 
 ```java
 @Service
 public class InstrumentService {
-    // ❌ ŹLE — stan mutable w Singleton Bean (problemy z wątkami!)
-    private int requestCount = 0;  // wyścig wątków!
+    // ❌ BAD — mutable state in Singleton Bean (thread problems!)
+    private int requestCount = 0;  // race condition!
 
-    // ✅ DOBRZE — bean jest bezstanowy (stateless)
+    // ✅ GOOD — bean is stateless
     private final InstrumentRepository repository;  // final, immutable
 }
 ```
 
-### 2. Prototype — nowa instancja za KAŻDYM razem
+### 2. Prototype — new instance EVERY time
 
 ```java
 @Component
-@Scope("prototype")  // za każdym razem nowa instancja
+@Scope("prototype")  // new instance every time
 public class ReportGenerator {
     private final List<String> data = new ArrayList<>();
 
@@ -62,30 +62,30 @@ public class ReportGenerator {
 ```
 
 ```
-Ktoś prosi o ReportGenerator → nowa instancja (0x001)
-Ktoś prosi o ReportGenerator → nowa instancja (0x002)  ← INNA instancja!
+Someone asks for ReportGenerator → new instance (0x001)
+Someone asks for ReportGenerator → new instance (0x002)  ← DIFFERENT instance!
 ```
 
-**Kiedy:** Gdy Bean przechowuje stan specyficzny dla jednego użycia
-(np. builder raportów, form handler).
+**When:** When the Bean holds state specific to a single use
+(e.g., report builder, form handler).
 
-**Analogia Angular:** `providedIn` w komponencie zamiast w `'root'` →
-każdy komponent dostaje swoją instancję.
+**Angular Analogy:** `providedIn` on a component instead of `'root'` →
+each component gets its own instance.
 
-### 3. Request — jedna instancja per HTTP Request (web only)
+### 3. Request — one instance per HTTP Request (web only)
 
 ```java
 @Component
 @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class RequestContext {
     private String userId;
-    // żyje tylko w ramach jednego HTTP requestu
+    // lives only within a single HTTP request
 }
 ```
 
-**Kiedy:** Dane specyficzne dla jednego requestu (np. kontekst użytkownika, audit log).
+**When:** Data specific to a single request (e.g., user context, audit log).
 
-### 4. Session — jedna instancja per HTTP Session (web only)
+### 4. Session — one instance per HTTP Session (web only)
 
 ```java
 @Component
@@ -93,44 +93,44 @@ public class RequestContext {
 public class UserPreferences {
     private String theme;
     private String currency;
-    // żyje tak długo jak sesja użytkownika
+    // lives as long as the user session
 }
 ```
 
-**Kiedy:** Dane per sesja (np. preferencje użytkownika). Rzadkie w REST API (REST jest stateless).
+**When:** Per-session data (e.g., user preferences). Rare in REST APIs (REST is stateless).
 
-### Podsumowanie Scopes
+### Scopes Summary
 
-| Scope         | Ile instancji        | Kiedy użyć                              | Częstość       |
-| ------------- | -------------------- | --------------------------------------- | -------------- |
-| **Singleton** | 1 na aplikację       | Services, Repositories, Controllers     | 99% przypadków |
-| **Prototype** | nowa za każdym razem | Stateful builders, temporary processors | Rzadko         |
-| **Request**   | 1 na HTTP request    | Request-scoped context                  | Rzadko         |
-| **Session**   | 1 na HTTP session    | User preferences (nie w REST)           | Prawie nigdy   |
+| Scope         | How many instances | When to use                             | Frequency    |
+| ------------- | ------------------ | --------------------------------------- | ------------ |
+| **Singleton** | 1 per application  | Services, Repositories, Controllers     | 99% of cases |
+| **Prototype** | new one every time | Stateful builders, temporary processors | Rarely       |
+| **Request**   | 1 per HTTP request | Request-scoped context                  | Rarely       |
+| **Session**   | 1 per HTTP session | User preferences (not in REST)          | Almost never |
 
-**Zasada:** Jeśli nie wiesz jaki scope — **Singleton** (domyślny). W 99% przypadków to wystarczy.
+**Rule:** If you don't know which scope — **Singleton** (default). In 99% of cases that's enough.
 
 ---
 
-### Bean Lifecycle — cykl życia Beana
+### Bean Lifecycle
 
 ```
- Spring tworzy Bean
+ Spring creates Bean
        ↓
- Wstrzykuje zależności (Constructor Injection)
+ Injects dependencies (Constructor Injection)
        ↓
- @PostConstruct ← metoda wywoływana PO utworzeniu (inicjalizacja)
+ @PostConstruct ← method called AFTER creation (initialization)
        ↓
- Bean gotowy do użycia
+ Bean ready for use
        ↓
- ... aplikacja działa ...
+ ... application runs ...
        ↓
- @PreDestroy ← metoda wywoływana PRZED zniszczeniem (cleanup)
+ @PreDestroy ← method called BEFORE destruction (cleanup)
        ↓
- Bean usuwany z pamięci
+ Bean removed from memory
 ```
 
-### @PostConstruct — inicjalizacja po wstrzyknięciu
+### @PostConstruct — initialization after injection
 
 ```java
 @Service
@@ -141,85 +141,85 @@ public class InstrumentService {
         this.repository = repository;
     }
 
-    @PostConstruct  // wywoływane RAZ, po Constructor Injection
+    @PostConstruct  // called ONCE, after Constructor Injection
     public void init() {
-        System.out.println("InstrumentService gotowy!");
-        // Tu możesz: załadować dane startowe, sprawdzić konfigurację, itp.
+        System.out.println("InstrumentService ready!");
+        // Here you can: load startup data, check configuration, etc.
     }
 }
 ```
 
-**Kiedy:** Potrzebujesz logiki inicjalizacyjnej, która wymaga wstrzykniętych zależności
-(w konstruktorze zależności jeszcze mogą nie być w pełni gotowe w złożonych scenariuszach).
+**When:** You need initialization logic that requires injected dependencies
+(in the constructor, dependencies might not be fully ready in complex scenarios).
 
-**Analogia Angular:** To jak `ngOnInit()`:
+**Angular Analogy:** It's like `ngOnInit()`:
 
 ```typescript
 export class InstrumentComponent implements OnInit {
   constructor(private service: InstrumentService) {}
 
   ngOnInit() {
-    // ≈ @PostConstruct — wywoływane PO wstrzyknięciu zależności
+    // ≈ @PostConstruct — called AFTER dependency injection
     this.loadData();
   }
 }
 ```
 
-### @PreDestroy — sprzątanie przed zamknięciem
+### @PreDestroy — cleanup before shutdown
 
 ```java
 @Service
 public class CacheService {
     private final Map<String, Object> cache = new ConcurrentHashMap<>();
 
-    @PreDestroy  // wywoływane PRZED zamknięciem aplikacji
+    @PreDestroy  // called BEFORE application shutdown
     public void cleanup() {
-        System.out.println("Czyszczę cache (" + cache.size() + " elementów)...");
+        System.out.println("Clearing cache (" + cache.size() + " items)...");
         cache.clear();
     }
 }
 ```
 
-**Kiedy:** Musisz zwolnić zasoby: zamknąć połączenia, zatrzymać scheduler, wyczyścić cache.
+**When:** You need to release resources: close connections, stop schedulers, clear caches.
 
-**Analogia Angular:** To jak `ngOnDestroy()`:
+**Angular Analogy:** It's like `ngOnDestroy()`:
 
 ```typescript
 export class InstrumentComponent implements OnDestroy {
   ngOnDestroy() {
-    // ≈ @PreDestroy — sprzątanie, odsubskrybowanie, cleanup
+    // ≈ @PreDestroy — cleanup, unsubscribe, teardown
     this.subscription.unsubscribe();
   }
 }
 ```
 
-### Ważne: @PostConstruct i @PreDestroy NIE działają z Prototype!
+### Important: @PostConstruct and @PreDestroy DON'T work with Prototype!
 
-Spring tworzy Prototype Bean i **zapomina o nim** — nie zarządza jego lifecycle.
-`@PreDestroy` się NIE wywoła. Musisz sam posprzątać.
+Spring creates a Prototype Bean and **forgets about it** — it doesn't manage its lifecycle.
+`@PreDestroy` will NOT be called. You have to clean up yourself.
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie 1:** Dodaj tymczasowo `@PostConstruct` do jednego ze swoich Service'ów:
+**Task 1:** Temporarily add `@PostConstruct` to one of your Services:
 
 ```java
 @PostConstruct
 public void init() {
-    System.out.println(">>> " + getClass().getSimpleName() + " zainicjalizowany!");
+    System.out.println(">>> " + getClass().getSimpleName() + " initialized!");
 }
 ```
 
-Uruchom aplikację i sprawdź logi — kiedy dokładnie się wypisuje?
+Run the application and check the logs — when exactly does it print?
 
-**Zadanie 2:** Odpowiedz na pytania:
+**Task 2:** Answer the questions:
 
-- Dlaczego Controller, Service i Repository powinny być Singletonami?
-- Co by się stało, gdyby InstrumentService był Prototype? (wskazówka: każdy request → nowa instancja → pusty stan)
+- Why should Controller, Service, and Repository be Singletons?
+- What would happen if InstrumentService was Prototype? (hint: every request → new instance → empty state)
 
 ## Checklist
 
-- [x] Wiem że domyślny scope to Singleton (jedna instancja)
-- [x] Rozumiem kiedy użyć Prototype (stateful, temporary)
-- [x] Wiem czym jest @PostConstruct (init po wstrzyknięciu ≈ ngOnInit)
-- [x] Wiem czym jest @PreDestroy (cleanup przed zamknięciem ≈ ngOnDestroy)
-- [x] Rozumiem dlaczego Singleton Service NIE powinien mieć mutable state
+- [x] I know the default scope is Singleton (one instance)
+- [x] I understand when to use Prototype (stateful, temporary)
+- [x] I know what @PostConstruct is (init after injection ≈ ngOnInit)
+- [x] I know what @PreDestroy is (cleanup before shutdown ≈ ngOnDestroy)
+- [x] I understand why a Singleton Service should NOT have mutable state

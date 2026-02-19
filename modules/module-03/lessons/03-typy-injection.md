@@ -1,52 +1,52 @@
-# Lekcja 03: Typy Injection
+# Lesson 03: Injection Types
 
-> Constructor ✅, Setter ⚠️, Field ❌ — dlaczego Constructor Injection wygrywa.
+> Constructor ✅, Setter ⚠️, Field ❌ — why Constructor Injection wins.
 
-## Koncept
+## Concept
 
-### Trzy sposoby wstrzykiwania zależności
+### Three ways to inject dependencies
 
-Spring oferuje 3 mechanizmy DI. Tylko jeden jest rekomendowany.
+Spring offers 3 DI mechanisms. Only one is recommended.
 
-### 1. Constructor Injection ✅ (REKOMENDOWANE)
+### 1. Constructor Injection ✅ (RECOMMENDED)
 
 ```java
 @Service
 public class InstrumentService {
     private final InstrumentRepository repository;  // final!
 
-    // Spring widzi konstruktor z parametrem typu InstrumentRepository
-    // → szuka Beana tego typu → wstrzykuje
+    // Spring sees a constructor with an InstrumentRepository parameter
+    // → looks for a Bean of that type → injects it
     public InstrumentService(InstrumentRepository repository) {
         this.repository = repository;
     }
 }
 ```
 
-**Dlaczego to najlepsze?**
+**Why is this the best?**
 
-| Zaleta           | Wyjaśnienie                                                     |
-| ---------------- | --------------------------------------------------------------- |
-| **Immutable**    | Pole jest `final` → nie można go zmienić po utworzeniu          |
-| **Wymuszone**    | Nie da się stworzyć obiektu BEZ zależności (kompilator pilnuje) |
-| **Testowalność** | W teście po prostu: `new InstrumentService(mockRepo)`           |
-| **Jawne**        | Patrząc na konstruktor, widzisz WSZYSTKIE zależności            |
+| Advantage       | Explanation                                                  |
+| --------------- | ------------------------------------------------------------ |
+| **Immutable**   | Field is `final` → can't be changed after creation           |
+| **Enforced**    | Can't create object WITHOUT dependencies (compiler enforces) |
+| **Testability** | In tests simply: `new InstrumentService(mockRepo)`           |
+| **Explicit**    | Looking at the constructor, you see ALL dependencies         |
 
-**Analogia Angular:** Dokładnie to robisz w każdym komponencie:
+**Angular Analogy:** Exactly what you do in every component:
 
 ```typescript
 // Angular — Constructor Injection
 export class InstrumentComponent {
   constructor(private service: InstrumentService) {}
-  //          ↑ Angular wstrzykuje — dokładnie jak Spring
+  //          ↑ Angular injects — exactly like Spring
 }
 ```
 
-**Ważne:** Od Spring 4.3, jeśli klasa ma **JEDEN konstruktor**, adnotacja `@Autowired`
-jest **opcjonalna** — Spring automatycznie użyje tego konstruktora.
+**Important:** Since Spring 4.3, if a class has **ONE constructor**, the `@Autowired` annotation
+is **optional** — Spring will automatically use that constructor.
 
 ```java
-// ✅ @Autowired NIE POTRZEBNE (jeden konstruktor)
+// ✅ @Autowired NOT NEEDED (single constructor)
 @Service
 public class InstrumentService {
     private final InstrumentRepository repository;
@@ -56,12 +56,12 @@ public class InstrumentService {
     }
 }
 
-// ⚠️ @Autowired POTRZEBNE (wiele konstruktorów — musisz wskazać który)
+// ⚠️ @Autowired NEEDED (multiple constructors — you must point to which one)
 @Service
 public class InstrumentService {
     private final InstrumentRepository repository;
 
-    @Autowired  // ← "użyj TEGO konstruktora"
+    @Autowired  // ← "use THIS constructor"
     public InstrumentService(InstrumentRepository repository) {
         this.repository = repository;
     }
@@ -74,88 +74,88 @@ public class InstrumentService {
 
 ---
 
-### 2. Setter Injection ⚠️ (OPCJONALNE ZALEŻNOŚCI)
+### 2. Setter Injection ⚠️ (OPTIONAL DEPENDENCIES)
 
 ```java
 @Service
 public class InstrumentService {
-    private InstrumentRepository repository;  // NIE final!
+    private InstrumentRepository repository;  // NOT final!
 
-    @Autowired  // ← wymagane przy setter injection
+    @Autowired  // ← required for setter injection
     public void setRepository(InstrumentRepository repository) {
         this.repository = repository;
     }
 }
 ```
 
-**Kiedy użyć?** Prawie nigdy. Jedyny sensowny przypadek: zależność jest **opcjonalna**
-(np. cache, który może nie istnieć, logger opcjonalny).
+**When to use?** Almost never. The only sensible case: the dependency is **optional**
+(e.g., a cache that may not exist, an optional logger).
 
-**Problem:** Obiekt może istnieć BEZ ustawionej zależności → `NullPointerException` runtime.
+**Problem:** Object can exist WITHOUT a set dependency → `NullPointerException` at runtime.
 
 ---
 
-### 3. Field Injection ❌ (UNIKAJ)
+### 3. Field Injection ❌ (AVOID)
 
 ```java
 @Service
 public class InstrumentService {
-    @Autowired  // ← Spring wstrzykuje bezpośrednio w pole (przez reflection)
-    private InstrumentRepository repository;  // NIE final!
+    @Autowired  // ← Spring injects directly into the field (via reflection)
+    private InstrumentRepository repository;  // NOT final!
 
-    // Brak konstruktora z parametrami
+    // No constructor with parameters
 }
 ```
 
-**Dlaczego to złe?**
+**Why is this bad?**
 
-| Problem               | Wyjaśnienie                                             |
-| --------------------- | ------------------------------------------------------- |
-| **Ukryte zależności** | Nie widać ich w konstruktorze — musisz czytać pola      |
-| **Brak immutability** | Pole NIE MOŻE być `final`                               |
-| **Trudne testowanie** | `new InstrumentService()` → repository = null → 💥 NPE  |
-| **Reflection magic**  | Spring używa refleksji — łamie enkapsulację             |
-| **God Object**        | Łatwo dodać 15 pól `@Autowired` i nie zauważyć problemu |
+| Problem              | Explanation                                              |
+| -------------------- | -------------------------------------------------------- |
+| **Hidden deps**      | Not visible in the constructor — you have to read fields |
+| **No immutability**  | Field CANNOT be `final`                                  |
+| **Hard testing**     | `new InstrumentService()` → repository = null → 💥 NPE   |
+| **Reflection magic** | Spring uses reflection — breaks encapsulation            |
+| **God Object**       | Easy to add 15 `@Autowired` fields without noticing      |
 
-**Analogia Angular:** Często mylony z `inject()` function w nowym Angularze.
-⚠️ **Uwaga:** Choć składniowo podobne (`private service = inject(Service)`),
-w Angularze to **nowoczesne i zalecane podejście** (funkcyjne, jawne).
-W Javie `@Autowired private Service` to **przestarzały anty-wzorzec** (ukrywa zależności, utrudnia testy).
-Nie przenoś nawyków `inject()` na `@Autowired` w polu!
+**Angular Analogy:** Often confused with the `inject()` function in new Angular.
+⚠️ **Note:** Although syntactically similar (`private service = inject(Service)`),
+in Angular this is a **modern and recommended approach** (functional, explicit).
+In Java, `@Autowired private Service` is an **outdated anti-pattern** (hides dependencies, complicates testing).
+Don't carry `inject()` habits over to `@Autowired` on fields!
 
 ---
 
-### Porównanie — jedna tabela
+### Comparison — one table
 
 ```java
-// ✅ Constructor (REKOMENDOWANE)
+// ✅ Constructor (RECOMMENDED)
 public InstrumentService(InstrumentRepository repo) {
-    this.repo = repo;  // final, jawne, testowalne
+    this.repo = repo;  // final, explicit, testable
 }
 
-// ⚠️ Setter (opcjonalne zależności)
+// ⚠️ Setter (optional dependencies)
 @Autowired
 public void setRepo(InstrumentRepository repo) {
-    this.repo = repo;  // NIE final, może być null
+    this.repo = repo;  // NOT final, can be null
 }
 
-// ❌ Field (UNIKAJ)
+// ❌ Field (AVOID)
 @Autowired
-private InstrumentRepository repo;  // ukryte, NIE final, reflection
+private InstrumentRepository repo;  // hidden, NOT final, reflection
 ```
 
-| Aspekt           | Constructor                | Setter            | Field                |
-| ---------------- | -------------------------- | ----------------- | -------------------- |
-| `final`          | ✅ Tak                     | ❌ Nie            | ❌ Nie               |
-| Jawne zależności | ✅ Widać w konstruktorze   | ⚠️ Rozproszone    | ❌ Ukryte            |
-| Testowalność     | ✅ `new Service(mock)`     | ⚠️ Wymaga settera | ❌ Wymaga reflection |
-| Obowiązkowe      | ✅ Kompilator pilnuje      | ❌ Może być null  | ❌ Może być null     |
-| `@Autowired`     | Opcjonalne (1 konstruktor) | Wymagane          | Wymagane             |
+| Aspect        | Constructor               | Setter             | Field                  |
+| ------------- | ------------------------- | ------------------ | ---------------------- |
+| `final`       | ✅ Yes                    | ❌ No              | ❌ No                  |
+| Explicit deps | ✅ Visible in constructor | ⚠️ Scattered       | ❌ Hidden              |
+| Testability   | ✅ `new Service(mock)`    | ⚠️ Requires setter | ❌ Requires reflection |
+| Required      | ✅ Compiler enforces      | ❌ Can be null     | ❌ Can be null         |
+| `@Autowired`  | Optional (1 constructor)  | Required           | Required               |
 
-### Kiedy widzisz wiele zależności w konstruktorze — to ZAPACH kodu
+### When you see many dependencies in a constructor — it's a CODE SMELL
 
 ```java
-// ⚠️ Red flag — za dużo zależności (Single Responsibility Principle naruszony)
+// ⚠️ Red flag — too many dependencies (Single Responsibility Principle violated)
 public OrderService(
     InstrumentRepository instrumentRepo,
     TransactionRepository transactionRepo,
@@ -167,24 +167,24 @@ public OrderService(
 ) { ... }
 ```
 
-**Reguła kciuka:** Więcej niż **3-4 zależności** → rozważ podział klasy na mniejsze.
-Constructor Injection sprawia, że ten problem jest **widoczny** — to zaleta, nie wada!
+**Rule of thumb:** More than **3-4 dependencies** → consider splitting the class into smaller ones.
+Constructor Injection makes this problem **visible** — that's a feature, not a bug!
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie:** Przejrzyj swój Wallet Manager i odpowiedz na pytania:
+**Task:** Review your Wallet Manager and answer the questions:
 
-1. Jakiego typu injection używasz teraz w kontrolerach i serwisach?
-2. Czy pola zależności są `final`?
-3. Czy używasz `@Autowired`? Czy jest potrzebne?
-4. Ile zależności ma każda klasa (policz parametry konstruktora)?
+1. What type of injection are you currently using in controllers and services?
+2. Are the dependency fields `final`?
+3. Are you using `@Autowired`? Is it needed?
+4. How many dependencies does each class have (count constructor parameters)?
 
-**Nie zmieniaj jeszcze kodu** — praktyczne refaktorowanie robimy w Lekcji 06.
+**Don't change the code yet** — practical refactoring happens in Lesson 06.
 
 ## Checklist
 
-- [x] Wiem że Constructor Injection to jedyny rekomendowany sposób
-- [x] Rozumiem dlaczego Field Injection jest złe (ukryte zależności, brak final)
-- [x] Wiem kiedy `@Autowired` jest opcjonalne (jeden konstruktor)
-- [x] Rozumiem że wiele zależności w konstruktorze = sygnał do refaktoryzacji
-- [x] Widzę analogię do Angular Constructor DI
+- [x] I know that Constructor Injection is the only recommended approach
+- [x] I understand why Field Injection is bad (hidden dependencies, no final)
+- [x] I know when `@Autowired` is optional (single constructor)
+- [x] I understand that many dependencies in a constructor = signal for refactoring
+- [x] I see the analogy to Angular Constructor DI

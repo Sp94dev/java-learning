@@ -1,44 +1,44 @@
-# Lekcja 04: Stereotypy (Adnotacje)
+# Lesson 04: Stereotypes (Annotations)
 
-> @Component, @Service, @Repository, @Controller — semantyka ma znaczenie.
+> @Component, @Service, @Repository, @Controller — semantics matter.
 
-## Koncept
+## Concept
 
-### Czym są stereotypy?
+### What are stereotypes?
 
-Stereotyp = adnotacja, która mówi Springowi: **"To jest Bean, zarządzaj nim."**
+Stereotype = annotation that tells Spring: **"This is a Bean, manage it."**
 
-Technicznie **wszystkie stereotypy dziedziczą po `@Component`** — są funkcjonalnie identyczne.
-Różnica jest **semantyczna** — informują programistę o ROLI klasy w architekturze.
+Technically **all stereotypes inherit from `@Component`** — they are functionally identical.
+The difference is **semantic** — they inform the developer about the class's ROLE in the architecture.
 
 ```
                     @Component (generic)
                    /     |     \       \
           @Service  @Repository  @Controller  @Configuration
-          (logika)  (dane)       (HTTP)        (konfiguracja)
+          (logic)   (data)       (HTTP)        (configuration)
 ```
 
-### Mapowanie na warstwy
+### Mapping to layers
 
 ```
 ┌─────────────────────────────────────────┐
-│  @RestController / @Controller          │  ← WARSTWA WEB (HTTP)
-│  Obsługuje requesty, zwraca response    │
+│  @RestController / @Controller          │  ← WEB LAYER (HTTP)
+│  Handles requests, returns response     │
 ├─────────────────────────────────────────┤
-│  @Service                               │  ← WARSTWA BIZNESOWA
-│  Logika, reguły, obliczenia             │
+│  @Service                               │  ← BUSINESS LAYER
+│  Logic, rules, calculations             │
 ├─────────────────────────────────────────┤
-│  @Repository                            │  ← WARSTWA DANYCH
-│  CRUD, zapytania do bazy, IO            │
+│  @Repository                            │  ← DATA LAYER
+│  CRUD, database queries, IO             │
 ├─────────────────────────────────────────┤
-│  @Configuration                         │  ← KONFIGURACJA
-│  Definicje beanów, ustawieniaexternal   │
+│  @Configuration                         │  ← CONFIGURATION
+│  Bean definitions, external settings    │
 └─────────────────────────────────────────┘
 ```
 
 ---
 
-### Każdy stereotyp z osobna
+### Each stereotype in detail
 
 #### 1. `@Component` — generic bean
 
@@ -51,10 +51,10 @@ public class PriceCalculator {
 }
 ```
 
-**Kiedy:** Klasa nie pasuje do żadnej z innych kategorii.
-Utility, helper, converter — coś co nie jest ani Service, ani Repository.
+**When:** The class doesn't fit any other category.
+Utility, helper, converter — something that's neither Service nor Repository.
 
-#### 2. `@Service` — warstwa biznesowa
+#### 2. `@Service` — business layer
 
 ```java
 @Service
@@ -76,11 +76,11 @@ public class InstrumentService {
 }
 ```
 
-**Kiedy:** Klasa zawiera **logikę biznesową**. Orkiestruje operacje na danych.
+**When:** The class contains **business logic**. Orchestrates data operations.
 
-**Analogia Angular:** `@Injectable({ providedIn: 'root' })` na serwisie biznesowym.
+**Angular Analogy:** `@Injectable({ providedIn: 'root' })` on a business service.
 
-#### 3. `@Repository` — warstwa danych
+#### 3. `@Repository` — data layer
 
 ```java
 @Repository
@@ -102,12 +102,12 @@ public class InMemoryInstrumentRepository {
 }
 ```
 
-**Kiedy:** Klasa komunikuje się z bazą danych lub symuluje przechowywanie danych.
+**When:** The class communicates with a database or simulates data storage.
 
-**Bonus `@Repository`:** Spring automatycznie tłumaczy wyjątki bazodanowe
-na ujednoliconą hierarchię `DataAccessException` (przydatne od Module 05 z JPA).
+**Bonus `@Repository`:** Spring automatically translates database exceptions
+into a unified `DataAccessException` hierarchy (useful from Module 05 with JPA).
 
-#### 4. `@Controller` / `@RestController` — warstwa web
+#### 4. `@Controller` / `@RestController` — web layer
 
 ```java
 @RestController  // = @Controller + @ResponseBody
@@ -126,20 +126,20 @@ public class InstrumentController {
 }
 ```
 
-**Różnica:**
+**Difference:**
 
-- `@Controller` → zwraca widoki (HTML, Thymeleaf) — typowe dla MVC
-- `@RestController` → zwraca dane (JSON) — to co robisz w REST API
+- `@Controller` → returns views (HTML, Thymeleaf) — typical for MVC
+- `@RestController` → returns data (JSON) — what you're doing in a REST API
 
-**Analogia Angular:** `@RestController` to jak `@Component` z routingiem w Angular.
+**Angular Analogy:** `@RestController` is like `@Component` with routing in Angular.
 
-#### 5. `@Configuration` — definicje beanów
+#### 5. `@Configuration` — bean definitions
 
 ```java
 @Configuration
 public class AppConfig {
 
-    @Bean  // ← ręczna definicja Beana (zamiast @Component na klasie)
+    @Bean  // ← manual Bean definition (instead of @Component on the class)
     public ObjectMapper objectMapper() {
         return new ObjectMapper()
                 .registerModule(new JavaTimeModule())
@@ -148,13 +148,13 @@ public class AppConfig {
 }
 ```
 
-**Kiedy:** Kiedy nie możesz dodać `@Component` do klasy (bo pochodzi z zewnętrznej biblioteki)
-lub chcesz mieć pełną kontrolę nad tworzeniem Beana.
+**When:** You can't add `@Component` to a class (because it comes from an external library)
+or you want full control over Bean creation.
 
-**Analogia Angular:** To jak moduł z `providers:` — ręcznie rejestrujesz serwisy.
+**Angular Analogy:** It's like a module with `providers:` — you manually register services.
 
 ```typescript
-// Angular — ręczna rejestracja
+// Angular — manual registration
 @NgModule({
   providers: [
     { provide: API_URL, useValue: 'http://localhost:8080' }
@@ -164,46 +164,46 @@ lub chcesz mieć pełną kontrolę nad tworzeniem Beana.
 
 ---
 
-### Technicznie identyczne, semantycznie różne
+### Technically identical, semantically different
 
-Możesz zamienić `@Service` na `@Component` i kod **zadziała**.
-Ale to jak nazwanie pliku Angular `instrument.component.ts` zamiast `instrument.service.ts` — działa, ale myli programistów.
+You can replace `@Service` with `@Component` and the code **will work**.
+But it's like naming an Angular file `instrument.component.ts` instead of `instrument.service.ts` — it works, but confuses developers.
 
 ```java
-// ✅ Poprawna semantyka
-@Service         // → logika biznesowa
-@Repository      // → dostęp do danych
-@RestController  // → obsługa HTTP
+// ✅ Correct semantics
+@Service         // → business logic
+@Repository      // → data access
+@RestController  // → HTTP handling
 
-// ❌ Technicznie działa, ale semantycznie BŁĘDNE
-@Component       // → na wszystkim (nie wiadomo co klasa robi)
+// ❌ Technically works, but semantically WRONG
+@Component       // → on everything (unclear what the class does)
 ```
 
-### Szybki quiz — co użyć?
+### Quick quiz — what to use?
 
-| Klasa                                         | Stereotyp                  |
-| --------------------------------------------- | -------------------------- |
-| Obsługuje `GET /api/instruments`              | `@RestController`          |
-| Oblicza wartość portfela                      | `@Service`                 |
-| Przechowuje instrumenty w `ConcurrentHashMap` | `@Repository`              |
-| Konfiguruje `ObjectMapper`                    | `@Configuration` + `@Bean` |
-| Konwertuje `Transaction` → `TransactionDTO`   | `@Component`               |
+| Class                                       | Stereotype                 |
+| ------------------------------------------- | -------------------------- |
+| Handles `GET /api/instruments`              | `@RestController`          |
+| Calculates portfolio value                  | `@Service`                 |
+| Stores instruments in a `ConcurrentHashMap` | `@Repository`              |
+| Configures `ObjectMapper`                   | `@Configuration` + `@Bean` |
+| Converts `Transaction` → `TransactionDTO`   | `@Component`               |
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie:** Sprawdź swoje klasy w Wallet Manager.
+**Task:** Check your classes in Wallet Manager.
 
-1. Otwórz każdą klasę w pakietach `instrument/` i `transaction/`.
-2. Sprawdź czy ma poprawny stereotyp:
-   - Kontroler → `@RestController`
-   - Serwis → `@Service`
-   - Repozytorium → `@Repository`
-3. Czy brakuje jakiejś adnotacji? Jeśli tak — dodaj ją.
+1. Open each class in the `instrument/` and `transaction/` packages.
+2. Check if it has the correct stereotype:
+   - Controller → `@RestController`
+   - Service → `@Service`
+   - Repository → `@Repository`
+3. Is any annotation missing? If so — add it.
 
 ## Checklist
 
-- [x] Znam 5 stereotypów: @Component, @Service, @Repository, @Controller, @Configuration
-- [x] Wiem że wszystkie dziedziczą po @Component (technicznie identyczne)
-- [x] Rozumiem różnicę semantyczną (rola w architekturze)
-- [x] Wiem kiedy użyć @Bean w @Configuration (klasy z zewnętrznych bibliotek)
-- [x] Potrafię przypisać stereotyp do każdej klasy w projekcie
+- [x] I know the 5 stereotypes: @Component, @Service, @Repository, @Controller, @Configuration
+- [x] I know they all inherit from @Component (technically identical)
+- [x] I understand the semantic difference (role in architecture)
+- [x] I know when to use @Bean in @Configuration (classes from external libraries)
+- [x] I can assign a stereotype to every class in the project

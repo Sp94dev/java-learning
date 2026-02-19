@@ -35,6 +35,7 @@
 - [ ] Pass by Value — reference copying
 - [ ] `opt` String Pool — interning, immutability, StringBuilder
 - [ ] Garbage Collection — generational hypothesis, GC algorithms
+  - 💡 _AI Context: Alokacja pamięci przy przetwarzaniu dużych wektorów (embeddings) na potrzeby Semantic Search — wpływ na Heap, large object allocation, GC pressure._
 - [ ] Memory Leaks — static references, unclosed resources, listener leaks
 
 #### Core Language Features
@@ -71,6 +72,7 @@
 - Constructor Injection
 - @Service, @Repository, @Component
 - Lombok
+- 💡 _AI Context: Zrozumienie DI/IoC jako fundamentu do łatwego wstrzykiwania komponentów LLM (ChatClient, EmbeddingModel) i baz wektorowych (VectorStore) za pomocą Spring AI. Ten sam mechanizm, który wstrzykuje Repository, wstrzyknie Ci klienta do Azure OpenAI._
 
 ### Moduł 04: Architektura Aplikacji 🆕
 
@@ -92,10 +94,12 @@
 
 **Cel:** Trwałość danych.
 
-- Docker Compose + PostgreSQL
+- Docker Compose + PostgreSQL (docelowo: **Azure Database for PostgreSQL**)
 - Entity, Repository
 - Spring Data JPA
 - @Transactional
+- **pgvector** — rozszerzenie PostgreSQL do przechowywania wektorów (embeddings) obok danych transakcyjnych
+  - 💡 _Knowledge Engineering: Jedno źródło prawdy — dane relacyjne + wektory w jednej bazie. Kluczowe dla architektury RAG._
 - MongoDB — Spring Data Mongo, teoria + porównanie z SQL
 - Spring Batch — ETL, import CSV → DB
 
@@ -256,30 +260,39 @@
 - Code coverage requirements
 - Dependency scanning
 
-### Moduł 14: Cloud Deployment 🆕
+### Moduł 14: Cloud Deployment — Microsoft Azure ☁️
 
-**Cel:** Wdrożenie produkcyjne.
+**Cel:** Wdrożenie produkcyjne w ekosystemie Azure.
 
-| Platform       | Complexity  | Cost        | Approach   |
-| -------------- | ----------- | ----------- | ---------- |
-| Railway/Render | Low         | Free tier   | Startup    |
-| AWS ECS / K8s  | Medium-High | Pay-per-use | Enterprise |
+| Platform                | Complexity  | Cost        | Approach   |
+| ----------------------- | ----------- | ----------- | ---------- |
+| Azure App Service       | Low         | Free tier   | Startup    |
+| Azure Spring Apps / AKS | Medium-High | Pay-per-use | Enterprise |
 
-#### Startup: Railway/Render
+#### Startup: Azure App Service
 
-- Deploy from GitHub
-- Environment config
-- Database provisioning
+- Deploy from GitHub (GitHub Actions → Azure)
+- Environment config (App Settings, Key Vault)
+- Azure Database for PostgreSQL — Flexible Server provisioning
 
-#### Enterprise: Spring Cloud
+#### Enterprise: Azure Spring Apps
 
-- Eureka — service discovery
-- Gateway — proxy, load balancing
-- AWS ECS / Kubernetes basics
+- Managed Spring Boot hosting
+- Azure API Management — gateway, rate limiting
+- Azure Kubernetes Service (AKS) — basics
+- Azure Container Registry (ACR)
 
-#### AWS Basics (awareness)
+#### Azure Basics (awareness)
 
-- `opt` EC2, RDS, S3, VPC
+- Azure Resource Groups, VNets, Azure Monitor
+- Azure Key Vault — secrets management
+- `opt` Azure Service Bus — messaging
+
+#### Infrastructure as Code (IaC)
+
+- **Terraform** — deklaratywne zarządzanie infrastrukturą Azure (Resource Group, App Service, PostgreSQL, Key Vault)
+  - HCL syntax, `plan` → `apply` workflow, state management
+  - 💡 _Najbardziej pożądany IaC tool na rynku — cross-cloud, ogromna społeczność._
 
 ---
 
@@ -330,13 +343,17 @@
 - `opt` Spring Integration — flows, channels, adaptery
 - Event-driven architecture + Outbox pattern
 
-### 🆕 Moduł 20: Spring AI
+### 🆕 Moduł 20: Spring AI + Azure OpenAI 🧠
 
-**Cel:** Integracja z AI.
+**Cel:** Budowa enterprise-grade AI features w Java.
 
-- `opt` Spring AI + LLM integracja
-- `opt` PGVector — vector database, similarity search
-- `opt` Tool Calling + MCP — agenci AI w Spring
+- Spring AI — ChatClient, EmbeddingModel, VectorStore
+- **Azure OpenAI Service** — wdrożenie modeli GPT w środowisku korporacyjnym (compliance, data residency)
+- pgvector jako VectorStore — similarity search na danych transakcyjnych
+- RAG (Retrieval-Augmented Generation) — wzbogacanie promptów danymi z bazy
+- Tool Calling + MCP — agenci AI w Spring (function calling)
+- `opt` LangChain4j — alternatywa dla Spring AI
+- 💡 _Enterprise AI: Ten moduł łączy Twoje wykształcenie w Inżynierii Wiedzy z praktycznym wdrożeniem RAG w bezpiecznym środowisku Azure._
 
 ---
 
@@ -346,36 +363,40 @@
 
 Aplikacja łącząca wszystkie moduły:
 
-**Features:**
+**Features (per [PRD](docs/prd.md)):**
 
-- [ ] User registration & JWT auth
-- [ ] CRUD Instruments & Transactions
-- [ ] Import CSV (XTB format)
-- [ ] Dashboard (wartość, koszt, zysk)
-- [ ] Redis cache dla cen
-- [ ] Full test coverage
-- [ ] Dockerized
-- [ ] Deployed to cloud (startup: Railway)
-- [ ] CI/CD pipeline
+- [ ] CRUD Instruments & Transactions (z `fee` i `platform_id`)
+- [ ] Import CSV (XTB format — zamknięta pozycja = BUY + SELL)
+- [ ] Dashboard (wartość portfela, koszt, zysk)
+- [ ] Prices cache (Redis / Caffeine)
+- [ ] **🧠 AI Financial Advisor** — przesyłanie ostatnich N transakcji do Azure OpenAI w celu uzyskania spersonalizowanej porady finansowej (Spring AI + RAG)
+- [ ] **pgvector** — embeddings transakcji do semantic search ("pokaż transakcje podobne do...")
+- [ ] Full test coverage (Testcontainers)
+- [ ] Dockerized (multi-stage)
+- [ ] Deployed to **Azure** (App Service + Terraform IaC)
+- [ ] CI/CD pipeline (GitHub Actions → Azure)
+
+> ⚠️ Per PRD: brak multi-user auth, multi-currency, FIFO/podatków, realtime.
 
 **Architecture:**
 
 ```
-┌─────────────────────────────────────────┐
-│              API Gateway                │
-├─────────────────────────────────────────┤
-│           Spring Security               │
-├─────────────────────────────────────────┤
-│  InstrumentController  TransactionController
-├─────────────────────────────────────────┤
-│  InstrumentService     TransactionService
-│          ↓                    ↓
-│     PortfolioCalculator (domain logic)
-├─────────────────────────────────────────┤
-│     JPA Repositories    Redis Cache
-├─────────────────────────────────────────┤
-│        PostgreSQL         Redis
-└─────────────────────────────────────────┘
+┌─────────────────────────────────────────────────┐
+│   InstrumentController   TransactionController  │
+│                AdvisorController                 │
+├─────────────────────────────────────────────────┤
+│   InstrumentService      TransactionService     │
+│                AdvisorService                    │
+│          ↓                    ↓         ↓       │
+│     DashboardCalculator     Spring AI (RAG)     │
+├─────────────────────────────────────────────────┤
+│     JPA Repositories     Redis Cache (prices)   │
+├─────────────────────────────────────────────────┤
+│   PostgreSQL (+ pgvector)       Redis           │
+├─────────────────────────────────────────────────┤
+│              Azure Cloud (Terraform)            │
+│   App Service  ·  Azure DB  ·  Azure OpenAI     │
+└─────────────────────────────────────────────────┘
 ```
 
 ---
@@ -386,12 +407,26 @@ Aplikacja łącząca wszystkie moduły:
 | --------------- | -------------- | ----- |
 | 1. Fundamenty   | 00-02          | 6 tyg |
 | 2. Architektura | 03-04          | 4 tyg |
-| 3. Dane         | 05-07          | 6 tyg |
+| 3. Dane         | 05-07          | 7 tyg |
 | 4. Security     | 08             | 3 tyg |
 | 5. Quality      | 09-11          | 5 tyg |
-| 6. DevOps       | 12-14          | 4 tyg |
+| 6. DevOps       | 12-14          | 5 tyg |
 | 7. Praktyka     | 15-17          | 4 tyg |
-| 8. Zaawansowane | 18-20          | 4 tyg |
+| 8. Zaawansowane | 18-20          | 6 tyg |
 | Projekt         | Wallet Manager | 6 tyg |
 
-**Total: ~42 tygodnie + buffer**
+**Total: ~46 tygodni + buffer**
+
+---
+
+## 🎯 CERTYFIKACJA
+
+### Cel długoterminowy
+
+- [ ] **Microsoft Certified: Azure AI Engineer Associate (AI-102)**
+  - Zakres: Azure Cognitive Services, Azure OpenAI, Knowledge Mining, Document Intelligence
+  - Dlaczego: Formalne potwierdzenie kompetencji w budowaniu rozwiązań AI na Azure — kluczowe dla pozycji "Enterprise AI Solutions Architect"
+  - Kiedy: Po ukończeniu Modułu 14 (Azure) i Modułu 20 (Spring AI)
+- [ ] `opt` **Microsoft Certified: Azure Developer Associate (AZ-204)**
+  - Zakres: Azure App Service, Functions, Cosmos DB, Storage, Security
+  - Wzmocnienie profilu cloud-native

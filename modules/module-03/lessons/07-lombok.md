@@ -1,15 +1,15 @@
-# Lekcja 07: Lombok
+# Lesson 07: Lombok
 
-> @RequiredArgsConstructor, @Data, @Builder, @Slf4j — mniej boilerplate'u.
+> @RequiredArgsConstructor, @Data, @Builder, @Slf4j — less boilerplate.
 
-## Koncept
+## Concept
 
-### Problem: Java jest gadatliwa
+### Problem: Java is verbose
 
-Porównaj Javę z TypeScriptem:
+Compare Java with TypeScript:
 
 ```typescript
-// TypeScript — 3 linie
+// TypeScript — 3 lines
 export class Instrument {
   constructor(
     public readonly ticker: string,
@@ -19,7 +19,7 @@ export class Instrument {
 ```
 
 ```java
-// Java (bez Record, bez Lombok) — 25+ linii
+// Java (without Record, without Lombok) — 25+ lines
 public class Instrument {
     private final String ticker;
     private final String name;
@@ -43,22 +43,22 @@ public class Instrument {
 }
 ```
 
-**Lombok** generuje ten boilerplate za Ciebie **w czasie kompilacji**.
-Nie jest częścią Springa — to osobna biblioteka, ale Spring Boot jej intensywnie używa.
+**Lombok** generates this boilerplate for you **at compile time**.
+It's not part of Spring — it's a separate library, but Spring Boot uses it extensively.
 
-**Uwaga:** Dla prostych **DTO/modeli** preferuj **Java Records** (Module 01).
-Lombok jest najbardziej przydatny dla **Beanów Spring** (Service, Repository) i klas mutowalnych.
+**Note:** For simple **DTOs/models** prefer **Java Records** (Module 01).
+Lombok is most useful for **Spring Beans** (Service, Repository) and mutable classes.
 
 ---
 
-### Główne adnotacje
+### Main Annotations
 
-### 1. `@RequiredArgsConstructor` — Constructor Injection bez pisania konstruktora
+### 1. `@RequiredArgsConstructor` — Constructor Injection without writing a constructor
 
-**To jest najważniejsza adnotacja Lomboka dla Spring DI.**
+**This is the most important Lombok annotation for Spring DI.**
 
 ```java
-// ❌ Bez Lomboka — ręczny konstruktor
+// ❌ Without Lombok — manual constructor
 @Service
 public class InstrumentService {
     private final InstrumentRepository repository;
@@ -70,39 +70,39 @@ public class InstrumentService {
     }
 }
 
-// ✅ Z Lombokiem — konstruktor wygenerowany automatycznie
+// ✅ With Lombok — constructor auto-generated
 @Service
-@RequiredArgsConstructor  // generuje konstruktor dla WSZYSTKICH pól `final`
+@RequiredArgsConstructor  // generates constructor for ALL `final` fields
 public class InstrumentService {
     private final InstrumentRepository repository;
     private final PriceCalculator calculator;
-    // Lombok auto-generuje: public InstrumentService(repo, calculator) { ... }
+    // Lombok auto-generates: public InstrumentService(repo, calculator) { ... }
 }
 ```
 
-**Jak to działa?**
+**How does it work?**
 
-- Lombok szuka pól `final` (i `@NonNull`)
-- Generuje konstruktor z tymi polami jako parametrami
-- Spring widzi jeden konstruktor → automatycznie wstrzykuje zależności
+- Lombok looks for `final` fields (and `@NonNull`)
+- Generates a constructor with those fields as parameters
+- Spring sees one constructor → automatically injects dependencies
 
-**Analogia Angular/TS:**
+**Angular/TS Analogy:**
 
 ```typescript
-// TypeScript robi to natywnie — parameter properties
+// TypeScript does this natively — parameter properties
 export class InstrumentService {
   constructor(
     private readonly repository: InstrumentRepository,
     private readonly calculator: PriceCalculator,
   ) {}
-  // ↑ TypeScript automatycznie tworzy i przypisuje pola
-  //   Lombok robi to samo dla Javy
+  // ↑ TypeScript automatically creates and assigns fields
+  //   Lombok does the same for Java
 }
 ```
 
 ---
 
-### 2. `@Data` — wszystko w jednym (dla MUTOWALNYCH klas)
+### 2. `@Data` — everything in one (for MUTABLE classes)
 
 ```java
 @Data  // = @Getter + @Setter + @ToString + @EqualsAndHashCode + @RequiredArgsConstructor
@@ -111,14 +111,14 @@ public class UserPreferences {
     private String currency;
     private int pageSize;
 }
-// Lombok generuje: gettery, settery, toString(), equals(), hashCode(), konstruktor
+// Lombok generates: getters, setters, toString(), equals(), hashCode(), constructor
 ```
 
-**⚠️ Kiedy NIE używać `@Data`:**
+**⚠️ When NOT to use `@Data`:**
 
-- Na **Entity JPA** (Module 05) — `equals`/`hashCode` mogą powodować problemy z lazy loading
-- Na **DTO** — użyj `record` zamiast tego
-- Na **immutable** klasach — użyj `@Value` (immutable wersja `@Data`)
+- On **JPA Entities** (Module 05) — `equals`/`hashCode` can cause problems with lazy loading
+- On **DTOs** — use `record` instead
+- On **immutable** classes — use `@Value` (immutable version of `@Data`)
 
 ---
 
@@ -133,7 +133,7 @@ public class Transaction {
     private final LocalDate date;
 }
 
-// Użycie:
+// Usage:
 Transaction tx = Transaction.builder()
         .ticker("AAPL")
         .quantity(10)
@@ -142,9 +142,9 @@ Transaction tx = Transaction.builder()
         .build();
 ```
 
-**Kiedy:** Klasa ma wiele pól (>3-4) i chcesz uniknąć konstruktora z wieloma parametrami.
+**When:** Class has many fields (>3-4) and you want to avoid a constructor with many parameters.
 
-**Analogia Angular/TS:** Jak tworzenie obiektu z interfejsem/typem:
+**Angular/TS Analogy:** Like creating an object with an interface/type:
 
 ```typescript
 const tx: Transaction = {
@@ -153,59 +153,59 @@ const tx: Transaction = {
   price: 150.5,
   date: new Date(),
 };
-// Java nie ma object literals, więc Builder jest najbliższym odpowiednikiem
+// Java doesn't have object literals, so Builder is the closest equivalent
 ```
 
 ---
 
-### 4. `@Slf4j` — Logger bez boilerplate'u
+### 4. `@Slf4j` — Logger without boilerplate
 
 ```java
-// ❌ Bez Lomboka
+// ❌ Without Lombok
 @Service
 public class InstrumentService {
     private static final Logger log = LoggerFactory.getLogger(InstrumentService.class);
 
     public Instrument findByTicker(String ticker) {
-        log.info("Szukam instrumentu: {}", ticker);
+        log.info("Looking for instrument: {}", ticker);
         // ...
     }
 }
 
-// ✅ Z Lombokiem
-@Slf4j  // generuje pole `log` automatycznie
+// ✅ With Lombok
+@Slf4j  // generates the `log` field automatically
 @Service
 public class InstrumentService {
 
     public Instrument findByTicker(String ticker) {
-        log.info("Szukam instrumentu: {}", ticker);  // `log` jest dostępne!
+        log.info("Looking for instrument: {}", ticker);  // `log` is available!
         // ...
     }
 }
 ```
 
-**Uwaga:** `{}` w logu to **placeholder** — SLF4J wstawia wartość zmiennej.
-Nie używaj konkatenacji (`"text" + var`) — jest wolniejsza i mniej bezpieczna.
+**Note:** `{}` in the log is a **placeholder** — SLF4J inserts the variable's value.
+Don't use concatenation (`"text" + var`) — it's slower and less safe.
 
 ---
 
-### 5. Inne przydatne adnotacje (szybki przegląd)
+### 5. Other useful annotations (quick overview)
 
-| Adnotacja             | Co robi                              | Kiedy użyć                                 |
-| --------------------- | ------------------------------------ | ------------------------------------------ |
-| `@Getter`             | Generuje gettery                     | Gdy potrzebujesz TYLKO getterów            |
-| `@Setter`             | Generuje settery                     | Rzadko — preferuj immutability             |
-| `@ToString`           | Generuje `toString()`                | Debug, logowanie                           |
-| `@NoArgsConstructor`  | Konstruktor bez argumentów           | JPA Entity (wymagane)                      |
-| `@AllArgsConstructor` | Konstruktor ze wszystkimi polami     | Rzadko — zwykle `@RequiredArgsConstructor` |
-| `@Value`              | Immutable `@Data` (wszystko `final`) | Value Objects                              |
-| `@NonNull`            | Null check w konstruktorze/setterze  | Guard clause                               |
+| Annotation            | What it does                           | When to use                                 |
+| --------------------- | -------------------------------------- | ------------------------------------------- |
+| `@Getter`             | Generates getters                      | When you need ONLY getters                  |
+| `@Setter`             | Generates setters                      | Rarely — prefer immutability                |
+| `@ToString`           | Generates `toString()`                 | Debug, logging                              |
+| `@NoArgsConstructor`  | No-args constructor                    | JPA Entity (required)                       |
+| `@AllArgsConstructor` | Constructor with all fields            | Rarely — usually `@RequiredArgsConstructor` |
+| `@Value`              | Immutable `@Data` (everything `final`) | Value Objects                               |
+| `@NonNull`            | Null check in constructor/setter       | Guard clause                                |
 
 ---
 
-### Setup — jak dodać Lombok do projektu
+### Setup — how to add Lombok to the project
 
-W `pom.xml` (Maven):
+In `pom.xml` (Maven):
 
 ```xml
 <dependency>
@@ -215,14 +215,14 @@ W `pom.xml` (Maven):
 </dependency>
 ```
 
-Spring Boot ma Lomboka w swoim BOM (Bill of Materials), więc **nie musisz podawać wersji**.
+Spring Boot has Lombok in its BOM (Bill of Materials), so **you don't need to specify a version**.
 
-**IDE:** VS Code z Extension Pack for Java powinien automatycznie obsługiwać Lomboka.
-Jeśli nie widzi wygenerowanych metod → zainstaluj rozszerzenie "Lombok Annotations Support".
+**IDE:** VS Code with Extension Pack for Java should automatically support Lombok.
+If it doesn't see generated methods → install the "Lombok Annotations Support" extension.
 
 ---
 
-### Praktyczny wzorzec — Spring Service z Lombokiem
+### Practical pattern — Spring Service with Lombok
 
 ```java
 @Slf4j
@@ -232,12 +232,12 @@ public class InstrumentService {
     private final InstrumentRepository repository;
 
     public List<Instrument> findAll() {
-        log.debug("Pobieranie wszystkich instrumentów");
+        log.debug("Fetching all instruments");
         return repository.findAll();
     }
 
     public Instrument create(Instrument instrument) {
-        log.info("Tworzenie instrumentu: {}", instrument.ticker());
+        log.info("Creating instrument: {}", instrument.ticker());
 
         repository.findByTicker(instrument.ticker())
                 .ifPresent(existing -> {
@@ -249,34 +249,34 @@ public class InstrumentService {
 }
 ```
 
-To jest **standardowy wzorzec** który będziesz pisać codziennie:
+This is the **standard pattern** you'll be writing every day:
 
 - `@Slf4j` → logger
-- `@Service` → stereotyp
-- `@RequiredArgsConstructor` → DI bez pisania konstruktora
-- `private final` → immutable zależności
+- `@Service` → stereotype
+- `@RequiredArgsConstructor` → DI without writing a constructor
+- `private final` → immutable dependencies
 
-## Ćwiczenie
+## Exercise
 
-**Zadanie 1:** Dodaj Lomboka do Wallet Manager (`pom.xml`).
+**Task 1:** Add Lombok to Wallet Manager (`pom.xml`).
 
-**Zadanie 2:** Zrefaktoryzuj swoje Service i Repository:
+**Task 2:** Refactor your Services and Repositories:
 
-1. Zamień ręczne konstruktory na `@RequiredArgsConstructor`
-2. Dodaj `@Slf4j` i zamień `System.out.println` na `log.info()`
-3. Upewnij się że wszystkie zależności są `private final`
+1. Replace manual constructors with `@RequiredArgsConstructor`
+2. Add `@Slf4j` and replace `System.out.println` with `log.info()`
+3. Make sure all dependencies are `private final`
 
-**Zadanie 3:** Sprawdź czy aplikacja nadal działa po refaktoryzacji:
+**Task 3:** Check if the application still works after refactoring:
 
-- `./mvnw clean install` → kompilacja OK?
-- `./mvnw spring-boot:run` → start OK?
-- Przetestuj endpointy ręcznie (pliki `.rest`)
+- `./mvnw clean install` → compilation OK?
+- `./mvnw spring-boot:run` → startup OK?
+- Test endpoints manually (`.rest` files)
 
 ## Checklist
 
-- [ ] Wiem co to Lombok i czemu go używamy (redukcja boilerplate'u)
-- [ ] Używam `@RequiredArgsConstructor` zamiast ręcznych konstruktorów
-- [ ] Używam `@Slf4j` zamiast `System.out.println`
-- [ ] Wiem kiedy użyć `@Data` vs `record` (mutable vs immutable)
-- [ ] Wiem że `@Builder` to odpowiednik object literals z JS/TS
-- [ ] Mam Lomboka dodanego w `pom.xml`
+- [x] I know what Lombok is and why we use it (boilerplate reduction)
+- [x] I use `@RequiredArgsConstructor` instead of manual constructors
+- [x] I use `@Slf4j` instead of `System.out.println`
+- [x] I know when to use `@Data` vs `record` (mutable vs immutable)
+- [x] I know that `@Builder` is the equivalent of object literals from JS/TS
+- [x] I have Lombok added in `pom.xml`

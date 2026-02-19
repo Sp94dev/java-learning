@@ -1,51 +1,51 @@
-# Moduł 03: Dependency Injection + Warstwy
+# Module 03: Dependency Injection + Layers
 
-> Cel: Zrozumieć Dependency Injection, IoC Container i wydzielić warstwy aplikacji.
+> Goal: Understand Dependency Injection, IoC Container, and separate application layers.
 
 > `opt` = optional
 
-## Lekcje
+## Lessons
 
-| #   | Temat                    | Opis                                                             | Status |
-| --- | ------------------------ | ---------------------------------------------------------------- | ------ |
-| 01  | Problem bez DI + Koncept | Tight coupling, ukryte zależności, Inversion of Control.         | 🟢     |
-| 02  | Spring IoC Container     | ApplicationContext, Bean, Component Scanning.                    | 🟢     |
-| 03  | Typy Injection           | Constructor ✅, Setter, Field ❌ — dlaczego Constructor wygrywa. | 🟢     |
-| 04  | Stereotypy (Adnotacje)   | @Component, @Service, @Repository, @Controller, @Configuration.  | 🟢     |
-| 05  | Bean Scopes + Lifecycle  | Singleton, Prototype, Request, @PostConstruct, @PreDestroy.      | 🟢     |
-| 06  | Architektura Warstwowa   | Controller → Service → Repository. Thin Controller.              | ⚪     |
-| 07  | Lombok                   | @RequiredArgsConstructor, @Data, @Builder, @Slf4j.               | ⚪     |
+| #   | Topic                     | Description                                                     | Status |
+| --- | ------------------------- | --------------------------------------------------------------- | ------ |
+| 01  | The Problem Without DI    | Tight coupling, hidden dependencies, Inversion of Control.      | 🟢     |
+| 02  | Spring IoC Container      | ApplicationContext, Bean, Component Scanning.                   | 🟢     |
+| 03  | Injection Types           | Constructor ✅, Setter, Field ❌ — why Constructor wins.        | 🟢     |
+| 04  | Stereotypes (Annotations) | @Component, @Service, @Repository, @Controller, @Configuration. | 🟢     |
+| 05  | Bean Scopes + Lifecycle   | Singleton, Prototype, Request, @PostConstruct, @PreDestroy.     | 🟢     |
+| 06  | Layered Architecture      | Controller → Service → Repository. Thin Controller.             | 🟢     |
+| 07  | Lombok                    | @RequiredArgsConstructor, @Data, @Builder, @Slf4j.              | 🟢     |
 
 `⚪ Not Started` · `🟡 In Progress` · `🟢 Done`
 
-## Projekt
+## Project
 
-W tym module refaktoryzujesz **Wallet Manager API** — zamiast ręcznego tworzenia obiektów,
-Spring przejmuje kontrolę nad tworzeniem i wstrzykiwaniem zależności.
+In this module you refactor the **Wallet Manager API** — instead of manually creating objects,
+Spring takes control over creating and injecting dependencies.
 
-Kluczowe zmiany:
+Key changes:
 
-- Poprawna hierarchia warstw: Controller → Service → Repository
-- Constructor Injection zamiast `new`
-- Jeden Bean = jedna odpowiedzialność
+- Proper layer hierarchy: Controller → Service → Repository
+- Constructor Injection instead of `new`
+- One Bean = one responsibility
 
-## Powiązana teoria
+## Related Theory
 
 - `docs/theory/04-spring-framework.md` → DI, IoC Container, Bean Lifecycle
-- Moduł 02, Lekcja 07 → Java EE, Beany i Spring (most do tego modułu)
+- Module 02, Lesson 07 → Java EE, Beans, and Spring (bridge to this module)
 
-## Wymagania wstępne
+## Prerequisites
 
-- ✅ Moduł 01 ukończony (REST API, Records, Service layer)
-- ✅ Moduł 02 przejrzany (JVM, Memory, Java EE → Spring)
-- 🛠 Działający projekt Wallet Manager z `InstrumentController` i `TransactionController`
+- ✅ Module 01 completed (REST API, Records, Service layer)
+- ✅ Module 02 reviewed (JVM, Memory, Java EE → Spring)
+- 🛠 Working Wallet Manager project with `InstrumentController` and `TransactionController`
 
-## Sprawdzian gotowości
+## Readiness Checklist
 
-- [ ] Rozumiem co to Dependency Injection i po co
-- [ ] Używam Constructor Injection (nie Field Injection)
-- [ ] Wiem różnicę między @Service, @Repository, @Component
-- [ ] Potrafię wydzielić Controller → Service → Repository
-- [ ] Controller jest "cienki" - tylko deleguje
-- [ ] Wiem co to Bean Scope i jaki jest domyślny
-- [ ] Potrafię użyć Lomboka do redukcji boilerplate'u
+- [x] I understand what Dependency Injection is and why it matters
+- [x] I use Constructor Injection (not Field Injection)
+- [x] I know the difference between @Service, @Repository, @Component
+- [x] I can separate Controller → Service → Repository
+- [x] Controller is "thin" — only delegates
+- [x] I know what Bean Scope is and what the default is
+- [x] I can use Lombok to reduce boilerplate
