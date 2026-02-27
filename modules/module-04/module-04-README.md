@@ -8,30 +8,46 @@ Poznać popularne wzorce architektoniczne i kiedy je stosować.
 
 ---
 
+## Lekcje
+
+- [Lekcja 01: Po co architektura?](lessons/01-why-architecture.md)
+- [Lekcja 02: Layered Architecture (Architektura Warstwowa)](lessons/02-layered-architecture.md)
+- [Lekcja 03: Struktura Pakietów - Pakiety wg Funkcjonalności](lessons/03-package-structure.md)
+- [Lekcja 04: Architektura Heksagonalna a systemy AI](lessons/04-hexagonal-architecture.md)
+- [Lekcja 05: Clean Architecture](lessons/05-clean-architecture.md)
+- [Lekcja 06: Modelowanie Domeny (DDD Lite)](lessons/06-domain-modeling.md)
+- [Lekcja 07: Wzorce Projektowe W Architekturze Aplikacji](lessons/07-design-patterns.md)
+- [Lekcja 08: Monolith vs Microservices](lessons/08-monolith-vs-microservices.md)
+- [Lekcja 09: Spring Modulith 🆕](lessons/09-spring-modulith.md)
+- [Lekcja 10: Enterprise Integration Patterns (EIP)](lessons/10-enterprise-integration-patterns.md)
+- [Ćwiczenie Refaktoryzacji Wallet Manager (Krok po Kroku)](lessons/11-refactoring-wallet.md)
+
+---
+
 ## Tematy do opanowania
 
 ### 1. Po co architektura?
 
-- [ ] Separation of Concerns
-- [ ] Low Coupling, High Cohesion
-- [ ] Testability
-- [ ] Changeability
+- [x] Separation of Concerns
+- [x] Low Coupling, High Cohesion
+- [x] Testability
+- [x] Changeability
 
 ### 2. Layered Architecture
 
-- [ ] Presentation → Business → Persistence → Database
-- [ ] Zależności tylko w dół
-- [ ] Zalety: prosta, jasna separacja
-- [ ] Wady: tight coupling z DB, anemic domain
+- [x] Presentation → Business → Persistence → Database
+- [x] Zależności tylko w dół
+- [x] Zalety: prosta, jasna separacja
+- [x] Wady: tight coupling z DB, anemic domain
 
 ### 3. Package by Layer vs Package by Feature
 
-- [ ] **By Layer:** `controller/`, `service/`, `repository/`
-- [ ] **By Feature:** `user/`, `order/`, `product/`
-- [ ] Zalety Package by Feature:
-  - [ ] Wysoka kohezja
-  - [ ] Łatwa nawigacja
-  - [ ] Przygotowanie do microservices
+- [x] **By Layer:** `controller/`, `service/`, `repository/`
+- [x] **By Feature:** `user/`, `order/`, `product/`
+- [x] Zalety Package by Feature:
+  - [x] Wysoka kohezja
+  - [x] Łatwa nawigacja
+  - [x] Przygotowanie do microservices
 
 ### 4. Hexagonal Architecture (Ports & Adapters)
 
@@ -93,36 +109,54 @@ Poznać popularne wzorce architektoniczne i kiedy je stosować.
 
 ---
 
-## Struktura dla Wallet Manager (rekomendowana)
+## Struktura dla Wallet Manager (rekomendowana po Module 04)
+
+> Bazowane na: [`projects/PROJECT.md`](../../projects/PROJECT.md), sekcja "Aktualna Struktura Pakietów"
 
 ```
 com.sp94dev.wallet/
 ├── WalletApplication.java
 ├── instrument/
-│   ├── InstrumentController.java
-│   ├── InstrumentService.java
-│   ├── InstrumentRepository.java      # Interface
-│   ├── InMemoryInstrumentRepository.java  # Impl
-│   ├── Instrument.java
+│   ├── InstrumentController.java          # Adapter IN
+│   ├── InstrumentService.java             # Domena (Use Case)
+│   ├── InstrumentRepository.java          # 🆕 Port OUT (interfejs)
+│   ├── InMemoryInstrumentRepository.java  # Adapter OUT (impl)
+│   ├── Instrument.java                    # Entity
 │   └── dto/
-│       ├── CreateInstrumentRequest.java
-│       └── InstrumentResponse.java
+│       ├── InstrumentResponse.java        # Response DTO
+│       └── CreateInstrumentRequest.java   # 🆕 Request DTO
 ├── transaction/
-│   └── ... (analogicznie)
-├── portfolio/
-│   └── ...
+│   ├── TransactionController.java
+│   ├── TransactionService.java
+│   ├── TransactionRepository.java         # 🆕 Port OUT (interfejs)
+│   ├── InMemoryTransactionRepository.java
+│   ├── Transaction.java
+│   ├── TransactionType.java               # 🆕 Value Object (enum)
+│   └── dto/
+│       ├── TransactionResponse.java
+│       ├── TransactionStats.java
+│       └── CreateTransactionRequest.java  # 🆕 Request DTO
 └── common/
-    ├── exception/
     └── config/
+        └── OpenApiConfig.java
 ```
 
 ---
 
-## Ćwiczenia
+## Ćwiczenia (z lekcji)
 
-1. Przeorganizuj kod do Package by Feature
-2. Wydziel DTO (Request/Response) od domenowego modelu
-3. Stwórz interface Repository i implementację InMemory
+> Pełny checklist z postępem: [Ćwiczenie 11](lessons/11-refactoring-wallet.md)
+
+1. ✏️ Audyt coupling w `InstrumentService` (Lekcja 01)
+2. ✏️ Mapowanie przepływu żądania przez warstwy (Lekcja 02)
+3. ✏️ Weryfikacja cross-module imports (Lekcja 03)
+4. 🔨 **Wydzielenie interfejsów `InstrumentRepository` / `TransactionRepository`** (Lekcja 04) ← najważniejsze
+5. ✏️ Mapowanie klas na pierścienie Clean Architecture (Lekcja 05)
+6. 🔨 **Stworzenie `TransactionType` enum** (Lekcja 06)
+7. 🔨 **Wydzielenie Request DTO** (`CreateInstrumentRequest`, `CreateTransactionRequest`) (Lekcja 07)
+8. ✏️ Analiza gotowości do wydzielenia mikroserwisu (Lekcja 08)
+
+> ✏️ = analiza/notatki, 🔨 = zmiana w kodzie
 
 ---
 
@@ -133,3 +167,5 @@ com.sp94dev.wallet/
 - [ ] Znam podstawowe wzorce: Repository, DTO, Factory
 - [ ] Rozumiem trade-offs Monolith vs Microservices
 - [ ] Potrafię wybrać architekturę dla projektu
+- [ ] **Wydzieliłem** interfejsy Repository (Port OUT) w wallet-manager
+- [ ] **Stworzyłem** Request DTO i odseparowałem od domain models
