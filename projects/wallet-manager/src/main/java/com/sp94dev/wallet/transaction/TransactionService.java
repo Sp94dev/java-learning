@@ -26,7 +26,7 @@ public class TransactionService {
     public TransactionStats getStats() {
         List<Transaction> allTransactions = repository.findAll();
         int totalTransactions = allTransactions.size();
-        Map<String, Long> byType = allTransactions.stream()
+        Map<TransactionType, Long> byType = allTransactions.stream()
                 .collect(Collectors.groupingBy(Transaction::type, Collectors.counting()));
         Map<Long, Double> valueByInstrument = allTransactions.stream().collect(
                 Collectors.groupingBy(

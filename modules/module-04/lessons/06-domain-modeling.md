@@ -53,13 +53,13 @@ Przykład: `Wallet` (root) zawiera `Transaction` (encje wewnętrzne) i `Money` (
 
 Wypełnij tabelę:
 
-| Klasa/pole                                | Entity czy Value Object? | Uzasadnienie                                    |
-| ----------------------------------------- | ------------------------ | ----------------------------------------------- |
-| `Instrument`                              | ?                        | Ma `id`? Jest mutowalny?                        |
-| `Transaction`                             | ?                        | Ma `id`?                                        |
-| `Transaction.type` (String: "BUY"/"SELL") | ?                        | Powinien być `String` czy coś innego?           |
-| `Transaction.price * quantity`            | ?                        | Czy to logika, która powinna mieszkać w modelu? |
-| `InstrumentResponse` (DTO)                | Ani jedno ani drugie     | DTO to nie domena                               |
+| Klasa/pole                                | Entity czy Value Object? | Uzasadnienie                                       |
+| ----------------------------------------- | ------------------------ | -------------------------------------------------- |
+| `Instrument`                              | Entity                   |                                                    |
+| `Transaction`                             | Entity                   |                                                    |
+| `Transaction.type` (String: "BUY"/"SELL") | VO                       | Powinien być `String` czy coś innego?              |
+| `Transaction.price * quantity`            | VO,                      | tak przeciez nie ma sensu trzymac wartosci w bazie |
+| `InstrumentResponse` (DTO)                | None                     |                                                    |
 
 ### Część B: Stwórz `TransactionType` enum
 
@@ -79,10 +79,9 @@ Zmień `Transaction.java` żeby używał `TransactionType` zamiast `String`. Spr
 
 PRD ma pola `price` i `fee` w Transaction. Czy `Double price` to dobry typ na pieniądze? (Podpowiedź: floating-point arithmetic → `0.1 + 0.2 != 0.3`). W Module 05+ rozważymy `BigDecimal` lub dedykowany `Money` VO.
 
-
 ## Sprawdzian wiedzy
 
-- [ ] Znam podstawowe pojęcia DDD: Bounded Context, Ubiquitous Language
-- [ ] Rozumiem różnicę między Entity (z tożsamością) a Value Object (bez tożsamości, immutable)
-- [ ] Wiem, czym jest Aggregate Root zarządzący wewnętrznymi encjami
-- [ ] Stworzyłem enum `TransactionType` i zastosowałem go w kodzie, zastępując typ `String`
+- [x] Znam podstawowe pojęcia DDD: Bounded Context, Ubiquitous Language
+- [x] Rozumiem różnicę między Entity (z tożsamością) a Value Object (bez tożsamości, immutable)
+- [x] Wiem, czym jest Aggregate Root zarządzący wewnętrznymi encjami
+- [x] Stworzyłem enum `TransactionType` i zastosowałem go w kodzie, zastępując typ `String`
