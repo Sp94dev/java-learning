@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class TransactionService {
-    private final InMemoryTransactionRepository repository;
+    private final TransactionRepository repository;
 
     public List<Transaction> getAll() {
         return repository.findAll();

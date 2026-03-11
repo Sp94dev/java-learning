@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class InstrumentService {
-    private final InMemoryInstrumentRepository inMemoryInstrumentRepository;
+    private final InstrumentRepository inMemoryInstrumentRepository;
 
     private static final Map<String, Function<Instrument, String>> SORT_FIELDS = Map.of(
             "ticker", Instrument::ticker,

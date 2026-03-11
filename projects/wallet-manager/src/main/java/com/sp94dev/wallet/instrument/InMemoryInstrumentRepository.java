@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class InMemoryInstrumentRepository {
+public class InMemoryInstrumentRepository implements InstrumentRepository {
     private final Map<Long, Instrument> storage = new ConcurrentHashMap<>();
     private final AtomicLong idCounter = new AtomicLong(1);
 

@@ -8,5 +8,6 @@
 "terminal.integrated.suggest.quickSuggestions": true,
 "terminal.integrated.suggest.suggestOnTriggerCharacters": true,
 "java.compile.nullAnalysis.mode": "automatic",
-"editor.formatOnSave": true
+"editor.formatOnSave": true,
+"java.configuration.updateBuildConfiguration": "interactive"
 }

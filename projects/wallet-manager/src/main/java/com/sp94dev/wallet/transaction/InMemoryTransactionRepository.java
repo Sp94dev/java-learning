@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class InMemoryTransactionRepository {
+public class InMemoryTransactionRepository implements TransactionRepository {
     private final Map<Long, Transaction> storage = new ConcurrentHashMap<>();
     private final AtomicLong idCounter = new AtomicLong(1);
 
