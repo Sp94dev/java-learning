@@ -1,6 +1,6 @@
 # Java Backend Learning
 
-> Angular Senior → Full-Stack (Java 25 + Spring Boot 4)
+> Angular Senior → Enterprise AI Solutions Architect (Java 25 + Spring Boot 4 + Azure)
 
 ## Progress
 
@@ -10,14 +10,14 @@
 | --- | -------------------------------- | ------ |
 | 00  | Setup + Tooling                  | 🟢     |
 | 01  | REST + Java Basics               | 🟢     |
-| 02  | Java Internals (JVM, Memory, GC) | ⚪     |
+| 02  | Java Internals (JVM, Memory, GC) | 🟢     |
 
 ### Phase 2: Architecture
 
 | #   | Module                          | Status |
 | --- | ------------------------------- | ------ |
-| 03  | DI + Layers                     | ⚪     |
-| 04  | Architecture (Clean, Hexagonal) | ⚪     |
+| 03  | DI + Layers                     | 🟢     |
+| 04  | Architecture (Clean, Hexagonal) | 🟡     |
 
 ### Phase 3: Data
 
@@ -51,10 +51,19 @@
 
 ### Phase 7: Practice
 
-| #   | Module               | Status |
-| --- | -------------------- | ------ |
-| 15  | Good and Bad Practices| ⚪     |
-| 16  | Interview Prep       | ⚪     |
+| #   | Module                | Status |
+| --- | --------------------- | ------ |
+| 15  | Good and Bad Practices | ⚪     |
+| 16  | Interview Prep        | ⚪     |
+| 17  | Frontend Integration  | ⚪     |
+
+### Phase 8: Advanced
+
+| #   | Module                    | Status |
+| --- | ------------------------- | ------ |
+| 18  | Web Beyond REST (GraphQL) | ⚪     |
+| 19  | Messaging (Kafka)         | ⚪     |
+| 20  | Spring AI                 | ⚪     |
 
 `⚪ Not Started` · `🟡 In Progress` · `🟢 Done`
 
@@ -72,7 +81,7 @@ docs/                # Documentation
 
 ## Timeline
 
-~12 months (38 weeks + buffer)
+~12 months (46 weeks + buffer)
 
 <!-- AI:START -->
 

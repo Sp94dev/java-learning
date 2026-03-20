@@ -23,7 +23,7 @@
 - [x] Service layer, ResponseEntity
 - [x] OpenAPI Documentation
 
-### Module 02: Java Internals 🆕
+### Module 02: Java Internals ✅
 
 **Goal:** Understand how Java works under the hood + core language features.
 
@@ -64,22 +64,22 @@
 
 ## FAZA 2: ARCHITEKTURA
 
-### Moduł 03: DI + Warstwy
+### Moduł 03: DI + Warstwy ✅
 
 **Cel:** Oddzielić logikę od HTTP.
 
-- Spring IoC Container
-- Constructor Injection
-- @Service, @Repository, @Component
-- Lombok
+- [x] Spring IoC Container
+- [x] Constructor Injection
+- [x] @Service, @Repository, @Component
+- [x] Lombok
 - 💡 _AI Context: Zrozumienie DI/IoC jako fundamentu do łatwego wstrzykiwania komponentów LLM (ChatClient, EmbeddingModel) i baz wektorowych (VectorStore) za pomocą Spring AI. Ten sam mechanizm, który wstrzykuje Repository, wstrzyknie Ci klienta do Azure OpenAI._
 
-### Moduł 04: Architektura Aplikacji 🆕
+### Moduł 04: Architektura Aplikacji 🟡
 
 **Cel:** Poznać popularne wzorce architektoniczne.
 
-- Layered Architecture — Controller → Service → Repository → Database
-- Package by Feature
+- [x] Layered Architecture — Controller → Service → Repository → Database
+- [x] Package by Feature
 - Repository / DTO / Factory / Builder patterns
 - Clean Architecture / Hexagonal — Ports & Adapters, Dependency Rule
 - Spring Modulith — modularność, eventy, @Externalized, UML zależności
