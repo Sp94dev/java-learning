@@ -36,10 +36,9 @@ Wyobraź sobie, że za rok `transaction/` musi stać się osobnym mikroserwisem.
 
 > 💡 Ideał: moduły komunikują się wyłącznie przez publiczne API lub eventy, nigdy przez import wewnętrznych klas.
 
-
 ## Sprawdzian wiedzy
 
-- [ ] Znam główne różnice i wady/zalety Monolitu i Mikroserwisów
-- [ ] Rozumiem koncepcję Modular Monolith jako kompromisu i punktu wyjścia
-- [ ] Wiem, dlaczego "Monolith first" to rekomendowane podejście
-- [ ] Przeanalizowałem, czy usunięcie jednego pakietu biznesowego zepsułoby inny w obecnym kodzie
+- [x] Znam główne różnice i wady/zalety Monolitu i Mikroserwisów
+- [x] Rozumiem koncepcję Modular Monolith jako kompromisu i punktu wyjścia
+- [x] Wiem, dlaczego "Monolith first" to rekomendowane podejście
+- [x] Przeanalizowałem, czy usunięcie jednego pakietu biznesowego zepsułoby inny w obecnym kodzie

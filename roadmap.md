@@ -84,7 +84,7 @@
 - Clean Architecture / Hexagonal — Ports & Adapters, Dependency Rule
 - Spring Modulith — modularność, eventy, @Externalized, UML zależności
 - `opt` Enterprise Integration Patterns — overview (file, DB, RPC, messaging)
-- Monolith vs Microservices — trade-offs, "monolith first"
+- [x] Monolith vs Microservices — trade-offs, "monolith first"
 
 ---
 

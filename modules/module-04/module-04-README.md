@@ -81,10 +81,10 @@ Poznać popularne wzorce architektoniczne i kiedy je stosować.
 
 ### 8. Monolith vs Microservices
 
-- [ ] **Monolith:** prostszy, jeden deployment
-- [ ] **Microservices:** niezależne skalowanie, złożoność operacyjna
-- [ ] **Modular Monolith:** kompromis - moduły gotowe do wydzielenia
-- [ ] "Monolith first" - nie zaczynaj od microservices
+- [x] **Monolith:** prostszy, jeden deployment
+- [x] **Microservices:** niezależne skalowanie, złożoność operacyjna
+- [x] **Modular Monolith:** kompromis - moduły gotowe do wydzielenia
+- [x] "Monolith first" - nie zaczynaj od microservices
 
 ### 9. Spring Modulith 🆕
 
@@ -165,7 +165,7 @@ com.sp94dev.wallet/
 - [ ] Rozumiem różnicę Package by Layer vs Package by Feature
 - [ ] Wiem kiedy stosować Hexagonal Architecture (złożona domena)
 - [x] Znam podstawowe wzorce: Repository, DTO, Factory
-- [ ] Rozumiem trade-offs Monolith vs Microservices
+- [x] Rozumiem trade-offs Monolith vs Microservices
 - [ ] Potrafię wybrać architekturę dla projektu
 - [ ] **Wydzieliłem** interfejsy Repository (Port OUT) w wallet-manager
 - [x] **Stworzyłem** Request DTO i odseparowałem od domain models
