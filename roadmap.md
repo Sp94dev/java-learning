@@ -80,7 +80,7 @@
 
 - [x] Layered Architecture — Controller → Service → Repository → Database
 - [x] Package by Feature
-- Repository / DTO / Factory / Builder patterns
+- [x] Repository / DTO / Factory / Builder patterns
 - Clean Architecture / Hexagonal — Ports & Adapters, Dependency Rule
 - Spring Modulith — modularność, eventy, @Externalized, UML zależności
 - `opt` Enterprise Integration Patterns — overview (file, DB, RPC, messaging)

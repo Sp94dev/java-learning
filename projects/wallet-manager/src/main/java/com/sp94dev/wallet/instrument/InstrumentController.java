@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.sp94dev.wallet.instrument.dto.CreateInstrumentRequest;
 import com.sp94dev.wallet.instrument.dto.InstrumentResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -71,9 +72,11 @@ public class InstrumentController {
                         @ApiResponse(responseCode = "201", description = "Instrument created successfully"),
                         @ApiResponse(responseCode = "400", description = "Invalid input data")
         })
-        public ResponseEntity<InstrumentResponse> createInstrument(@RequestBody Instrument instrumentBody) {
+        public ResponseEntity<InstrumentResponse> createInstrument(@RequestBody CreateInstrumentRequest request) {
                 log.info("Create instrument");
-                Instrument savedInstrument = this.instrumentService.createInstrument(instrumentBody);
+                Instrument instrument = new Instrument(null, request.ticker(), request.currency(), request.market(),
+                                request.type());
+                Instrument savedInstrument = this.instrumentService.createInstrument(instrument);
                 InstrumentResponse instrumentResponse = InstrumentResponse.from(savedInstrument);
                 URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                                 .path("/{id}")

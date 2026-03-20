@@ -74,10 +74,10 @@ Poznać popularne wzorce architektoniczne i kiedy je stosować.
 
 ### 7. Wzorce projektowe
 
-- [ ] **Repository Pattern** - abstrakcja dostępu do danych
-- [ ] **DTO Pattern** - oddzielenie reprezentacji od domeny
-- [ ] **Factory Pattern** - tworzenie złożonych obiektów
-- [ ] **Builder Pattern** - step-by-step construction
+- [x] **Repository Pattern** - abstrakcja dostępu do danych
+- [x] **DTO Pattern** - oddzielenie reprezentacji od domeny
+- [x] **Factory Pattern** - tworzenie złożonych obiektów
+- [x] **Builder Pattern** - step-by-step construction
 
 ### 8. Monolith vs Microservices
 
@@ -164,8 +164,8 @@ com.sp94dev.wallet/
 
 - [ ] Rozumiem różnicę Package by Layer vs Package by Feature
 - [ ] Wiem kiedy stosować Hexagonal Architecture (złożona domena)
-- [ ] Znam podstawowe wzorce: Repository, DTO, Factory
+- [x] Znam podstawowe wzorce: Repository, DTO, Factory
 - [ ] Rozumiem trade-offs Monolith vs Microservices
 - [ ] Potrafię wybrać architekturę dla projektu
 - [ ] **Wydzieliłem** interfejsy Repository (Port OUT) w wallet-manager
-- [ ] **Stworzyłem** Request DTO i odseparowałem od domain models
+- [x] **Stworzyłem** Request DTO i odseparowałem od domain models

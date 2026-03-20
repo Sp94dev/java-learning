@@ -66,10 +66,9 @@ To drugie kluczowe zadanie z `PROJECT.md`:
 
 > 💡 **Bonus:** Zauważ, że `Instrument.java` ma adnotacje `@Schema` (Swagger). Przenieś je na DTO, a model domenowy zostaw czysty — to krok w stronę Clean Architecture (pierścień 1 bez frameworków).
 
-
 ## Sprawdzian wiedzy
 
-- [ ] Odróżniam wzorzec Repository od DTO (oddzielenie bazy/domeny od reprezentacji)
-- [ ] Rozumiem, kiedy przydaje się Factory Pattern, a kiedy Builder Pattern
-- [ ] Wdrożyłem wzorzec DTO, tworząc obiekty `*Request` i `*Response` w aplikacji
-- [ ] Wiem, dlaczego kontrolery powinny zwracać i przyjmować DTO, a nie modele domenowe
+- [x] Odróżniam wzorzec Repository od DTO (oddzielenie bazy/domeny od reprezentacji)
+- [x] Rozumiem, kiedy przydaje się Factory Pattern, a kiedy Builder Pattern
+- [x] Wdrożyłem wzorzec DTO, tworząc obiekty `*Request` i `*Response` w aplikacji
+- [x] Wiem, dlaczego kontrolery powinny zwracać i przyjmować DTO, a nie modele domenowe

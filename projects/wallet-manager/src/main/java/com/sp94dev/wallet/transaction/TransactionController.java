@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.sp94dev.wallet.transaction.dto.CreateTransactionRequest;
 import com.sp94dev.wallet.transaction.dto.TransactionResponse;
 
 @Slf4j
@@ -44,8 +45,16 @@ public class TransactionController {
             @ApiResponse(responseCode = "201", description = "Transaction recorded successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid input data")
     })
-    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody Transaction transaction) {
+    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody CreateTransactionRequest request) {
         log.info("Create transaction");
+        Transaction transaction = new Transaction(
+                null, 
+                request.instrumentId(), 
+                request.type(), 
+                request.quantity(), 
+                request.price(), 
+                request.date()
+        );
         Transaction created = transactionService.create(transaction);
         TransactionResponse response = TransactionResponse.from(created);
 
